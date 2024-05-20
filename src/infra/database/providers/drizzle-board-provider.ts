@@ -10,4 +10,11 @@ export class DrizzleBoardProvider implements IBoardDatabaseProvider {
     })
     return result
   }
+  public async createBoard(board: any): Promise<any> {
+    const result = await db.insert(board).values({
+      name: board.name,
+      cards: []
+    })
+    return result
+  }
 }
