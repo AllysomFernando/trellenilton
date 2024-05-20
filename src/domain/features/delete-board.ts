@@ -1,6 +1,8 @@
 import type { IBoardRepository } from "../contracts/board-repository";
+import type { Board } from "../entities/board";
 
 type Input = {
+  board: Board;
   id: string;
 };
 type Output = {
@@ -15,12 +17,12 @@ type Setup = (props: SetupDeleteBoard) => DeleteBoard;
 
 export const setupDeleteBoard: Setup =
   ({ repository }) =>
-  async ({ id }) => {
+  async ({ board, id }) => {
     try {
-      await repository.deleteBoard(id);
+      await repository.deleteBoard(board, id);
       return {
         statusCode: 200,
-        message: "Board deleted",
+        message: "Board deleted successfully",
       };
     } catch (error) {
       throw new Error("Could not delete board", {
