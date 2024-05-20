@@ -16,6 +16,7 @@ export class BoardRepository implements IBoardRepository {
         description: card.description,
         deadLine: new Date(card.deadLine),
       })),
+      deleted: board.deleted,
     }));
   }
   public async createBoard(board: Board): Promise<Board> {
@@ -29,6 +30,11 @@ export class BoardRepository implements IBoardRepository {
         description: card.description,
         deadLine: new Date(card.deadLine),
       })),
+      deleted: board.deleted,
     };
+  }
+  public async deleteBoard(board: Board, id: string): Promise<void> {
+    const data = await this.db.deleteBoard(board, id);
+    return data;
   }
 }
