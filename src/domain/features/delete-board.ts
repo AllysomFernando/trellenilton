@@ -25,7 +25,7 @@ export const setupDeleteBoard: Setup =
         message: "Board deleted successfully",
       };
     } catch (error) {
-      throw new Error("Could not delete board", {
+      throw new Error("Could not delete the board", {
         cause: "delete-board",
       });
     }
