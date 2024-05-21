@@ -2,28 +2,30 @@ import type { IBoardRepository } from "../contracts/board-repository";
 import type { Board } from "../entities/board";
 
 type Input = {
-  name: string;
+	name: string;
 };
 type Output = Board;
 type CreateBoard = (input: Input) => Promise<Output>;
 type SetupCreateBoard = {
-  repository: IBoardRepository;
+	repository: IBoardRepository;
 };
 type Setup = (props: SetupCreateBoard) => CreateBoard;
 
 export const setupCreateUser: Setup =
-  ({ repository }) =>
-  async () => {
-    try {
-      return await repository.createBoard({
-        name: "any_name",
-        cards: [],
-        id: "",
-        deleted: 0,
-      });
-    } catch (error) {
-      throw new Error("Could not create board", {
-        cause: "create-board",
-      });
-    }
-  };
+	({ repository }) =>
+	async ({ name }: Input) => {
+		if (name.length < 3)
+			throw new Error("Name must have at least 3 characters");
+		try {
+			return await repository.createBoard({
+				name,
+				cards: [],
+				id: "",
+				deleted: 0,
+			});
+		} catch (error) {
+			throw new Error("Could not create board", {
+				cause: "create-board",
+			});
+		}
+	};
