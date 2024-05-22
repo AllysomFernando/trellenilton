@@ -3,7 +3,7 @@ import { db } from "../../../main/drizzle";
 import type { ICreateProfileDatabaseProvider } from "../../contracts/create-profile-database-profile";
 
 export class DrizzleCreateProfilveProvider implements ICreateProfileDatabaseProvider {
-    public async insertProfileDatabase(profile: Profile): Promise<any>{
+    public async createProfile(profile: any): Promise<any>{
         const result = await db.insert(profile).values(
             {
                 name: String,

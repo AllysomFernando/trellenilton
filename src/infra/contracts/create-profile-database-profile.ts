@@ -1,3 +1,3 @@
 export interface ICreateProfileDatabaseProvider {
-    insertProfileDatabase: () => Promise<any>
+    createProfile: (profile: any) => Promise<any>
 }
