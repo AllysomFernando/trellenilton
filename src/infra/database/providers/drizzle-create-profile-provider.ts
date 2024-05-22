@@ -1,9 +1,8 @@
-import type { Profile } from "../../../domain/entities/profile";
 import { db } from "../../../main/drizzle";
-import type { ICreateProfileDatabaseProvider } from "../../contracts/create-profile-database-profile";
+import type { ICreateProfileDatabaseProvider } from "../../contracts/create-profile-database-provider";
 
 export class DrizzleCreateProfilveProvider implements ICreateProfileDatabaseProvider {
-    public async createProfile(profile: any): Promise<any>{
+    public async createProfile(profile: any): Promise<any> {
         const result = await db.insert(profile).values(
             {
                 name: String,

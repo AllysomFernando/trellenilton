@@ -22,7 +22,7 @@ export const setupCreateProfile: Setup = ({ repository }) => async input => {
         }
     } catch (error) {
         throw new Error("Não foi possivel criar o usuário", {
-            cause: "Create profile"
+            cause: "create-profile"
         })
     }
 }
