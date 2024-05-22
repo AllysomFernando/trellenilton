@@ -1,5 +1,5 @@
 export type Profile = {
-    name:string;
+    name: string;
     function: string;
-    image:string;
+    image: string;
 }
