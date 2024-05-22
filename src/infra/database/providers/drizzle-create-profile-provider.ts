@@ -3,10 +3,8 @@ import type { ICreateProfileDatabaseProvider } from "../../contracts/create-prof
 
 export class DrizzleCreateProfilveProvider implements ICreateProfileDatabaseProvider {
     public async insertProfileDatabase(): => Promise<any>{
-        const result = await db.query.profile'.create({
-            data: {
-                name: "Diego"
-            }
+        const result = await db.insert()
+           
         })
     };
 }
