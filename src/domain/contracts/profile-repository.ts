@@ -1,5 +1,5 @@
 import type { Profile } from "../entities/profile";
 
 export interface ICreateProfileRepository {
-    insertProfile: () => Promise<Profile>
+    insertProfile: (profile: Profile) => Promise<Profile>
 }

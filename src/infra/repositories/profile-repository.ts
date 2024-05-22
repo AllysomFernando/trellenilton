@@ -1,4 +1,4 @@
-import type { ICreateProfileRepository } from "../../domain/contracts/create-profile-repository";
+import type { ICreateProfileRepository } from "../../domain/contracts/profile-repository";
 
 export class ProfileRepository implements ICreateProfileRepository {
     constructor(private 
