@@ -18,9 +18,10 @@ export const setupCreateUser: Setup =
 			throw new Error("Name must have at least 3 characters");
 		try {
 			return await repository.createBoard({
+				id: Math.random().toString(),
 				name,
 				cards: [],
-				id: "",
+				createdAt: new Date().toISOString(),
 				deleted: 0,
 			});
 		} catch (error) {
