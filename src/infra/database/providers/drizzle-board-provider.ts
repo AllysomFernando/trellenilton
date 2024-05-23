@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../../main/drizzle";
 import type { IBoardDatabaseProvider } from "../../contracts/board-database-provider";
+import { card, priority } from "../models";
 
 export class DrizzleBoardProvider implements IBoardDatabaseProvider {
   public async loadAllBoards(): Promise<any[]> {
@@ -25,5 +26,19 @@ export class DrizzleBoardProvider implements IBoardDatabaseProvider {
       .where(eq(board.id, id))
       .execute();
     return result;
+  }
+
+
+  public async createCard(_: any): Promise<any> {
+    const priorityReference = await db.query.priority.findFirst({
+      where: eq(priority.id, _.priorityid)
+    })
+    if(!priorityReference) {
+      throw new Error("Priority not found")
+    }
+    await db.insert(card).values({
+      idPriority: priorityReference.id,
+      //all references in the db for the card need this changes
+    })
   }
 }
