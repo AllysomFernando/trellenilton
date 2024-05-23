@@ -20,13 +20,15 @@ type SetupCreateCard = {
 };
 type Setup = (props: SetupCreateCard) => CreateCard;
 
+//TODO: allocate correct types in setupCreateCard
+
 export const SetupCreateCard: Setup =
     ({ repository }) =>
         async () => {
             try {
                 return await repository.createCard({
                     id: "",
-                    idPriority: "any",
+                    idPriority: "any", 
                     idCategory: "any",
                     idStatus: "any",
                     title: "any",
