@@ -1,8 +1,6 @@
 import type { ICreateProfileRepository } from "../contracts/profile-repository";
 
-type Input = {
-    name: string;
-}
+type Input = {}
 type Output = {}
 type CreateProfile = (input: Input) => Promise<Output>
 type SetupCreateProfileProps = {

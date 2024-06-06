@@ -18,5 +18,11 @@ describe('create-profile', () => {
         })
     })
 
-    test("Should thrown an error when creating a profile")
+    test("Should thrown an error when creating a profile with less than 3 characters", () => {
+        const badInput ={
+            name: "D",
+            function: "Admininastor",
+        }
+    } 
+    )
 })
