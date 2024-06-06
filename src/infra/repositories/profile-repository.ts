@@ -4,6 +4,15 @@ import type { ICreateProfileDatabaseProvider } from "../contracts/profile-databa
 
 export class ProfileRepository implements IProfileRepository {
     constructor(private readonly db: ICreateProfileDatabaseProvider) { }
+    public async loadProfile(profile: Profile): Promise<Profile[]> {
+        const data = await this.db.loadprofile()
+        return data.map((profile) => ({
+            name: profile.name,
+            function: profile.function,
+            image: profile.image,
+            deleted: profile.deleted,
+        }));
+    }
 
     public async createProfile(profile: Profile): Promise<Profile> {
         const data = await this.db.createProfile(profile);

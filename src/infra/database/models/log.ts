@@ -1,5 +1,5 @@
 import { sqliteTable, text, } from "drizzle-orm/sqlite-core";
-import { user } from "./user";
+import { user } from "./profile";
 
 export const log = sqliteTable('log', {
   id: text('id').primaryKey(),
