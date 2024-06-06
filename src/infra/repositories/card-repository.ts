@@ -36,6 +36,9 @@ export class CardRepository implements ICardRepository {
         };
     }
 
-
+    public async deleteCard(card: Card, id: string): Promise<void> {
+        const data = await this.db.deleteCard(card, id);
+        return data;
+    }
 
 }
