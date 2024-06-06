@@ -13,10 +13,10 @@ type Setup = (props: SetupCreateBoard) => CreateBoard;
 
 export const setupCreateUser: Setup =
   ({ repository }) =>
-  async () => {
+  async ({name}) => {
     try {
       return await repository.createBoard({
-        name: "any_name",
+        name: name,
         cards: [],
         id: "",
         deleted: 0,
