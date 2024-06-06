@@ -28,14 +28,14 @@ export const SetupCreateCard: Setup =
             try {
                 return await repository.createCard({
                     id: "",
-                    idPriority: "any", 
-                    idCategory: "any",
-                    idStatus: "any",
-                    title: "any",
-                    description: "any",
-                    createdAt: "any",
-                    updatedAt: "any",
-                    endedAt: "any",
+                    idPriority: "", 
+                    idCategory: "",
+                    idStatus: "",
+                    title: "",
+                    description: "",
+                    createdAt: "",
+                    updatedAt: "",
+                    endedAt: "",
                     deleted: 0,
                 });
             } catch (error) {
