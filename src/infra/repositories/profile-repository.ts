@@ -1,8 +1,8 @@
-import type { ICreateProfileRepository } from "../../domain/contracts/profile-repository";
+import type { IProfileRepository } from "../../domain/contracts/profile-repository";
 import type { Profile } from "../../domain/entities/profile";
 import type { ICreateProfileDatabaseProvider } from "../contracts/profile-database-provider";
 
-export class ProfileRepository implements ICreateProfileRepository {
+export class ProfileRepository implements IProfileRepository {
     constructor(private readonly db: ICreateProfileDatabaseProvider) { }
 
     public async createProfile(profile: Profile): Promise<Profile> {
