@@ -23,4 +23,8 @@ export class ProfileRepository implements IProfileRepository {
             deleted: data.deleted,
         };
     }
+    public async deleteProfile(profile: Profile, id: string): Promise<void> {
+        const data = await this.db.deleteProfile(profile, id);
+        return data;
+    }
 }

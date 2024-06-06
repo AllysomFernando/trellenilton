@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import { db } from "../../../main/drizzle";
 import type { ICreateProfileDatabaseProvider } from "../../contracts/profile-database-provider";
 
@@ -21,4 +22,12 @@ export class DrizzleProfileProvider implements ICreateProfileDatabaseProvider {
         );
         return result;
     }
+   public async deleteProfile (profile: any, id: string) : Promise<any>{
+    const result = await db
+     .update(profile)
+     .set({ deleted: "1" })
+     .where(eq(profile.id, id))
+     .execute();
+    return result;
+   }
 };
