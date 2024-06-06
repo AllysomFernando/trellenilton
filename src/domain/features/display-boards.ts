@@ -9,9 +9,7 @@ type SetupDisplayBoardsProps = {
 }
 type Setup = (props: SetupDisplayBoardsProps) => DisplayBoards
 
-export const setupDisplayBoards: Setup = ({
-  repository
-}) => async input => {
+export const setupDisplayBoards: Setup = ({ repository }) => async input => {
   try {
     const boards = await repository.loadAllBoards()
     return boards
