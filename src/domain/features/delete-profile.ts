@@ -5,7 +5,10 @@ type Input = {
     profile: Profile,
     id: string,
 }
-type Output = {}
+type Output = {
+    statusCode: number,
+    message: string,
+}
 type DeleteProfile = (input: Input) => Promise<Output>
 type SetupDeleteProfileprops = {
     repository: IProfileRepository
@@ -14,7 +17,7 @@ type Setup = (props: SetupDeleteProfileprops) => DeleteProfile
 
 export const setupDeleteProfile: Setup = ({ repository }) => async ({ profile, id }) => {
     try {
-        const profile = await repository.deleteProfile(profile, id)
+        await repository.deleteProfile(profile, id)
         return {
             statusCode: 200,
             message: "Profile deleted successfully",

@@ -5,7 +5,7 @@ import type { ICreateProfileDatabaseProvider } from "../../contracts/profile-dat
 export class DrizzleProfileProvider implements ICreateProfileDatabaseProvider {
     public async loadAllProfiles(): Promise<any[]> {
         const result = await db.query.profile.findMany({
-            with:{
+            with: {
                 deleted: 0
             }
         });
@@ -22,12 +22,12 @@ export class DrizzleProfileProvider implements ICreateProfileDatabaseProvider {
         );
         return result;
     }
-   public async deleteProfile (profile: any, id: string) : Promise<any>{
-    const result = await db
-     .update(profile)
-     .set({ deleted: "1" })
-     .where(eq(profile.id, id))
-     .execute();
-    return result;
-   }
+    public async deleteProfile(profile: any, id: string): Promise<any> {
+        const result = await db
+            .update(profile)
+            .set({ deleted: "1" })
+            .where(eq(profile.id, id))
+            .execute();
+        return result;
+    }
 };
