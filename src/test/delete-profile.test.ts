@@ -37,7 +37,7 @@ describe("DeleteProfile", () => {
         try {
             deleteProfile(badInput)
         } catch (error) {
-            expect(error.message).toEqual("Profile already deleted")
+            expect(error).toEqual("Profile already deleted")
         }
     })
 
