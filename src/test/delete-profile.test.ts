@@ -9,6 +9,8 @@ type DeleteProfile = (dto: Profile) => Pick<Profile, "deletado">
 const deleteProfile: DeleteProfile = (dto) => {
     if (dto.deletado == 0) {
         dto.deletado = 1
+    } else {
+        throw new Error("Profile already deleted")
     }
     return {
         deletado: dto.deletado
@@ -24,6 +26,19 @@ describe("DeleteProfile", () => {
         const response = deleteProfile(goodInput)
         expect(response).toEqual({
             deletado: 1
+        })
+    })
+
+    test("should return error message", () => {
+        const badInput = {
+            name: "Diego",
+            deletado: 1
+        }
+        const response = deleteProfile(badInput)
+        expect(response).toEqual({
+            throw new Error("Profile already deleted")
+
+
         })
     })
 
