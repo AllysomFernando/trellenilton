@@ -34,12 +34,11 @@ describe("DeleteProfile", () => {
             name: "Diego",
             deletado: 1
         }
-        const response = deleteProfile(badInput)
-        expect(response).toEqual({
-            throw new Error("Profile already deleted")
-
-
-        })
+        try {
+            deleteProfile(badInput)
+        } catch (error) {
+            expect(error.message).toEqual("Profile already deleted")
+        }
     })
 
 })
