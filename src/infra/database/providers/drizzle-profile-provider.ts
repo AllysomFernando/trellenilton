@@ -25,7 +25,7 @@ export class DrizzleProfileProvider implements ICreateProfileDatabaseProvider {
     public async deleteProfile(profile: any, id: string): Promise<any> {
         const result = await db
             .update(profile)
-            .set({ deleted: "1" })
+            .set({ deleted: 1 })
             .where(eq(profile.id, id))
             .execute();
         return result;
