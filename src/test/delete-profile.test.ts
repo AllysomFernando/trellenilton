@@ -2,23 +2,29 @@ import { describe, test, expect } from 'bun:test'
 
 type Profile = {
     name: string,
-    deleted: number
+    deletado: number,
 }
 
-type DeleteProfile = (dto: Profile) => Pick<Profile, "deleted">
+type DeleteProfile = (dto: Profile) => Pick<Profile, "deletado">
 const deleteProfile: DeleteProfile = (dto) => {
-    if (dto.deleted === 0) {
-        dto.deleted = 1
+    if (dto.deletado == 0) {
+        dto.deletado = 1
     }
-    return "Profile deleted"
+    return {
+        deletado: dto.deletado
+    }
 }
 
 describe("DeleteProfile", () => {
-    test("should return message", () => {
+    test("should return status dto deleted", () => {
         const goodInput = {
             name: "Diego",
-            deleted: 0
+            deletado: 0
         }
+        const response = deleteProfile(goodInput)
+        expect(response).toEqual({
+            deletado: 1
+        })
     })
 
 })
