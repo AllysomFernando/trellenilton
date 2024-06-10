@@ -11,7 +11,7 @@ type SetupCreateBoard = {
 };
 type Setup = (props: SetupCreateBoard) => CreateBoard;
 
-export const setupCreateUser: Setup =
+export const SetupCreateBoard: Setup =
   ({ repository }) =>
   async () => {
     try {

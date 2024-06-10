@@ -1,6 +1,8 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../../main/drizzle";
 import type { IBoardDatabaseProvider } from "../../contracts/board-database-provider";
+import { card, category, priority, status } from "../models";
+import type { Card } from "../../../domain/entities/card";
 
 export class DrizzleBoardProvider implements IBoardDatabaseProvider {
   public async loadAllBoards(): Promise<any[]> {
@@ -26,4 +28,5 @@ export class DrizzleBoardProvider implements IBoardDatabaseProvider {
       .execute();
     return result;
   }
+
 }
