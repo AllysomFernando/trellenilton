@@ -26,4 +26,16 @@ export class DrizzleBoardProvider implements IBoardDatabaseProvider {
       .execute();
     return result;
   }
+  public async updateBoard(board: any, id: string): Promise<any> {
+    const result = await db
+      .update(board)
+      .set({ 
+        name: board.name,
+        cards: board.cards,
+        deleted: board.deleted,
+      })
+      .where(eq(board.id, id))
+      .execute();
+    return result;
+  }
 }
