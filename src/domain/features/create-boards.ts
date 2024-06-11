@@ -14,6 +14,9 @@ type Setup = (props: SetupCreateBoard) => CreateBoard;
 export const setupCreateUser: Setup =
   ({ repository }) =>
   async ({name}) => {
+    if(name.length < 3) throw new Error("Name must be at least 3 characters long", {
+      cause: "invalid-board-name",
+    });
     try {
       return await repository.createBoard({
         name: name,
@@ -26,4 +29,4 @@ export const setupCreateUser: Setup =
         cause: "create-board",
       });
     }
-  };
+  };  
