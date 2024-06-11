@@ -26,6 +26,11 @@ export const setupUpdateBoard: Setup = ({ repository }) => async ({ id, name, ca
                 cause: "board-not-found"
             });
         }
+        if(name && name.length < 3) {
+            throw new Error("Name must be at least 3 characters long", {
+                cause: "invalid-board-name"
+            });
+        }
         const updateBoard: Board = {
             ...board,
             name: name ?? board.name,
