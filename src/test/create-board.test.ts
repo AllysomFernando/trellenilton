@@ -17,7 +17,8 @@ const createBoard: CreateBoard = (dto) => {
         throw new Error("The name must be at least with 5 characters ")
     }
     return {
-        name: dto.name
+        name: dto.name,
+        cards: dto.cards ?? []
     }
 }
 
@@ -29,12 +30,13 @@ describe("CreateBoard", () => {
         }
         const response = createBoard(goodPath)
         expect(response).toEqual({
-            name: "DiegoBoard"
+            name: "DiegoBoard",
+            cards: []
         })
     })
     test("should throws if pass a name with less than 5 characters", ()=> {
         const badInput = {
-            name: "DiegoBoard",
+            name: "Di",
             deleted: 0
         }
         try{

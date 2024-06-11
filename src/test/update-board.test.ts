@@ -19,7 +19,9 @@ const updateBoard: UpdateBoard = (dto) => {
   if (!dto.id) {
     throw new Error("Board id is required");
   }
-
+  if (dto.name && dto.name.length < 3) {
+    throw new Error("Board name must be at least 3 characters long");
+  }
   const existingBoard: Board = {
     id: dto.id,
     name: "Existing Board",
@@ -60,6 +62,19 @@ describe("UpdateBoard", () => {
       updateBoard(badInput as any);
     } catch (error) {
       expect(error).toEqual(new Error("Board id is required"));
+    }
+  });
+  test("Should throw if name has less than 3 characters", () => {
+    const badInput = {
+      id: "random_id",
+      name: "Up",
+      cards: [],
+      deleted: 0
+    };
+    try {
+      updateBoard(badInput);
+    } catch (error) {
+      expect(error).toEqual(new Error("Board name must be at least 3 characters long"));
     }
   });
 });
