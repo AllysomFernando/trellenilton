@@ -14,7 +14,7 @@ type Board = {
 
 type DeleteBoard = (dto: Board) => Pick<Board, 'id' | 'deleted'>
 const deleteBoard: DeleteBoard = (dto) => {
-    if(dto.deleted = 0){
+    if(dto.deleted === 0){
         throw new Error("Something went wrong trying to delete the board")
     }
     return {
@@ -43,7 +43,7 @@ describe("Deleted", () => {
         try{
             deleteBoard(badInput)
         }catch(error){
-            expect(error).toEqual(new Error("To deleted a board the propertie deleted must be 1"));
+            expect(error).toEqual(new Error("Something went wrong trying to delete the board"));
         }
     })
 })
