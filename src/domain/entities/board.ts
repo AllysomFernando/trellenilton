@@ -4,5 +4,5 @@ export type Board = {
   cards: Card[],
   id: string,
   name: string
-  deleted: number
+  deleted: boolean
 }
