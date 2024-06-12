@@ -1,23 +1,27 @@
-import { UpdateBoardData } from "@/types/board";
-import api, { fetcher, poster } from "../utils/api";
+import api from '../utils/api';
+import { UpdateBoardData } from '../types/board';
 
-export const getBoards = async () => {
-	return await fetcher("/boards").then((res) => res.data);
+export const fetchBoards = async () => {
+  const response = await api.get('/boards');
+  return response.data;
 };
 
 export const createBoard = async (data: { name: string }) => {
-	return await poster("/boards", data).then((res) => res.data);
+  const response = await api.post('/boards', data);
+  return response.data;
 };
 
-export const fetchBoard = async (id: string) => {
-	return await fetcher(`/boards/${id}`).then((res) => res.data);
+export const fetchBoardById = async (id: string) => {
+  const response = await api.get(`/boards/${id}`);
+  return response.data;
 };
 
 export const updateBoard = async (id: string, data: UpdateBoardData) => {
-	try {
-		const response = await api.put(`/boards/${id}`, data);
-		return response.data;
-	} catch (error) {
-		console.log(error);
-	}
+  const response = await api.put(`/boards/${id}`, data);
+  return response.data;
+};
+
+export const deleteBoard = async (id: string) => {
+  const response = await api.delete(`/boards/${id}`);
+  return response.data;
 };
