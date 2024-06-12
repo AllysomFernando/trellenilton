@@ -25,11 +25,16 @@ export class DrizzleBoardProvider implements IBoardDatabaseProvider {
   }
 
   public async deleteBoard(id: string): Promise<void> {
-    const result = await db
+    try{
+      await db
       .update(board)
       .set({ deleted: true })
       .where(eq(board.id, id))
       .execute();
+    }catch(error){
+      console.error(error)
+    }
+     
    }
   public async updateBoard(board: any, id: string): Promise<any> {
     const result = await db
