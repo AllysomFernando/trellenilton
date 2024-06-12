@@ -1,9 +1,9 @@
 import type { IProfileRepository } from "../../domain/contracts/profile-repository";
 import type { Profile } from "../../domain/entities/profile";
-import type { ICreateProfileDatabaseProvider } from "../contracts/profile-database-provider";
+import type { IProfileDatabaseProvider } from "../contracts/profile-database-provider";
 
 export class ProfileRepository implements IProfileRepository {
-    constructor(private readonly db: ICreateProfileDatabaseProvider) { }
+    constructor(private readonly db: IProfileDatabaseProvider) { }
     public async loadAllProfile(): Promise<Profile[]> {
         const data = await this.db.loadAllProfiles()
         return data.map((profile) => ({
@@ -23,8 +23,11 @@ export class ProfileRepository implements IProfileRepository {
             deleted: data.deleted,
         };
     }
-    public async deleteProfile(profile: Profile, id: string): Promise<void> {
-        const data = await this.db.deleteProfile(profile, id);
-        return data;
+    public async deleteProfile(id: string): Promise<void> {
+        const data = await this.db.deleteProfile(id);
+    }
+
+    public async renameProfile(profile: Profile, name: string): Promise<void> {
+
     }
 }
