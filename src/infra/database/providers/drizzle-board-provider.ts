@@ -12,27 +12,29 @@ export class DrizzleBoardProvider implements IBoardDatabaseProvider {
     });
     return result;
   }
+
+
   public async createBoard(board: any): Promise<any> {
     const result = await db.insert(board).values({
       name: board.name,
       id: board.id,
       deleted: board.deleted,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     });
     return result;
   }
+
   public async deleteBoard(id: string): Promise<void> {
     const result = await db
       .update(board)
-      .set({ deleted: 1 })
+      .set({ deleted: true })
       .where(eq(board.id, id))
       .execute();
-    return result;
-  }
+   }
   public async updateBoard(board: any, id: string): Promise<any> {
     const result = await db
       .update(board)
-      .set({ 
+      .set({
         name: board.name,
         cards: board.cards,
         deleted: board.deleted,
