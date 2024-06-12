@@ -24,7 +24,7 @@ export const setupDeleteBoard: Setup =
           cause: "board-not-deleted",
         });
       }
-      await repository.deleteBoard(board, id);
+      await repository.deleteBoard(id);
       return {
         statusCode: 200,
         message: "Board deleted successfully",

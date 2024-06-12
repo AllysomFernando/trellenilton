@@ -1,7 +1,11 @@
-import { sqliteTable, text, } from "drizzle-orm/sqlite-core";
+import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
+import { pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 
-export const priority = sqliteTable('priority', {
-  id: text('id').primaryKey(),
-  name: text("name").notNull(),
-  level: text("level").notNull()
+export const priority = pgTable("priority", {
+	id: uuid("id").defaultRandom().primaryKey(),
+	name: varchar("name").notNull(),
+	level: varchar("level").notNull(),
 });
+
+export type Priority = InferSelectModel<typeof priority>;
+export type NewPriority = InferInsertModel<typeof priority>;
