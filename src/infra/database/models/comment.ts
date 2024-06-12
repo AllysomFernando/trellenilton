@@ -1,6 +1,6 @@
 import { sqliteTable, text, } from "drizzle-orm/sqlite-core";
 import { card } from "./card";
-import { user } from "./user";
+import { user } from "./profile";
 
 export const comment = sqliteTable('comment', {
   id: text('id').primaryKey(),

@@ -1,6 +1,12 @@
 export type Card = {
   id: string,
-  name: string,
+  idPriority: string,
+  idCategory: string,
+  idStatus: string,
+  title: string,
   description: string,
-  deadLine: Date
+  createdAt: string,
+  updatedAt: string,
+  endedAt: string,
+  deleted: number,
 }
