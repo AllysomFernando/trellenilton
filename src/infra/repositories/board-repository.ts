@@ -1,4 +1,3 @@
-// src/infra/repositories/BoardRepository.ts
 import type { IBoardRepository } from "../../domain/contracts/board-repository";
 import type { Board } from "../../domain/entities/board";
 import type { IBoardDatabaseProvider } from "../contracts/board-database-provider";
