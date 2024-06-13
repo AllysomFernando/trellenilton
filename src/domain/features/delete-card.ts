@@ -15,18 +15,23 @@ type SetupDeleteCard = {
 };
 type Setup = (props: SetupDeleteCard) => DeleteCard;
 
-export const setupDeleteCard: Setup = 
-    ({repository}) =>
-    async ({card, id}) => {
-        try {
-            await repository.deleteCard(card, id);
-            return {
-                statusCode: 200,
-                message: "Card deleted successfully",
-            };
-        } catch (error) {
-            throw new Error("Could not delete card", {
-                cause: "delete-card",
-            })
+export const setupDeleteCard: Setup =
+    ({ repository }) =>
+        async ({ card, id }) => {
+            try {
+                if (card.deleted === false) {
+                    throw new Error("Card must be marked as deleted before deletion", {
+                        cause: "card-not-deleted",
+                    });
+                }
+                await repository.deleteCard(card, id);
+                return {
+                    statusCode: 200,
+                    message: "Card deleted successfully",
+                };
+            } catch (error) {
+                throw new Error("Could not delete card", {
+                    cause: "delete-card",
+                })
+            }
         }
-    }
