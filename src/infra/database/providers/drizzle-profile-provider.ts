@@ -1,8 +1,9 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../../main/drizzle";
-import type { ICreateProfileDatabaseProvider } from "../../contracts/profile-database-provider";
+import type { IProfileDatabaseProvider } from "../../contracts/profile-database-provider";
+import { profile } from "../models";
 
-export class DrizzleProfileProvider implements ICreateProfileDatabaseProvider {
+export class DrizzleProfileProvider implements IProfileDatabaseProvider {
     public async loadAllProfiles(): Promise<any[]> {
         const result = await db.query.profile.findMany({
             with: {
@@ -22,12 +23,20 @@ export class DrizzleProfileProvider implements ICreateProfileDatabaseProvider {
         );
         return result;
     }
-    public async deleteProfile(profile: any, id: string): Promise<any> {
-        const result = await db
+    public async deleteProfile(id: string): Promise<void> {
+        await db
             .update(profile)
-            .set({ deleted: 1 })
+            .set({ deleted: false })
             .where(eq(profile.id, id))
             .execute();
-        return result;
+    }
+    public async renameProfile(profile: any, id: string): Promise<void> {
+        await db
+            .update(profile)
+            .set({
+                name: profile.name,
+            })
+            .where(eq(profile.id, id))
+            .execute()
     }
 };

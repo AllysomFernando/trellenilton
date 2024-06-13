@@ -7,9 +7,9 @@ export class ProfileRepository implements IProfileRepository {
     public async loadAllProfile(): Promise<Profile[]> {
         const data = await this.db.loadAllProfiles()
         return data.map((profile) => ({
+            id: profile.id,
             name: profile.name,
-            function: profile.function,
-            image: profile.image,
+            funcao: profile.funcao,
             deleted: profile.deleted,
         }));
     }
@@ -17,17 +17,23 @@ export class ProfileRepository implements IProfileRepository {
     public async createProfile(profile: Profile): Promise<Profile> {
         const data = await this.db.createProfile(profile);
         return {
+            id: data.id,
             name: data.name,
-            function: data.function,
-            image: data.image,
+            funcao: data.funcao,
             deleted: data.deleted,
         };
     }
     public async deleteProfile(id: string): Promise<void> {
-        const data = await this.db.deleteProfile(id);
+        await this.db.deleteProfile(id);
     }
 
-    public async renameProfile(profile: Profile, name: string): Promise<void> {
-
+    public async renameProfile(profile: any, id: string): Promise<Profile> {
+        const data = await this.db.renameProfile(profile, id)
+        return{
+            id: data.id,
+            name: data.name,
+            funcao: data.funcao,
+            deleted: data.deleted,
+        }
     }
 }
