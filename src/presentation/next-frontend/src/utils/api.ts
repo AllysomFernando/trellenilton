@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3001/api',
+  baseURL: 'http://localhost:3000/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -10,7 +10,7 @@ const api = axios.create({
 api.interceptors.response.use(
     response => response,
     error =>{
-        if(error.response.status) {
+        if(error.response && error.response.status) {
             console.log(error.response.data);
         }
         return Promise.reject(error);

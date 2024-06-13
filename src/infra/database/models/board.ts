@@ -11,8 +11,8 @@ import {
 export const board = pgTable("board", {
 	id: uuid("id").defaultRandom().primaryKey(),
 	name: varchar("name", { length: 255 }).notNull(),
-	deleted: boolean("deleted").notNull(),
-	createdAt: timestamp("createAt").notNull(),
+	deleted: boolean("deleted"),
+	createdAt: timestamp("createAt"),
 });
 
 export const boardRelations = relations(board, ({ many }) => ({
