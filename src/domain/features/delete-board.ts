@@ -19,7 +19,12 @@ export const setupDeleteBoard: Setup =
   ({ repository }) =>
   async ({ board, id }) => {
     try {
-      await repository.deleteBoard(board, id);
+      if(board.deleted === false){
+        throw new Error("Board must be marked as deleted before deletion", {
+          cause: "board-not-deleted",
+        });
+      }
+      await repository.deleteBoard(id);
       return {
         statusCode: 200,
         message: "Board deleted successfully",

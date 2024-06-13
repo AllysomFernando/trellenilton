@@ -35,8 +35,23 @@ export class BoardRepository implements IBoardRepository {
 			createdAt: board.createdAt,
 		};
 	}
-	public async deleteBoard(board: Board, id: string): Promise<void> {
-		const data = await this.db.deleteBoard(board, id);
+	public async deleteBoard(id: string): Promise<void> {
+		const data = await this.db.deleteBoard(id);
 		return data;
+	}
+	public async updateBoard(board: Board, id: string): Promise<Board> {
+		const data = await this.db.updateBoard(board, id);
+		return {
+			id: data.id,
+			name: data.name,
+			cards: data.cards.map((card: any) => ({
+				id: card.id,
+				name: card.name,
+				description: card.description,
+				deadLine: new Date(card.deadLine),
+			})),
+			deleted: board.deleted,
+			createdAt: board.createdAt,
+		};
 	}
 }

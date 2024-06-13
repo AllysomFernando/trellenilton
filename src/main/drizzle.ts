@@ -1,9 +1,7 @@
-import { createClient } from "@libsql/client";
-import { env } from "./env";
-import { drizzle } from "drizzle-orm/better-sqlite3";
-import * as schema from '../infra/database/models'
+import { Pool } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-serverless';
+import * as models from '../infra/database/models'
 
-const client = createClient({ url: env.url, authToken: env.authToken });
-export const db = drizzle(client, {
-  schema
-});
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+export const db = drizzle(pool, { schema: models });

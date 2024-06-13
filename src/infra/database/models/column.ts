@@ -1,9 +1,16 @@
-import { sqliteTable, text, int} from "drizzle-orm/sqlite-core";
+import { boolean, pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 import { card } from "./card";
-export const column = sqliteTable('column', {
-  id: text('id').primaryKey(),
-  idCard: text("idCard").references(() => card.id).notNull(),
-  name: text("name").notNull(),
-  description: text("description").notNull(),
-  deleted: int("deleted").notNull()
+import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
+
+
+export const column = pgTable('column', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  idCard: uuid("idCard").references(() => card.id).notNull(),
+  name: varchar("name").notNull(),
+  description: varchar("description", {length: 255}).notNull(),
+  deleted: boolean("deleted").notNull()
 });
+
+
+export type Column = InferSelectModel<typeof column>;
+export type NewColumn = InferInsertModel<typeof column>;

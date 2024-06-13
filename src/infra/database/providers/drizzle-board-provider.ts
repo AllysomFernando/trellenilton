@@ -2,34 +2,50 @@ import { eq } from "drizzle-orm";
 import { db } from "../../../main/drizzle";
 import type { IBoardDatabaseProvider } from "../../contracts/board-database-provider";
 import { board } from "../models";
-import type { Board } from "../../../domain/entities/board";
+
 export class DrizzleBoardProvider implements IBoardDatabaseProvider {
-	public async loadAllBoards(): Promise<any[]> {
-		const result = await db.query.board.findMany({
-			with: {
-				cards: true,
-			},
-		});
-		return result;
-	}
+  public async loadAllBoards(): Promise<any[]> {
+    const result = await db.query.board.findMany({
+      with: {
+        cards: true,
+      },
+    });
+    return result;
+  }
 
-	public async createBoard(boardCreate: Board): Promise<any> {
-		const result = await db.insert(board).values({
-			id: boardCreate.id.toString(),
-			name: boardCreate.name,
-			deleted: "0",
-			createdAt: boardCreate.createdAt,
-		});
-		return result;
-	}
 
-	//TODO: verificar se eh a maneira correta passar esse board aqui
-	public async deleteBoard(board: any, id: string): Promise<any> {
-		const result = await db
-			.update(board)
-			.set({ deleted: false })
-			.where(eq(board.id, id))
-			.execute();
-		return result;
-	}
+  public async createBoard(board: any): Promise<any> {
+    const result = await db.insert(board).values({
+      name: board.name,
+      id: board.id,
+      deleted: board.deleted,
+      createdAt: new Date().toISOString(),
+    });
+    return result;
+  }
+
+  public async deleteBoard(id: string): Promise<void> {
+    try{
+      await db
+      .update(board)
+      .set({ deleted: true })
+      .where(eq(board.id, id))
+      .execute();
+    }catch(error){
+      console.error(error)
+    }
+     
+   }
+  public async updateBoard(board: any, id: string): Promise<any> {
+    const result = await db
+      .update(board)
+      .set({
+        name: board.name,
+        cards: board.cards,
+        deleted: board.deleted,
+      })
+      .where(eq(board.id, id))
+      .execute();
+    return result;
+  }
 }

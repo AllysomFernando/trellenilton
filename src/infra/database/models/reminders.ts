@@ -1,8 +1,12 @@
-import { int, sqliteTable, text, } from "drizzle-orm/sqlite-core";
+import { pgTable, uuid, boolean } from "drizzle-orm/pg-core";
 import { card } from "./card";
+import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 
-export const reminders = sqliteTable('reminders', {
-  id: text('id').primaryKey(),
-  idCard: text("idCard").references(() => card.id).notNull(),
-  active: int("active").notNull()
+export const reminders = pgTable('reminders', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  idCard: uuid("idCard").references(() => card.id).notNull(),
+  active: boolean("active").notNull()
 });
+
+export type Reminders = InferSelectModel<typeof reminders>;
+export type NewReminders = InferInsertModel<typeof reminders>;
