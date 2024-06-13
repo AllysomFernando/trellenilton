@@ -22,7 +22,7 @@ export const setupCreateUser: Setup =
         name: name,
         cards: [],
         id: "",
-        deleted: 0,
+        deleted: false,
       });
     } catch (error) {
       throw new Error("Could not create board", {
