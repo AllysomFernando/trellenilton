@@ -37,7 +37,7 @@ export class DrizzleCardProvider implements ICardDatabaseProvider {
           createdAt: dto.createdAt,
           updatedAt: dto.updatedAt,
           endedAt: dto.endedAt,
-          deleted: 0,
+          deleted: false,
         })
         return result;
       }
@@ -58,10 +58,10 @@ export class DrizzleCardProvider implements ICardDatabaseProvider {
         }));
       }
 
-      public async deleteCard(id: string, card: any): Promise<Card> {
+      public async deleteCard(id: string): Promise<Card> {
         const result = await db
         .update(card)
-        .set({ deleted: 1 })
+        .set({ deleted: false })
         .where(eq(card.id, id))
         .execute();
         return result;
