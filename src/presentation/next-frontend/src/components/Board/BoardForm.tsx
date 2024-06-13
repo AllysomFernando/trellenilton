@@ -4,7 +4,7 @@ import { createBoard, updateBoard } from "../../services/boardServices";
 interface BoardFormProps {
 	boardId?: string;
 	initialData?: { name: string };
-	onSubmit?: (updatedData: { name: string; deleted: boolean }) => void;
+	onSubmit: (updatedData: { name: string; deleted: boolean }) => void;
 }
 
 export const BoardForm = ({
