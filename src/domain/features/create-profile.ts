@@ -1,6 +1,11 @@
 import type { IProfileRepository } from "../contracts/profile-repository";
 
-type Input = {}
+type Input = {
+    id: string,
+    name: string,
+    funcao: string,
+    deleted: boolean,
+}
 type Output = {}
 type CreateProfile = (input: Input) => Promise<Output>
 type SetupCreateProfileProps = {
@@ -12,10 +17,10 @@ export const setupCreateProfile: Setup = ({ repository }) => async input => {
     try {
         return async () => {
             return await repository.createProfile({
+                id: "id",
                 name: "any_name",
-                function: "any_function",
-                image: "string",
-                deleted: 0,
+                funcao: "any_function",
+                deleted: false,
             })
         }
     } catch (error) {

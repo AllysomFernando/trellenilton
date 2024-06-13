@@ -1,6 +1,6 @@
 export type Profile = {
+    id: string;
     name: string;
-    function: string;
-    image: string;
-    deleted: number;
+    funcao: string;
+    deleted: boolean;
 }

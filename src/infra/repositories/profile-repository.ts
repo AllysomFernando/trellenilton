@@ -1,15 +1,15 @@
 import type { IProfileRepository } from "../../domain/contracts/profile-repository";
 import type { Profile } from "../../domain/entities/profile";
-import type { ICreateProfileDatabaseProvider } from "../contracts/profile-database-provider";
+import type { IProfileDatabaseProvider } from "../contracts/profile-database-provider";
 
 export class ProfileRepository implements IProfileRepository {
-    constructor(private readonly db: ICreateProfileDatabaseProvider) { }
+    constructor(private readonly db: IProfileDatabaseProvider) { }
     public async loadAllProfile(): Promise<Profile[]> {
         const data = await this.db.loadAllProfiles()
         return data.map((profile) => ({
+            id: profile.id,
             name: profile.name,
-            function: profile.function,
-            image: profile.image,
+            funcao: profile.funcao,
             deleted: profile.deleted,
         }));
     }
@@ -17,14 +17,23 @@ export class ProfileRepository implements IProfileRepository {
     public async createProfile(profile: Profile): Promise<Profile> {
         const data = await this.db.createProfile(profile);
         return {
+            id: data.id,
             name: data.name,
-            function: data.function,
-            image: data.image,
+            funcao: data.funcao,
             deleted: data.deleted,
         };
     }
-    public async deleteProfile(profile: Profile, id: string): Promise<void> {
-        const data = await this.db.deleteProfile(profile, id);
-        return data;
+    public async deleteProfile(id: string): Promise<void> {
+        await this.db.deleteProfile(id);
+    }
+
+    public async renameProfile(profile: any, id: string): Promise<Profile> {
+        const data = await this.db.renameProfile(profile, id)
+        return{
+            id: data.id,
+            name: data.name,
+            funcao: data.funcao,
+            deleted: data.deleted,
+        }
     }
 }
