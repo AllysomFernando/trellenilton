@@ -2,12 +2,14 @@ import React from 'react';
 import BoardForm from '../components/Board/BoardForm';
 import { BoardList } from '@/components/Board/BoardList';
 
-export const Home = () => {
+const Home = () => {
   return (
     <div>
       <h1>My Boards</h1>
-      <BoardForm />
+      <BoardForm  onSubmit={(e) => console.log("submited", e)}/>
       <BoardList />
     </div>
   );
 };
+
+export default Home

@@ -11,9 +11,10 @@ type SetupCreateBoard = {
 };
 type Setup = (props: SetupCreateBoard) => CreateBoard;
 
-export const setupCreateUser: Setup =
+export const setupCreateBoards: Setup =
 	({ repository }) =>
 	async ({ name }: Input) => {
+		console.log("hello world")
 		if (name.length < 3)
 			throw new Error("Name must have at least 3 characters");
 		try {
@@ -25,8 +26,10 @@ export const setupCreateUser: Setup =
 				deleted: false,
 			});
 		} catch (error) {
+			console.log(error)
 			throw new Error("Could not create board", {
 				cause: "create-board",
 			});
 		}
 	};
+q
