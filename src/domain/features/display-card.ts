@@ -14,6 +14,9 @@ export const setupDisplayCards: Setup = ({
 }) => async input => {
     try {
         const cards = await repository.loadAllCards()
+        if (cards.length === 0) throw new Error ("No cards found", {
+            cause: "no-cards"
+        })
         return cards
     } catch (error) {
         throw new Error("Could not load all cards", {
