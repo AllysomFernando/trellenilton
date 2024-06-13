@@ -31,8 +31,8 @@ export class BoardRepository implements IBoardRepository {
 				description: card.description,
 				deadLine: new Date(card.deadLine),
 			})),
-			deleted: board.deleted,
-			createdAt: board.createdAt,
+			deleted: false,
+			createdAt: new Date().toISOString(),
 		};
 	}
 	public async deleteBoard(id: string): Promise<void> {
