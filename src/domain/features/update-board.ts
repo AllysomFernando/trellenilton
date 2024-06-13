@@ -7,7 +7,7 @@ type Input = {
     id: string;
     name?: string;
     cards?: Card[];
-    deleted?: number;
+    deleted?: boolean;
 }
 
 type Output = Board;
