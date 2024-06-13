@@ -30,7 +30,7 @@ export class DrizzleProfileProvider implements IProfileDatabaseProvider {
             .where(eq(profile.id, id))
             .execute();
     }
-    public async renameProfile(profile: any, id: string): Promise<void> {
+    public async renameProfile(profile: any, id: string): Promise<any> {
         await db
             .update(profile)
             .set({
