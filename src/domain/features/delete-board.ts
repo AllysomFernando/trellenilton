@@ -17,16 +17,21 @@ type Setup = (props: SetupDeleteBoard) => DeleteBoard;
 
 export const setupDeleteBoard: Setup =
   ({ repository }) =>
-    async ({ board, id }) => {
-      try {
-        await repository.deleteBoard(board, id);
-        return {
-          statusCode: 200,
-          message: "Board deleted successfully",
-        };
-      } catch (error) {
-        throw new Error("Could not delete board", {
-          cause: "delete-board",
+  async ({ board, id }) => {
+    try {
+      if(board.deleted === 0){
+        throw new Error("Board must be marked as deleted before deletion", {
+          cause: "board-not-deleted",
         });
       }
-    };
+      await repository.deleteBoard(board, id);
+      return {
+        statusCode: 200,
+        message: "Board deleted successfully",
+      };
+    } catch (error) {
+      throw new Error("Could not delete board", {
+        cause: "delete-board",
+      });
+    }
+  };

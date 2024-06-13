@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../../main/drizzle";
 import type { IBoardDatabaseProvider } from "../../contracts/board-database-provider";
-import { card, category, priority, status } from "../models";
-import type { Card } from "../../../domain/entities/card";
+import { board } from "../models";
+
 
 export class DrizzleBoardProvider implements IBoardDatabaseProvider {
   public async loadAllBoards(): Promise<any[]> {
@@ -16,14 +16,28 @@ export class DrizzleBoardProvider implements IBoardDatabaseProvider {
   public async createBoard(board: any): Promise<any> {
     const result = await db.insert(board).values({
       name: board.name,
-      cards: [],
+      id: board.id,
+      deleted: board.deleted,
+      createdAt: new Date().toISOString()
     });
     return result;
   }
-  public async deleteBoard(board: any, id: string): Promise<any> {
+  public async deleteBoard(id: string): Promise<void> {
     const result = await db
       .update(board)
-      .set({ deleted: "1" })
+      .set({ deleted: 1 })
+      .where(eq(board.id, id))
+      .execute();
+    return result;
+  }
+  public async updateBoard(board: any, id: string): Promise<any> {
+    const result = await db
+      .update(board)
+      .set({ 
+        name: board.name,
+        cards: board.cards,
+        deleted: board.deleted,
+      })
       .where(eq(board.id, id))
       .execute();
     return result;
