@@ -1,10 +1,10 @@
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
-import { user } from "./user";
+import { profile } from "./profile";
 import { pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 
 export const log = pgTable('log', {
   id: uuid('id').defaultRandom().primaryKey(),
-  idUser: uuid("idUser").references(() => user.id).notNull(), 
+  idProfile: uuid("idUser").references(() => profile.id).notNull(), 
   table: varchar("table").notNull(),
   primaryKey: varchar("primaryKey").notNull(),
   date: varchar("date").notNull(),
