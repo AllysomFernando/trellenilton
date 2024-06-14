@@ -37,6 +37,12 @@ export const updateBoard = async (id: string, data: UpdateBoardData) => {
 };
 
 export const deleteBoard = async (id: string, data: UpdateBoardData) => {
-	const response = await poster(`/boards/${id}`, data);
-	return response.data;
+	try {
+		const response = await poster(`/boards/${id}`, data);
+		console.log("deleted", response);
+		return response;
+	} catch (error) {
+		console.log(error);
+	}
+	return undefined;
 };

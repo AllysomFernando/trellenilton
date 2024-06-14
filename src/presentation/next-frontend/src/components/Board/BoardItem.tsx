@@ -6,10 +6,14 @@ interface BoardProps {
 	board: Board;
 }
 
-export const BoardItem = ({ board }: BoardProps) => {
+const BoardItem = ({ board }: BoardProps) => {
 	const handleDelete = async () => {
-		await deleteBoard(board.id, { deleted: true });
-		window.location.reload();
+		try {
+			const deleted = await deleteBoard(board.id, { deleted: true });
+			console.log("deleted inside of component", deleted);
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	return (
@@ -21,3 +25,4 @@ export const BoardItem = ({ board }: BoardProps) => {
 		</div>
 	);
 };
+export default BoardItem;

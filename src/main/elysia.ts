@@ -40,8 +40,8 @@ new Elysia()
 			}),
 		}
 	)
-	.post(
-		"api/delete-boards",
+	.delete(
+		"api/delete-boards/:id",
 		({ body: { id, board }, deleteService }) => {
 			return deleteService({ id, board });
 		},

@@ -1,6 +1,6 @@
 import { fetchBoards } from "@/services/boardServices";
 import React, { useEffect, useState } from "react";
-import { BoardItem } from "./BoardItem";
+import BoardItem from "./BoardItem";
 import { Board } from "@/types/board";
 
 const BoardList = () => {
