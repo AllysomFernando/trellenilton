@@ -27,7 +27,6 @@ export class DrizzleCardProvider implements ICardDatabaseProvider {
           throw new Error("Status not found")
         }
         const result = await db.insert(card).values({
-    
           id: dto.id,
           idPriority: priorityReference.id,
           idCategory: categoryReference.id,

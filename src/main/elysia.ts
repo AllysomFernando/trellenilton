@@ -6,7 +6,6 @@ import { BoardRepository } from 'infra/repositories/board-repository'
 
 new Elysia()
   .get("/health", () => "it's healthy")
-  // factory
   .decorate("service", setupCreateBoards({
     repository: new BoardRepository(
       new DrizzleBoardProvider()
@@ -16,10 +15,10 @@ new Elysia()
     body: { name },
     service
   }) => {
-    return service({ name })
+    return service({name});
   }, {
     body: t.Object({
       name: t.String(),
     })
   })
-  .listen(3001)
+  .listen(3000);

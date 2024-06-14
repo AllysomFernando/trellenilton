@@ -14,17 +14,10 @@ type Setup = (props: SetupCreateBoard) => CreateBoard;
 export const setupCreateBoards: Setup =
 	({ repository }) =>
 	async ({ name }: Input) => {
-		console.log("hello world")
 		if (name.length < 3)
 			throw new Error("Name must have at least 3 characters");
 		try {
-			return await repository.createBoard({
-				id: Math.random().toString(),
-				name,
-				cards: [],
-				createdAt: new Date().toISOString(),
-				deleted: false,
-			});
+			return await repository.createBoard(name); 
 		} catch (error) {
 			console.log(error)
 			throw new Error("Could not create board", {

@@ -1,14 +1,7 @@
-require('dotenv').config();
+import { Pool } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-serverless';
+import * as models from 'infra/database/models'
 
-const {neon} = require('@neondatabase/serverless');
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
-const {PGHOST, PGDATABASE, PGUSER, PGPASSWORD} = process.env;
-
-const sql = neon(`postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}/${PGDATABASE}`);
-
-async function getPgVersion(){
-    const result = await sql`SELECT version()`;
-    console.log(result[0]);
-}
-
-getPgVersion(); 
+export const db = drizzle(pool, { schema: models });

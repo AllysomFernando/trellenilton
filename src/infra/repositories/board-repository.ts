@@ -2,7 +2,7 @@ import type { IBoardRepository } from "../../domain/contracts/board-repository";
 import type { Board } from "../../domain/entities/board";
 import type { IBoardDatabaseProvider } from "../contracts/board-database-provider";
 
-export class BoardRepository implements IBoardRepository {
+export class BoardRepository implements IBoardDatabaseProvider {
 	constructor(private readonly db: IBoardDatabaseProvider) {}
 
 	public async loadAllBoards(): Promise<Board[]> {
@@ -20,19 +20,14 @@ export class BoardRepository implements IBoardRepository {
 			createdAt: board.createdAt,
 		}));
 	}
-	public async createBoard(board: Board): Promise<Board> {
-		const data = await this.db.createBoard(board);
+	public async createBoard(name: string, deletedAt: false, createdAt: string): Promise<Board> {
+		const data = await this.db.createBoard(name, deletedAt, createdAt);
 		return {
 			id: data.id,
 			name: data.name,
-			cards: data.cards.map((card: any) => ({
-				id: card.id,
-				name: card.name,
-				description: card.description,
-				deadLine: new Date(card.deadLine),
-			})),
+			cards: [],
 			deleted: false,
-			createdAt: new Date().toISOString(),
+			createdAt: new Date().toString(),
 		};
 	}
 	public async deleteBoard(id: string): Promise<void> {
