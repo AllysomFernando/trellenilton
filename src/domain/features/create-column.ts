@@ -1,9 +1,10 @@
+import type { IColumnRepository } from "../contracts/column-repository"
+
 type Input = {
-    name: string
 }
 type Output = {}
 
-type CreateColumn = ( input: Input)=> Promise<Output>
+type CreateColumn = (input: Input) => Promise<Output>
 
 type SetupCreateColumnProps = {
     repository: IColumnRepository
@@ -11,8 +12,8 @@ type SetupCreateColumnProps = {
 
 type Setup = (props: SetupCreateColumnProps) => CreateColumn
 
-export const setupCreateColumn: Setup = ({ repository }) => async ({ name }) => {
+export const setupCreateColumn: Setup = ({ repository }) => async ({ }) => {
 
-return {}
+    return {}
 
 }
