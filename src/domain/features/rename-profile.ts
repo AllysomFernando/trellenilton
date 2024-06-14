@@ -26,7 +26,7 @@ export const setupRenameProfile: Setup = ({ repository }) => async ({ id, name, 
             });
         }
         if (name && name.length < 3) {
-            throw new Error("Name must be at least 3 characters long", {
+            throw new Error("Name must have at least 3 characters long", {
                 cause: "invalid-profile-name"
             });
         }
