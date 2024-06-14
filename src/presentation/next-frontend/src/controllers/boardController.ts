@@ -22,7 +22,7 @@ export const fetchBoard = async (res: NextApiResponse) => {
 		console.log(error);
 		res.status(500).json({ error: error.message });
 	}
-}
+};
 
 export const fetchBoardById = async (id: string, res: NextApiResponse) => {
 	try {
@@ -32,4 +32,4 @@ export const fetchBoardById = async (id: string, res: NextApiResponse) => {
 		console.log(error);
 		res.status(500).json({ error: error.message });
 	}
-}
+};

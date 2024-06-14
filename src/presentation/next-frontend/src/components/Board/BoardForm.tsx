@@ -7,7 +7,7 @@ interface BoardFormProps {
 	onSubmit: (updatedData: { name: string; deleted: boolean }) => void;
 }
 
-export const BoardForm = ({
+const BoardForm = ({
 	boardId,
 	initialData,
 	onSubmit,

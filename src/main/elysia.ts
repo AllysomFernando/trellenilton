@@ -4,9 +4,9 @@ import { cors } from "@elysiajs/cors";
 import { DrizzleBoardProvider } from "infra/database/providers/drizzle-board-provider";
 import { BoardRepository } from "infra/repositories/board-repository";
 import { setupDisplayBoards } from "domain/features/display-boards";
+import { setupDeleteBoard } from "domain/features/delete-board";
 
 const boardRepository = new BoardRepository(new DrizzleBoardProvider());
-
 
 new Elysia()
 	.use(cors())
@@ -15,14 +15,20 @@ new Elysia()
 		"createService",
 		setupCreateBoards({
 			repository: boardRepository,
-		}),
+		})
 	)
 	.decorate(
-        "fetchService",
-        setupDisplayBoards({
-            repository: boardRepository,
-        }),
-    )
+		"fetchService",
+		setupDisplayBoards({
+			repository: boardRepository,
+		})
+	)
+	.decorate(
+		"deleteService",
+		setupDeleteBoard({
+			repository: boardRepository,
+		})
+	)
 	.post(
 		"/api/create-boards",
 		({ body: { name }, createService }) => {
@@ -34,7 +40,25 @@ new Elysia()
 			}),
 		}
 	)
-	.get("/api/boards", ({fetchService}) => {
+	.post(
+		"api/delete-boards",
+		({ body: { id, board }, deleteService }) => {
+			return deleteService({ id, board });
+		},
+		{
+			body: t.Object({
+				id: t.String(),
+				board: t.Object({
+					deleted: t.Boolean(),
+					id: t.String(),
+					name: t.String(),
+					createdAt: t.String(),
+				}),
+			}),
+		}
+	)
+
+	.get("/api/boards", ({ fetchService }) => {
 		return fetchService({});
 	})
 

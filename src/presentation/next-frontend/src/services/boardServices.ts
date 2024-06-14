@@ -4,8 +4,9 @@ import { Board, UpdateBoardData } from "../types/board";
 export const fetchBoards = async () => {
 	try {
 		const response = await fetcher("/boards");
-		if (response.data) {
-			return response.data;
+		console.log("response ==>", response);
+		if (response) {
+			return response;
 		} else {
 			return [];
 		}
@@ -13,12 +14,14 @@ export const fetchBoards = async () => {
 		console.log(error);
 	}
 };
-export const createBoard = async (data: { name: string }): Promise<Board | undefined> => {
+export const createBoard = async (data: {
+	name: string;
+}): Promise<Board | undefined> => {
 	try {
-	   const response = await poster('/create-boards', data);
-	   return response.data;
+		const response = await poster("/create-boards", data);
+		return response;
 	} catch (error) {
-	   console.log(error);
+		console.log(error);
 	}
 	return undefined;
 };
@@ -33,7 +36,7 @@ export const updateBoard = async (id: string, data: UpdateBoardData) => {
 	return response.data;
 };
 
-export const deleteBoard = async (id: string) => {
-	const response = await api.delete(`/boards/${id}`);
+export const deleteBoard = async (id: string, data: UpdateBoardData) => {
+	const response = await poster(`/boards/${id}`, data);
 	return response.data;
 };
