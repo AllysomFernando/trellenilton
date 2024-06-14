@@ -2,7 +2,7 @@ import type { IBoardRepository } from "../../domain/contracts/board-repository";
 import type { Board } from "../../domain/entities/board";
 import type { IBoardDatabaseProvider } from "../contracts/board-database-provider";
 
-export class BoardRepository implements IBoardDatabaseProvider {
+export class BoardRepository implements IBoardRepository {
 	constructor(private readonly db: IBoardDatabaseProvider) {}
 
 	public async loadAllBoards(): Promise<Board[]> {
@@ -20,8 +20,8 @@ export class BoardRepository implements IBoardDatabaseProvider {
 			createdAt: board.createdAt,
 		}));
 	}
-	public async createBoard(name: string, deletedAt: false, createdAt: string): Promise<Board> {
-		const data = await this.db.createBoard(name, deletedAt, createdAt);
+	public async createBoard(name: string, deleted: boolean, createdAt: string): Promise<Board> {
+		const data = await this.db.createBoard(name, deleted, createdAt);
 		return {
 			id: data.id,
 			name: data.name,
