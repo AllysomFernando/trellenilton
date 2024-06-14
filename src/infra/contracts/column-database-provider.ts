@@ -1,3 +1,3 @@
-export interface IColumnDatabseProvider{
-    createColumn: (column: any) => Promise<any>;
+export interface IColumnDatabseProvider {
+    createColumn: (deleted: boolean) => Promise<any>;
 }

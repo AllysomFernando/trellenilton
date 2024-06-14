@@ -6,10 +6,7 @@ export class DrizzleColumnProvider implements IColumnDatabseProvider {
     public async createColumn(column: any): Promise<any> {
         const result = await db.insert(column).values(
             {
-                id: String,
-                name: String,
-                card?: card[],
-                deleted: Boolean,
+                deleted: column.deleted,
             }
         )
         return result;
