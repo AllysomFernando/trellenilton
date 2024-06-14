@@ -7,65 +7,64 @@ import type { ICardDatabaseProvider } from "../../contracts/card-database-provid
 
 export class DrizzleCardProvider implements ICardDatabaseProvider {
 
-    public async createCard(dto: Card): Promise<Card> {
-        const priorityReference = await db.query.priority.findFirst({
-          where: eq(priority.id, dto.idPriority)
-        })
-        if (!priorityReference) {
-          throw new Error("Priority not found")
-        }
-        const categoryReference = await db.query.category.findFirst({
-          where: eq(category.id, dto.idCategory)
-        })
-        if (!categoryReference) {
-          throw new Error("Category not found")
-        }
-        const statusReference = await db.query.status.findFirst({
-          where: eq(status.id, dto.idStatus)
-        })
-        if (!statusReference) {
-          throw new Error("Status not found")
-        }
-        const result = await db.insert(card).values({
-    
-          id: dto.id,
-          idPriority: priorityReference.id,
-          idCategory: categoryReference.id,
-          idStatus: statusReference.id,
-          title: dto.title,
-          description: dto.description,
-          createdAt: dto.createdAt,
-          updatedAt: dto.updatedAt,
-          endedAt: dto.endedAt,
-          deleted: false,
-        })
-        return result;
-      }
+  public async createCard(dto: Card): Promise<Card> {
+    const priorityReference = await db.query.priority.findFirst({
+      where: eq(priority.id, dto.idPriority)
+    })
+    if (!priorityReference) {
+      throw new Error("Priority not found")
+    }
+    const categoryReference = await db.query.category.findFirst({
+      where: eq(category.id, dto.idCategory)
+    })
+    if (!categoryReference) {
+      throw new Error("Category not found")
+    }
+    const statusReference = await db.query.status.findFirst({
+      where: eq(status.id, dto.idStatus)
+    })
+    if (!statusReference) {
+      throw new Error("Status not found")
+    }
+    const result = await db.insert(card).values({
 
-      public async loadAllCards(): Promise<Card[]> {
-        const result = await db.query.card.findMany();
-        return result.map((card) => ({
-          id: card.id,
-          idPriority: card.idPriority,
-          idCategory: card.idCategory,
-          idStatus: card.idStatus,
-          title: card.title,
-          description: card.description,
-          createdAt: card.createdAt,
-          updatedAt: card.updatedAt,
-          endedAt: card.endedAt,
-          deleted: card.deleted,
-        }));
-      }
+      id: dto.id,
+      idPriority: priorityReference.id,
+      idCategory: categoryReference.id,
+      idStatus: statusReference.id,
+      title: dto.title,
+      description: dto.description,
+      createdAt: dto.createdAt,
+      updatedAt: dto.updatedAt,
+      endedAt: dto.endedAt,
+      deleted: false,
+    })
+    return result;
+  }
 
-      public async deleteCard(id: string): Promise<Card> {
-        const result = await db
-        .update(card)
-        .set({ deleted: false })
-        .where(eq(card.id, id))
-        .execute();
-        return result;
-      }
-      
+  public async loadAllCards(): Promise<Card[]> {
+    const result = await db.query.card.findMany();
+    return result.map((card) => ({
+      id: card.id,
+      idPriority: card.idPriority,
+      idCategory: card.idCategory,
+      idStatus: card.idStatus,
+      title: card.title,
+      description: card.description,
+      createdAt: card.createdAt,
+      updatedAt: card.updatedAt,
+      endedAt: card.endedAt,
+      deleted: card.deleted,
+    }));
+  }
+
+  public async deleteCard(id: string): Promise<Card> {
+    const result = await db
+      .update(card)
+      .set({ deleted: false })
+      .where(eq(card.id, id))
+      .execute();
+    return result;
+  }
+
 }
-
