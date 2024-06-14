@@ -10,13 +10,8 @@ export class BoardRepository implements IBoardRepository {
 		return data.map((board) => ({
 			id: board.id,
 			name: board.name,
-			cards: board.cards.map((card: any) => ({
-				id: card.id,
-				name: card.name,
-				description: card.description,
-				deadLine: new Date(card.deadLine),
-			})),
 			deleted: board.deleted,
+			column: board.column,
 			createdAt: board.createdAt,
 		}));
 	}
@@ -25,8 +20,8 @@ export class BoardRepository implements IBoardRepository {
 		return {
 			id: data.id,
 			name: data.name,
-			cards: [],
-			deleted: false,
+			column: [],
+			deleted: deleted,
 			createdAt: new Date().toString(),
 		};
 	}
@@ -39,11 +34,11 @@ export class BoardRepository implements IBoardRepository {
 		return {
 			id: data.id,
 			name: data.name,
-			cards: data.cards.map((card: any) => ({
-				id: card.id,
-				name: card.name,
-				description: card.description,
-				deadLine: new Date(card.deadLine),
+			column: data.column.map((column: any) => ({
+				id: column.id,
+				idCard: column.idCard,
+				description: column.description,
+				delete: column.delete,
 			})),
 			deleted: board.deleted,
 			createdAt: board.createdAt,
