@@ -3,14 +3,7 @@ import type { ICardRepository } from "../contracts/card-repository";
 
 type Input = {
     id: string,
-    idPriority: string,
-    idCategory: string,
-    idStatus: string,
     title: string,
-    description?: string,
-    createdAt: string,
-    updatedAt?: string,
-    endedAt?: string,
     deleted: boolean,
 };
 
@@ -26,7 +19,7 @@ type Setup = (props: SetupRenameCard) => RenameCard;
 
 export const setupRenameCard: Setup =
     ({ repository }) =>
-        async ({ title, id, deleted, idPriority, idCategory, idStatus, createdAt }) => {
+        async ({ title, id, deleted }) => {
             try {
                 const cards = await repository.loadAllCards();
                 const card = cards.find(card => card.id === id);
