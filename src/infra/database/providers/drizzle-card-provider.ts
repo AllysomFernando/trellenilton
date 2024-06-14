@@ -6,7 +6,7 @@ import type { ICardDatabaseProvider } from "../../contracts/card-database-provid
 
 
 export class DrizzleCardProvider implements ICardDatabaseProvider {
-
+  constructor(private readonly db: ICardDatabaseProvider) {}
   public async createCard(dto: Card): Promise<Card> {
     const priorityReference = await db.query.priority.findFirst({
       where: eq(priority.id, dto.idPriority)
@@ -67,4 +67,19 @@ export class DrizzleCardProvider implements ICardDatabaseProvider {
     return result;
   }
 
+  public async renameCard(card: any, id: string): Promise<Card> {
+    const data = await this.db.renameCard(card, id)
+    return {
+      id: data.id,
+      idPriority: data.idPriority,
+      idCategory: data.idCategory,
+      idStatus: data.idStatus,
+      title: data.title,
+      description: data.description,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
+      endedAt: data.endedAt,
+      deleted: data.deleted,
+    }
+  }
 }
