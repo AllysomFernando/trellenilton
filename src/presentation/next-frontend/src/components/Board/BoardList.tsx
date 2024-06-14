@@ -6,12 +6,9 @@ export const BoardList = () => {
     const [boards, setBoards] = useState<Board[]>([]);
 
     useEffect(() => {
-        const getBoards = async () => {
-            const boardsData = await fetchBoards();
-            setBoards(boardsData);
-        };
-
-        fetchBoards();
+        fetchBoards().then((data) => {
+            setBoards(data);
+        });
     }, []);
     return(
         <div>

@@ -32,12 +32,12 @@ export const BoardForm = ({
 					deleted: false,
 				});
 				if (onSubmit) {
-					onSubmit(updatedBoard);
+					onSubmit(updatedBoard || { name: "", deleted: false });
 				}
 			} else {
 				const newBoard = await createBoard({ name });
 				if (onSubmit) {
-					onSubmit(newBoard);
+					onSubmit(newBoard || { name: "", deleted: false });
 				}
 			}
 			window.location.reload();
