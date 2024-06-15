@@ -7,7 +7,7 @@ export class DrizzleProfileProvider implements IProfileDatabaseProvider {
     public async loadAllProfiles(): Promise<any[]> {
         const result = await db.query.profile.findMany({
             with: {
-                deleted: 0
+                deleted: false
             }
         });
         return result;
