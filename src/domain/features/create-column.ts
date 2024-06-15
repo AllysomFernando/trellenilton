@@ -1,7 +1,7 @@
 import type { IColumnRepository } from "../contracts/column-repository"
 
 type Input = {
-    deleted?: boolean,
+    deleted: boolean,
 }
 type Output = {}
 
@@ -15,12 +15,11 @@ type Setup = (props: SetupCreateColumnProps) => CreateColumn
 
 export const setupCreateColumn: Setup = ({ repository }) => async ({ deleted }) => {
     try {
-
-        return await repository.createColumn({ deleted || false})
-} catch (error) {
-    throw new Error("Could not create column", {
-        cause: "create-column",
-    })
-}
+        return await repository.createColumn(deleted || false)
+    } catch (error) {
+        throw new Error("Could not create column", {
+            cause: "create-column",
+        })
+    }
 
 }

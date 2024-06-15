@@ -7,15 +7,19 @@ export class ColumnRepository implements IColumnRepository {
     public async createColumn(deleted: boolean): Promise<Column> {
         const data = await this.db.createColumn(deleted);
         return {
-            id: data.id,    
+            id: data.id,
             ordernation: data.ordernation,
-            cards: data.cards.map((card: any) => ({
-                id: card.id,
-                name: card.name,
-                description: card.description,
-                deadLine: new Date(card.deadLine),
-            })),
-                deleted: data.deleted,
+            cards: [],
+            deleted: data.deleted,
         }
+    }
+    public async loadAllColumns(): Promise<Column[]> {
+        const data = await this.db.loadAllColumns();
+        return data.map((column) => ({
+            id: column.id,
+            ordernation: column.ordernation,
+            cards: column.cards,
+            deleted: column.deleted,
+        }));
     }
 }

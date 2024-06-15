@@ -14,8 +14,8 @@ export class ProfileRepository implements IProfileRepository {
         }));
     }
 
-    public async createProfile(profile: Profile): Promise<Profile> {
-        const data = await this.db.createProfile(profile);
+    public async createProfile(name: string, deleted: boolean, funcao: string): Promise<Profile> {
+        const data = await this.db.createProfile(name, deleted, funcao);
         return {
             id: data.id,
             name: data.name,
@@ -29,7 +29,7 @@ export class ProfileRepository implements IProfileRepository {
 
     public async renameProfile(profile: any, id: string): Promise<Profile> {
         const data = await this.db.renameProfile(profile, id)
-        return{
+        return {
             id: data.id,
             name: data.name,
             funcao: data.funcao,
