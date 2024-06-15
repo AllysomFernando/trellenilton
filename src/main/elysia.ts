@@ -41,8 +41,9 @@ new Elysia()
 		}
 	)
 	.delete(
-		"api/delete-boards/:id",
+		"api/delete-boards",
 		({ body: { id, board }, deleteService }) => {
+			console.log("id======>", id);
 			return deleteService({ id, board });
 		},
 		{
@@ -50,14 +51,10 @@ new Elysia()
 				id: t.String(),
 				board: t.Object({
 					deleted: t.Boolean(),
-					id: t.String(),
-					name: t.String(),
-					createdAt: t.String(),
 				}),
 			}),
 		}
 	)
-
 	.get("/api/boards", ({ fetchService }) => {
 		return fetchService({});
 	})

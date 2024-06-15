@@ -1,9 +1,13 @@
-import api, { fetcher, poster } from "../utils/api";
-import { Board, UpdateBoardData } from "../types/board";
+import api, { fetcher, poster, deleted } from "../utils/api";
+import { Board, DeleteBoardData, UpdateBoardData } from "../types/board";
 
 export const fetchBoards = async () => {
 	try {
-		const response = await fetcher("/boards");
+		const response = await fetcher("/boards", {
+			next: {
+				tags: ["boards"],
+			},
+		});
 		console.log("response ==>", response);
 		if (response) {
 			return response;
@@ -36,9 +40,9 @@ export const updateBoard = async (id: string, data: UpdateBoardData) => {
 	return response.data;
 };
 
-export const deleteBoard = async (id: string, data: UpdateBoardData) => {
+export const deleteBoard = async (id: string, data: DeleteBoardData) => {
 	try {
-		const response = await poster(`/boards/${id}`, data);
+		const response = await deleted(`/delete-boards`, { id, board: data });
 		console.log("deleted", response);
 		return response;
 	} catch (error) {

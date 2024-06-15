@@ -2,7 +2,7 @@ import type { IBoardRepository } from "../contracts/board-repository";
 import type { Board } from "../entities/board";
 
 type Input = {
-	board: Board;
+	board: Pick<Board, "deleted">;
 	id: string;
 };
 type Output = {
