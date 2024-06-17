@@ -5,7 +5,7 @@ import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 
 export const column = pgTable('column', {
   id: uuid('id').defaultRandom().primaryKey(),
-  idCard: uuid("idCard").references(() => card.id).notNull(),
+  idCard: uuid("idCard").references(() => card.id),
   name: varchar("name").notNull(),
   description: varchar("description", {length: 255}).notNull(),
   deleted: boolean("deleted").notNull()
