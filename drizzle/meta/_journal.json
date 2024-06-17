@@ -29,6 +29,13 @@
       "when": 1718301527019,
       "tag": "0003_orange_the_leader",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1718643701943,
+      "tag": "0004_greedy_stranger",
+      "breakpoints": true
     }
   ]
 }
