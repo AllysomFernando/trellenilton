@@ -24,6 +24,20 @@ export const fetchBoard = async (res: NextApiResponse) => {
 	}
 };
 
+export const updateBoard = async (
+	id: string,
+	res: NextApiResponse
+) => {
+	try {
+		const board = await api.put<Board>(`/update-boards/${id}`);
+		console.log("update -> inside of controller", board);
+		res.status(200).json(board);
+	} catch (error: any) {
+		console.log(error);
+		res.status(500).json({ error: error.message });
+	}
+};
+
 export const deleteBoard = async (id: string, res: NextApiResponse) => {
 	try {
 		const board = await api.delete<Board>(`/delete-boards/${id}`);

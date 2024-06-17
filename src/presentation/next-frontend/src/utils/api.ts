@@ -1,12 +1,16 @@
 import axios from "axios";
 
+const URL = "http://localhost:3000/api";
+
 const api = axios.create({
-	baseURL: "http://localhost:3000/api",
+	baseURL: URL,
 	headers: {
 		"Content-Type": "application/json",
+		"Access-Control-Allow-Origin": "*",
+		"Access-Control-Allow-Methods": "*",
+		"Access-Control-Allow-Headers": "*",
 	},
 });
-
 api.interceptors.response.use(
 	(response) => response,
 	(error) => {
@@ -35,6 +39,23 @@ export const poster = async (url: string, data: any) => {
 	}
 };
 
+export const updated = async (
+	url: string,
+	data: {
+		id: string;
+		board: { name: string };
+	}
+) => {
+	try {
+		console.log("data", data);
+		const response = await api.put(url, { id: data.id, board: data.board });
+		console.log("response", response);
+		return response.data;
+	} catch (error) {
+		console.log(error);
+	}
+};
+
 export const deleted = async (
 	url: string,
 	data: {
@@ -43,12 +64,9 @@ export const deleted = async (
 	}
 ) => {
 	try {
-		const response = await axios.delete(
-			"http://localhost:3000/api/delete-boards",
-			{
-				data,
-			}
-		);
+		const response = await axios.delete(url, {
+			data,
+		});
 		return response.data;
 	} catch (error) {
 		console.log(error);

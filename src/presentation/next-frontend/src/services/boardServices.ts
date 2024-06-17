@@ -1,4 +1,4 @@
-import api, { fetcher, poster, deleted } from "../utils/api";
+import api, { fetcher, poster, deleted, updated } from "../utils/api";
 import { Board, DeleteBoardData, UpdateBoardData } from "../types/board";
 
 export const fetchBoards = async () => {
@@ -36,8 +36,16 @@ export const fetchBoardById = async (id: string) => {
 };
 
 export const updateBoard = async (id: string, data: UpdateBoardData) => {
-	const response = await poster(`/boards/${id}`, data);
-	return response.data;
+	try {
+		console.log("id", id)
+		console.log("data", data)
+		const response = await updated(`/update-boards`, { id, board: data });
+		console.log("udpated", response);
+		return response;
+	} catch (error) {
+		console.log(error);
+	}
+	return undefined;
 };
 
 export const deleteBoard = async (id: string, data: DeleteBoardData) => {

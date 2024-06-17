@@ -1,18 +1,20 @@
-import { deleteBoard } from "@/services/boardServices";
+import { deleteBoard, updateBoard } from "@/services/boardServices";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-type UpdateBoardData = {
+type BoardData = {
 	success: boolean;
 };
 
 const handler = async (
 	req: NextApiRequest,
-	res: NextApiResponse<UpdateBoardData>
+	res: NextApiResponse<BoardData>
 ) => {
 	switch (req.method) {
 		case "PUT":
-			return res.json({ success: true });
-		case "DELETE":
+			const updated = await updateBoard(req.body.id, req.body);
+            console.log("updated -> inside of controller", updated);
+            res.status(200).json(updated);		
+			case "DELETE":
 			const deleted = await deleteBoard(req.body.id, req.body);
             console.log("deleted -> inside of controller", deleted);
             res.status(200).json(deleted);

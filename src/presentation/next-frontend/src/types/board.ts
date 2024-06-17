@@ -5,8 +5,7 @@ export interface Board {
 }
 
 export interface UpdateBoardData {
-	name?: string;
-	deleted?: boolean;
+	name: string;
 }
 
 export interface DeleteBoardData {

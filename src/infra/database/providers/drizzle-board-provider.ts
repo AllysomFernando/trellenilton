@@ -5,13 +5,13 @@ import { board } from "../models";
 
 export class DrizzleBoardProvider implements IBoardDatabaseProvider {
 	public async loadAllBoards(): Promise<any[]> {
-    try{
-      const result = await db.query.board.findMany();
-      return result;
-    }catch(error){
-      console.error(error);
-    }
-    return []; 
+		try {
+			const result = await db.query.board.findMany();
+			return result;
+		} catch (error) {
+			console.error(error);
+		}
+		return [];
 	}
 
 	public async createBoard(name: string): Promise<any> {
@@ -33,13 +33,11 @@ export class DrizzleBoardProvider implements IBoardDatabaseProvider {
 			console.error(error);
 		}
 	}
-	public async updateBoard(board: any, id: string): Promise<any> {
+	public async updateBoard(id: string, name: string): Promise<any> {
 		const result = await db
 			.update(board)
 			.set({
-				name: board.name,
-				cards: board.cards,
-				deleted: board.deleted,
+				name: name,
 			})
 			.where(eq(board.id, id))
 			.execute();

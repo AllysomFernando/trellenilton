@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { createBoard, updateBoard } from "../../services/boardServices";
-import { revalidateTag } from "next/cache";
 
 interface BoardFormProps {
 	boardId?: string;
@@ -24,9 +23,10 @@ const BoardForm = ({ boardId, initialData, onSubmit }: BoardFormProps) => {
 
 		try {
 			if (boardId) {
+				console.log("boardId====>", boardId)
+				console.log("name=====>", name)
 				const updatedBoard = await updateBoard(boardId, {
 					name,
-					deleted: false,
 				});
 				if (onSubmit) {
 					onSubmit(updatedBoard || { name: "", deleted: false });
@@ -36,10 +36,8 @@ const BoardForm = ({ boardId, initialData, onSubmit }: BoardFormProps) => {
 				if (onSubmit) {
 					onSubmit(newBoard || { name: "", deleted: false });
 				}
-			}
-
-			
-			// window.location.reload();
+			}			
+			// window.location.reload(); 
 		} catch (error) {
 			console.error("Failed to save board:", error);
 			alert("Failed to save board. Please try again.");

@@ -5,6 +5,7 @@ import { DrizzleBoardProvider } from "infra/database/providers/drizzle-board-pro
 import { BoardRepository } from "infra/repositories/board-repository";
 import { setupDisplayBoards } from "domain/features/display-boards";
 import { setupDeleteBoard } from "domain/features/delete-board";
+import { setupUpdateBoard } from "domain/features/update-board";
 
 const boardRepository = new BoardRepository(new DrizzleBoardProvider());
 
@@ -29,8 +30,11 @@ new Elysia()
 			repository: boardRepository,
 		})
 	)
+	.decorate("updateService", setupUpdateBoard({
+		repository: boardRepository
+	}))
 	.post(
-		"/api/create-boards",
+		"api/create-boards",
 		({ body: { name }, createService }) => {
 			return createService({ name });
 		},
@@ -41,9 +45,8 @@ new Elysia()
 		}
 	)
 	.delete(
-		"api/delete-boards",
+		"/api/delete-boards",
 		({ body: { id, board }, deleteService }) => {
-			console.log("id======>", id);
 			return deleteService({ id, board });
 		},
 		{
@@ -55,6 +58,21 @@ new Elysia()
 			}),
 		}
 	)
+	.put(
+		"/api/update-boards",
+		({ body: { id , board}, updateService }) => {
+		console.log("bateu elysia");
+		return updateService({ id, board });
+	},
+	{
+		body: t.Object({
+			id: t.String(),
+			board: t.Object({
+				name: t.String(),
+			}),
+		}),
+	
+	})
 	.get("/api/boards", ({ fetchService }) => {
 		return fetchService({});
 	})
