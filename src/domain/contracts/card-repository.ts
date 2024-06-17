@@ -8,5 +8,5 @@ export interface ICardRepository {
     findCardByTitle: (title: string) => Promise<Card>;
     renameCard: (card: Card, id: string) => Promise<Card>;
     insertCardDescription: (card: Card, id: string, description: string) => Promise<Card>;
-    inserCardDeadline: (card: Card, id: string, endedAt: string) => Promise<Card>;
+    insertCardDeadline: (card: Card, id: string, endedAt: string, createdAt: string) => Promise<Card>;
 }

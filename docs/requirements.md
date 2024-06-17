@@ -195,21 +195,6 @@ When: User accesses a board
 Must: Alert the user that we are having a problem with the database
 
 
-# Feature: Change cards ordering
-
-Scenario: The user tries to change the ordering of the cards in a column
-When: User changes the value position on the card
-Must: Refresh the page to show the new positions
-
-
-# Feature: Change card column
-
-Scenario: The user tries to change a card from one column to another
-When: User clicks on the button "Move to" on the card
-Then: Selects the column destination
-Must: Refresh the page to reflect changes on the board
-
-
 # Feature: Rename Card
 
 Scenario: The user tries to rename a card
@@ -261,14 +246,3 @@ If Then: The deadline is before the current date
 Must: Display a message to the user saying he needs to set a later deadline
 Else then: Display a success message
 Then: Refresh the page to show the new changes
-
-# Feature: Attach profile to a card
-
-Scenario: The user wants to attach a profile to a card
-When: The user clicks on the "attach profile" button inside the card
-Must: Update the card with the profile icon to demonstrate that the profile is attached
-
-Scenario: The user wants to attach a profile to a card
-When: The user clicks on the "attach profile" button inside the card
-And: The Backend is out of service
-Must: Alert the user that we are having problems

@@ -35,13 +35,13 @@ export const setupInsertCardDescriptionCard: Setup =
                     });
                 }
 
-                const renameCard: Card = {
+                const insertCardDescriptionCard: Card = {
                     ...card,
                     description: description ?? card.description,
                     deleted: deleted ?? card.deleted
                 }
 
-                return await repository.insertCardDescription(renameCard, id, description);
+                return await repository.insertCardDescription(insertCardDescriptionCard, id, description);
 
             } catch (error) {
                 throw new Error("Could not insert a description in card", {
