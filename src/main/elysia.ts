@@ -9,6 +9,10 @@ import { setupUpdateBoard } from "domain/features/update-board";
 import { ColumnRepository } from "infra/repositories/column-repository";
 import { DrizzleColumnProvider } from "infra/database/providers/drizzle-column-provider";
 import { setupDisplayColumn } from "domain/features/display-column";
+import { setupCreateColumn } from "domain/features/create-column";
+import { SetupDeleteColumn } from "domain/features/delete-column";
+import { column } from "@models/column";
+import { setupUpdateColumn } from "domain/features/update-column";
 
 const boardRepository = new BoardRepository(new DrizzleBoardProvider());
 const columnRepository = new ColumnRepository(new DrizzleColumnProvider());
@@ -34,12 +38,36 @@ new Elysia()
 			repository: boardRepository,
 		})
 	)
-	.decorate("updateService", setupUpdateBoard({
-		repository: boardRepository
-	}))
-	.decorate("displayColumnService", setupDisplayColumn({
-		repository: columnRepository
-	}))
+	.decorate(
+		"updateService",
+		setupUpdateBoard({
+			repository: boardRepository,
+		})
+	)
+	.decorate(
+		"displayColumnService",
+		setupDisplayColumn({
+			repository: columnRepository,
+		})
+	)
+	.decorate(
+		"createColumnService",
+		setupCreateColumn({
+			repository: columnRepository,
+		})
+	)
+	.decorate(
+		"deleteColumnService",
+		SetupDeleteColumn({
+			repository: columnRepository,
+		})
+	)
+	.decorate(
+		"updateColumnService",
+		setupUpdateColumn({
+			repository: columnRepository,
+		})
+	)
 	.post(
 		"api/create-boards",
 		({ body: { name }, createService }) => {
@@ -51,8 +79,20 @@ new Elysia()
 			}),
 		}
 	)
+	.post(
+		"api/create-columns",
+		({ body: { name, description }, createColumnService }) => {
+			return createColumnService({ name, description });
+		},
+		{
+			body: t.Object({
+				name: t.String(),
+				description: t.String(),
+			}),
+		}
+	)
 	.delete(
-		"/api/delete-boards",
+		"api/delete-boards",
 		({ body: { id, board }, deleteService }) => {
 			return deleteService({ id, board });
 		},
@@ -65,25 +105,52 @@ new Elysia()
 			}),
 		}
 	)
+	.delete(
+		"api/delete-columns",
+		({ body: { id, column }, deleteColumnService }) => {
+			return deleteColumnService({ id, column });
+		},
+		{
+			body: t.Object({
+				id: t.String(),
+				column: t.Object({
+					deleted: t.Boolean(),
+				}),
+			}),
+		}
+	)
 	.put(
 		"/api/update-boards",
-		({ body: { id , board}, updateService }) => {
-		console.log("bateu elysia");
-		return updateService({ id, board });
-	},
-	{
-		body: t.Object({
-			id: t.String(),
-			board: t.Object({
-				name: t.String(),
+		({ body: { id, board }, updateService }) => {
+			return updateService({ id, board });
+		},
+		{
+			body: t.Object({
+				id: t.String(),
+				board: t.Object({
+					name: t.String(),
+				}),
 			}),
-		}),
-	
-	})
+		}
+	)
+	.put(
+		"/api/update-columns",
+		({ body: { id, column }, updateColumnService }) => {
+			return updateColumnService({ id, column });
+		},
+		{
+			body: t.Object({
+				id: t.String(),
+				column: t.Object({
+					name: t.String(),
+				}),
+			}),
+		}
+	)
 	.get("/api/boards", ({ fetchService }) => {
 		return fetchService({});
 	})
-	.get("/api/columns", ({displayColumnService}) => {
+	.get("/api/columns", ({ displayColumnService }) => {
 		return displayColumnService({});
 	})
 	.listen(3000);
