@@ -94,11 +94,11 @@ Then: Display a success alert
 Then: Refetch the data
 
 
-# Feature: Change profile name
+# Feature: Rename profile
 
-Scenario: User tries to modify the profile name with less than 4 characters
-When: The profile has less than 4 characters
-Must: Alert the user that they cannot modify the profile with less than 4 characters
+Scenario: User tries to modify the profile name with less than 3 characters
+When: The profile has less than 3 characters
+Must: Alert the user that they cannot modify the profile with less than 3 characters
 
 
 # Feature: Display profile icons

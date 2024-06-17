@@ -1,6 +1,10 @@
 import type { IProfileRepository } from "../contracts/profile-repository";
 
-type Input = {}
+type Input = {
+    name: string,
+    funcao: string,
+    deleted: boolean,
+}
 type Output = {}
 type CreateProfile = (input: Input) => Promise<Output>
 type SetupCreateProfileProps = {
@@ -8,19 +12,16 @@ type SetupCreateProfileProps = {
 }
 type Setup = (props: SetupCreateProfileProps) => CreateProfile
 
-export const setupCreateProfile: Setup = ({ repository }) => async input => {
+export const setupCreateProfile: Setup = ({ repository }) => async ({ name, funcao, deleted }: Input) => {
     try {
-        return async () => {
-            return await repository.createProfile({
-                name: "any_name",
-                function: "any_function",
-                image: "string",
-                deleted: 0,
-            })
+        if (name.length < 3) {
+            throw new Error("Name must have at least 3 characters")
         }
-    } catch (error) {
-        throw new Error("Não foi possivel criar o usuário", {
-            cause: "create-profile"
-        })
+        return await repository.createProfile(name, deleted || false, funcao)
     }
+    } catch (error) {
+    throw new Error("Não foi possivel criar o usuário", {
+        cause: "create-profile"
+    })
+}
 }
