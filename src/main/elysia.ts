@@ -6,8 +6,12 @@ import { BoardRepository } from "infra/repositories/board-repository";
 import { setupDisplayBoards } from "domain/features/display-boards";
 import { setupDeleteBoard } from "domain/features/delete-board";
 import { setupUpdateBoard } from "domain/features/update-board";
+import { ColumnRepository } from "infra/repositories/column-repository";
+import { DrizzleColumnProvider } from "infra/database/providers/drizzle-column-provider";
+import { setupDisplayColumn } from "domain/features/display-column";
 
 const boardRepository = new BoardRepository(new DrizzleBoardProvider());
+const columnRepository = new ColumnRepository(new DrizzleColumnProvider());
 
 new Elysia()
 	.use(cors())
@@ -32,6 +36,9 @@ new Elysia()
 	)
 	.decorate("updateService", setupUpdateBoard({
 		repository: boardRepository
+	}))
+	.decorate("displayColumnService", setupDisplayColumn({
+		repository: columnRepository
 	}))
 	.post(
 		"api/create-boards",
@@ -76,5 +83,7 @@ new Elysia()
 	.get("/api/boards", ({ fetchService }) => {
 		return fetchService({});
 	})
-
+	.get("/api/columns", ({displayColumnService}) => {
+		return displayColumnService({});
+	})
 	.listen(3000);
