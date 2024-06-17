@@ -34,13 +34,15 @@ export class DrizzleBoardProvider implements IBoardDatabaseProvider {
 		}
 	}
 	public async updateBoard(id: string, name: string): Promise<any> {
-		const result = await db
-			.update(board)
-			.set({
-				name: name,
-			})
-			.where(eq(board.id, id))
-			.execute();
-		return result;
+		try {
+			const result = await db
+				.update(board)
+				.set({ name: name })
+				.where(eq(board.id, id))
+				.execute();
+			return result;
+		} catch (error) {
+			console.error(error);
+		}
 	}
 }
