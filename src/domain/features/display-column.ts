@@ -6,11 +6,11 @@ type Input = {
 type Output = {}
 type DisplayColumn = (input: Input) => Promise<Output>;
 
-type SetupDisplayColumnProps = {
+type SetupDisplayColumn = {
     repository: IColumnRepository
 }
 
-type Setup = (props: SetupDisplayColumnProps) => DisplayColumn
+type Setup = (props: SetupDisplayColumn) => DisplayColumn
 
 export const setupDisplayColumn: Setup = ({ repository }) => async input => {
     try {
