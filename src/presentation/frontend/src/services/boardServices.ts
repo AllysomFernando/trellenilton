@@ -54,6 +54,7 @@ export const updateBoard = async (id: string, data: UpdateBoardData) => {
 
 export const deleteBoard = async (id: string, data: DeleteBoardData) => {
 	try {
+
 		const response = await deleted(`/delete-boards`, { id, board: data });
 		console.log("deleted", response);
 		return response;

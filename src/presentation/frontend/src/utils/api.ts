@@ -64,9 +64,12 @@ export const deleted = async (
 	}
 ) => {
 	try {
-		const response = await axios.delete(url, {
-			data,
-		});
+		const response = await axios.delete(
+			"http://localhost:3000/api/delete-boards",
+			{
+				data,
+			}
+		);
 		return response.data;
 	} catch (error) {
 		console.log(error);
