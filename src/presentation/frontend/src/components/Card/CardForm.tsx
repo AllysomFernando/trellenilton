@@ -8,6 +8,7 @@ interface AddCardFormProps {
 
 const AddCardForm: React.FC<AddCardFormProps> = ({ columnId, onAddCard }) => {
 	const [content, setContent] = useState("");
+	const [isAdding, setIsAdding] = useState(false);
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -20,27 +21,45 @@ const AddCardForm: React.FC<AddCardFormProps> = ({ columnId, onAddCard }) => {
 			content,
 		};
 		onAddCard(columnId, newCard);
-		setContent("");
+		setContent(""); // Clear the input after adding the card
+		setIsAdding(false); // Close the input form
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="mb-4">
-			<label className="block mb-2">
-				Card Content:
-				<input
-					type="text"
-					value={content}
-					onChange={(e) => setContent(e.target.value)}
-					className="w-full p-2 border border-gray-300 rounded"
-				/>
-			</label>
-			<button
-				type="submit"
-				className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-			>
-				Add Card
-			</button>
-		</form>
+		<div className="mt-4">
+			{isAdding ? (
+				<form onSubmit={handleSubmit} className="mb-4">
+					<textarea
+						value={content}
+						onChange={(e) => setContent(e.target.value)}
+						placeholder="Insira um título para este cartão..."
+						className="w-full p-2 border border-gray-300 rounded resize-none"
+					/>
+					<div className="flex items-center mt-2">
+						<button
+							type="submit"
+							className="bg-slate-700 text-white-700  py-2 rounded hover:bg-slate-800 w-full font-semibold text-sm uppercase tracking-wider text-center border border-slate-700 hover:border-slate-800 transition duration-200 ease-in-out mt-2 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-slate-700 focus:ring-opacity"
+						>
+							Adicionar Cartão
+						</button>
+						<button
+							type="button"
+							onClick={() => setIsAdding(false)}
+							className="ml-2 text-gray-500 hover:text-gray-700"
+						>
+							X
+						</button>
+					</div>
+				</form>
+			) : (
+				<button
+					onClick={() => setIsAdding(true)}
+					className="bg-slate-700 text-white-700  py-2 rounded hover:bg-slate-800 w-full font-semibold text-sm uppercase tracking-wider text-center border border-slate-700 hover:border-slate-800 transition duration-200 ease-in-out mt-2 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-slate-700 focus:ring-opacity"
+				>
+					+ Adicionar outro cartão
+				</button>
+			)}
+		</div>
 	);
 };
 
