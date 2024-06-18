@@ -12,6 +12,7 @@ const BoardItem = ({ board, onEdit }: BoardProps) => {
 	const handleDelete = async () => {
 		try {
 			const deleted = await deleteBoard(board.id, { deleted: true });
+			window.location.reload();
 			console.log("deleted inside of component", deleted);
 		} catch (error) {
 			console.log(error);
