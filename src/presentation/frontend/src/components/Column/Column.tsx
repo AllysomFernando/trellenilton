@@ -16,6 +16,9 @@ const Container = styled.div`
 	margin: ${grid}px;
 	display: flex;
 	flex-direction: column;
+	background-color: ${colors.N30};
+	border-radius: ${borderRadius}px;
+	width: 272px;
 `;
 
 interface HeaderProps {
@@ -27,6 +30,7 @@ const Header = styled.div<HeaderProps>`
 	align-items: center;
 	justify-content: center;
 	border-top-left-radius: ${borderRadius}px;
+	color: ${colors.N800};
 	border-top-right-radius: ${borderRadius}px;
 	background-color: ${({ isDragging }) =>
 		isDragging ? colors.G50 : colors.N30};
@@ -35,6 +39,12 @@ const Header = styled.div<HeaderProps>`
 	&:hover {
 		background-color: ${colors.G50};
 	}
+`;
+
+const QuoteListContainer = styled.div`
+	padding: ${grid}px;
+	background-color: white;
+	min-height: 100px;
 `;
 
 interface Props {
@@ -66,16 +76,13 @@ export default class Column extends Component<Props> {
 						</Header>
 						<Droppable droppableId={title} type="QUOTE">
 							{(provided: DroppableProvided, snapshot) => (
-								<div
+								<QuoteListContainer
 									ref={provided.innerRef}
 									{...provided.droppableProps}
 									style={{
 										backgroundColor: snapshot.isDraggingOver
 											? colors.G50
 											: "white",
-										padding: grid,
-										width: 250,
-										minHeight: 500,
 									}}
 								>
 									{quotes.map((quote, index) => (
@@ -107,7 +114,7 @@ export default class Column extends Component<Props> {
 										</Draggable>
 									))}
 									{provided.placeholder}
-								</div>
+								</QuoteListContainer>
 							)}
 						</Droppable>
 						<AddCardForm columnId={title} onAddCard={this.props.onAddCard} />
