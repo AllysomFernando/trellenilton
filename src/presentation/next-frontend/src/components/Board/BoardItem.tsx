@@ -17,11 +17,20 @@ const BoardItem = ({ board }: BoardProps) => {
 	};
 
 	return (
-		<div>
-			<Link id="Name" href={`/boards/${board.id}`}>
+		<div className="flex items-center justify-between p-4 bg-white shadow-md rounded-lg mb-4">
+			<Link
+				id="Name"
+				className="text-blue-500 hover:underline"
+				href={`/boards/${board.id}`}
+			>
 				{board.name}
 			</Link>
-			<button onClick={handleDelete}>Delete</button>
+			<button
+				onClick={handleDelete}
+				className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
+			>
+				Delete
+			</button>
 		</div>
 	);
 };

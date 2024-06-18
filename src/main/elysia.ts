@@ -4,6 +4,7 @@ import { cors } from "@elysiajs/cors";
 import { DrizzleBoardProvider } from "infra/database/providers/drizzle-board-provider";
 import { BoardRepository } from "infra/repositories/board-repository";
 import { setupDisplayBoards } from "domain/features/display-boards";
+import { setupDisplayBoard } from "domain/features/display-board";
 import { setupDeleteBoard } from "domain/features/delete-board";
 import { setupUpdateBoard } from "domain/features/update-board";
 import { ColumnRepository } from "infra/repositories/column-repository";
@@ -11,7 +12,6 @@ import { DrizzleColumnProvider } from "infra/database/providers/drizzle-column-p
 import { setupDisplayColumn } from "domain/features/display-column";
 import { setupCreateColumn } from "domain/features/create-column";
 import { SetupDeleteColumn } from "domain/features/delete-column";
-import { column } from "@models/column";
 import { setupUpdateColumn } from "domain/features/update-column";
 
 const boardRepository = new BoardRepository(new DrizzleBoardProvider());
@@ -29,6 +29,12 @@ new Elysia()
 	.decorate(
 		"fetchService",
 		setupDisplayBoards({
+			repository: boardRepository,
+		})
+	)
+	.decorate(
+		"fetchSpecificBoardService",
+		setupDisplayBoard({
 			repository: boardRepository,
 		})
 	)
@@ -153,4 +159,15 @@ new Elysia()
 	.get("/api/columns", ({ displayColumnService }) => {
 		return displayColumnService({});
 	})
+	.post(
+		"/api/board",
+		({ body: { id }, fetchSpecificBoardService }) => {
+			return fetchSpecificBoardService({ id });
+		},
+		{
+			body: t.Object({
+				id: t.String(),
+			}),
+		}
+	)
 	.listen(3000);

@@ -13,7 +13,16 @@ export class DrizzleBoardProvider implements IBoardDatabaseProvider {
 		}
 		return [];
 	}
-
+	public async loadSpecificBoard(id: string): Promise<any> {
+		try {
+			const result = await db.query.board.findFirst({
+				where: eq(board.id, id),
+			});
+			return result;
+		} catch (error) {
+			console.error(error);
+		}
+	}
 	public async createBoard(name: string): Promise<any> {
 		const result = await db.insert(board).values({
 			name: name,

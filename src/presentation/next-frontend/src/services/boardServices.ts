@@ -31,14 +31,18 @@ export const createBoard = async (data: {
 };
 
 export const fetchBoardById = async (id: string) => {
-	const response = await fetcher(`/boards/${id}`);
-	return response.data;
+	try {
+		const response = await fetcher(`/boards`, { id });
+		return response;
+	} catch (error) {
+		console.log(error);
+	}
 };
 
 export const updateBoard = async (id: string, data: UpdateBoardData) => {
 	try {
-		console.log("id", id)
-		console.log("data", data)
+		console.log("id", id);
+		console.log("data", data);
 		const response = await updated(`/update-boards`, { id, board: data });
 		console.log("udpated", response);
 		return response;

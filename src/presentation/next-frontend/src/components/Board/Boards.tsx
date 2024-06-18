@@ -10,7 +10,7 @@ import type {
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import type { QuoteMap, Quote } from "@/types/board";
 import { PartialAutoScrollerOptions } from "@/components/auto-scroller/fluid-scroller/auto-scroller-options-types";
-import reorder, { reorderQuoteMap } from "@/services/reorder";
+import reorder, { reorderQuoteMap } from "@/utils/reorder";
 import Column from "@/components/Column/Column";
 
 interface ParentContainerProps {

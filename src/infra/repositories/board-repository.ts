@@ -15,7 +15,21 @@ export class BoardRepository implements IBoardRepository {
 			createdAt: board.createdAt,
 		}));
 	}
-	public async createBoard(name: string, deleted: boolean, createdAt: string): Promise<Board> {
+	public async loadSpecificBoard(id: string): Promise<Board> {
+		const data = await this.db.loadSpecificBoard(id);
+		return {
+			id: data.id,
+			name: data.name,
+			column: data.column,
+			deleted: data.deleted,
+			createdAt: data.createdAt,
+		};
+	}
+	public async createBoard(
+		name: string,
+		deleted: boolean,
+		createdAt: string
+	): Promise<Board> {
 		const data = await this.db.createBoard(name, deleted, createdAt);
 		return {
 			id: data.id,

@@ -1,57 +1,34 @@
-import BoardForm from "@/components/Board/BoardForm";
-import { fetchBoardById, updateBoard } from "@/services/boardServices";
-import { Board } from "@/types/board";
-import { useRouter } from "next/router"
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { Board } from "@/components/Board/Boards";
+import { fetchBoardById } from "@/services/boardServices";
+import { QuoteMap } from "@/types/board";
 
+const BoardPage = () => {
+	const router = useRouter();
+	const { id } = router.query;
+	const [boardData, setBoardData] = useState<QuoteMap | null>(null);
 
-export const BoardePage = () => {
-    const router = useRouter();
-    const { id } = router.query;    
-    const [board, setBoard] = useState<Board | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+	useEffect(() => {
+		const loadBoard = async () => {
+			if (id) {
+				const data = await fetchBoardById(id as string);
+				setBoardData(data);
+			}
+		};
+		loadBoard();
+	}, [id]);
 
-    useEffect(() => {
-        const getBoard = async () => {
-            if(id){
-                try{
-                    const boardData = await fetchBoardById(id as string);   
-                    setBoard(boardData);
-                }catch(error){
-                    console.error('Failed to fetch board:', error);
-                } finally {
-                    setIsLoading(false);
-                }
-            }
-        }
-        getBoard();
-    }, [id]);
+	if (!boardData) {
+		return <div>Loading...</div>;
+	}
 
-    const handleUpdate = async (updatedData: {name: string, deleted: boolean}) => {
-        if(id && board){
-            try{
-                const updatedBoard = await updateBoard(id as string, updatedData);
-                setBoard(updatedBoard);
-            }catch(error){
-                console.error('Failed to update board:', error);
-                alert('Failed to update board. Please try again.');
-            }
-        }
-    };
+	return (
+		<div>
+			<h1 className="text-2xl font-bold mb-4">Board</h1>
+			<Board initial={boardData} />
+		</div>
+	);
+};
 
-    if(isLoading){
-        return <p>Loading...</p>
-    }
-
-    if(!board){
-        return <p>Board not found.</p>
-    }
-
-    return (
-        <div>
-            <h1>{board.name}</h1>
-            <BoardForm boardId={id as string} initialData={{name: board.name}} onSubmit={handleUpdate} />
-        </div>
-    )
-
-}
+export default BoardPage;
