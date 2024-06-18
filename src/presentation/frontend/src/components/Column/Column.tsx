@@ -1,7 +1,7 @@
 import React, { Component, ReactElement } from "react";
 import styled from "@emotion/styled";
 import { colors } from "@atlaskit/theme";
-import { Draggable } from "@hello-pangea/dnd";
+import { Draggable, Droppable } from "@hello-pangea/dnd";
 import type {
 	DraggableProvided,
 	DraggableStateSnapshot,
@@ -62,17 +62,52 @@ export default class Column extends Component<Props> {
 								{title}
 							</Title>
 						</Header>
-						<QuoteList
-							listId={title}
-							listType="QUOTE"
-							style={{
-								backgroundColor: snapshot.isDragging ? colors.G50 : undefined,
-							}}
-							quotes={quotes}
-							internalScroll={this.props.isScrollable}
-							isCombineEnabled={Boolean(this.props.isCombineEnabled)}
-							useClone={Boolean(this.props.useClone)}
-						/>
+						<Droppable droppableId={title} type="QUOTE">
+							{(provided, snapshot) => (
+								<div
+									ref={provided.innerRef}
+									{...provided.droppableProps}
+									style={{
+										backgroundColor: snapshot.isDraggingOver
+											? colors.G50
+											: "white",
+										padding: grid,
+										width: 250,
+										minHeight: 500,
+									}}
+								>
+									{quotes.map((quote, index) => (
+										<Draggable
+											key={quote.id}
+											draggableId={quote.id}
+											index={index}
+										>
+											{(provided, snapshot) => (
+												<div
+													ref={provided.innerRef}
+													{...provided.draggableProps}
+													{...provided.dragHandleProps}
+													style={{
+														userSelect: "none",
+														padding: 16,
+														margin: "0 0 8px 0",
+														minHeight: "50px",
+														backgroundColor: snapshot.isDragging
+															? "#263B4A"
+															: "#456C86",
+														color: "white",
+														...provided.draggableProps.style,
+													}}
+												>
+													{quote.content}
+												</div>
+											)}
+										</Draggable>
+									))}
+									{provided.placeholder}
+								</div>
+							)}
+						</Droppable>
 					</Container>
 				)}
 			</Draggable>
