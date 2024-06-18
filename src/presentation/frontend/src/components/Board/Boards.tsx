@@ -12,6 +12,7 @@ import type { QuoteMap, Quote } from "@/types/board";
 import { reorderQuoteMap, reorder } from "@/services/reorder";
 import Column from "@/components/Column/Column";
 import AddColumnForm from "@/components/Column/AddColumnForm";
+import { grid } from "@/utils/constants";
 
 interface ParentContainerProps {
 	height: string;
@@ -26,8 +27,10 @@ const ParentContainer = styled.div<ParentContainerProps>`
 const Container = styled.div`
 	background-color: ${colors.B100};
 	min-height: 100vh;
-	min-width: 100vw;
-	display: inline-flex;
+	display: flex;
+	padding: ${grid}px;
+	gap: ${grid}px;
+	align-items: flex-start; /* align items at the top */
 `;
 
 interface Props {
@@ -175,6 +178,9 @@ export class Board extends Component<Props, State> {
 							/>
 						))}
 						{provided.placeholder}
+						<div className="m-2 p-2 bg-gray-300 rounded">
+							<AddColumnForm onAddColumn={this.handleAddColumn} />
+						</div>
 					</Container>
 				)}
 			</Droppable>
@@ -182,7 +188,6 @@ export class Board extends Component<Props, State> {
 
 		return (
 			<React.Fragment>
-				<AddColumnForm onAddColumn={this.handleAddColumn} />
 				<DragDropContext onDragEnd={this.onDragEnd}>
 					{containerHeight ? (
 						<ParentContainer height={containerHeight}>{board}</ParentContainer>
