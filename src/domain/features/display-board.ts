@@ -4,7 +4,7 @@ import type { Board } from "../entities/board";
 type Input = {
 	id: string;
 };
-type Output = Board[];
+type Output = Board;
 type DisplayBoard = (input: Input) => Promise<Output>;
 type SetupDisplayBoardsProps = {
 	repository: IBoardRepository;
@@ -16,8 +16,7 @@ export const setupDisplayBoard: Setup =
 	async ({ id }: Input) => {
 		try {
 			const boards = await repository.loadSpecificBoard(id);
-			console.log("Board loaded", boards);
-			if (boards)
+			if (boards.id !== id)
 				throw new Error(`No boards found with this id: ${id}`, {
 					cause: "no-boards",
 				});
