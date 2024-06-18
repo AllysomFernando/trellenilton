@@ -24,7 +24,7 @@ export const setupDeleteCard: Setup =
                         cause: "card-not-deleted",
                     });
                 }
-                await repository.deleteCard(card, id);
+                await repository.deleteCard(id);
                 return {
                     statusCode: 200,
                     message: "Card deleted successfully",

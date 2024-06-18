@@ -4,6 +4,7 @@ export interface ICardRepository {
 
     createCard: (card: Card) => Promise<Card>;
     loadAllCards: () => Promise<Card[]>;
+    displayCard: (id: string) => Promise<Card>;
     deleteCard: (id: string) => Promise<void>;
     findCardByTitle: (title: string) => Promise<Card>;
     renameCard: (card: Card, id: string) => Promise<Card>;

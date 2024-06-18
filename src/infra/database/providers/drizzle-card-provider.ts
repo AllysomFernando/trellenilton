@@ -67,6 +67,27 @@ export class DrizzleCardProvider implements ICardDatabaseProvider {
     return result;
   }
 
+  public async displayCard(id: string): Promise<Card> {
+    const data = await db.query.card.findFirst({
+      where: eq(card.id, id)
+     })
+     if (!data) {
+      throw new Error("Card not found");
+    }
+    return {
+      id: data.id,
+      idPriority: data.idPriority,
+      idCategory: data.idCategory,
+      idStatus: data.idStatus,
+      title: data.title,
+      description: data.description,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
+      endedAt: data.endedAt,
+      deleted: data.deleted,
+    };
+  }
+
   public async renameCard(card: any, id: string): Promise<Card> {
     const data = await this.db.renameCard(card, id)
     return {
