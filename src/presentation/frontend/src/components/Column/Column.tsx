@@ -58,6 +58,7 @@ export default class Column extends Component<Props> {
 							<Title
 								{...provided.dragHandleProps}
 								aria-label={`${title} quote list`}
+								className="text-black"
 							>
 								{title}
 							</Title>
