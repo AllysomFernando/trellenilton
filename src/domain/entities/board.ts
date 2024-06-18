@@ -5,5 +5,5 @@ export type Board = {
 	name: string;
 	deleted: boolean;
 	createdAt: string;
-	column: string;
+	column: Column[];
 };
