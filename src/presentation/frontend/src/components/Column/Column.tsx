@@ -5,10 +5,11 @@ import { Draggable, Droppable } from "@hello-pangea/dnd";
 import type {
 	DraggableProvided,
 	DraggableStateSnapshot,
+	DroppableProvided,
 } from "@hello-pangea/dnd";
 import { grid, borderRadius } from "@/utils/constants";
-import QuoteList from "@/components/primatives/quote-list";
 import Title from "@/components/primatives/title";
+import AddCardForm from "@/components/Card/CardForm";
 import type { Quote } from "@/types/board";
 
 const Container = styled.div`
@@ -43,6 +44,7 @@ interface Props {
 	isScrollable?: boolean;
 	isCombineEnabled?: boolean;
 	useClone?: boolean;
+	onAddCard: (columnId: string, card: Quote) => void;
 }
 
 export default class Column extends Component<Props> {
@@ -58,13 +60,12 @@ export default class Column extends Component<Props> {
 							<Title
 								{...provided.dragHandleProps}
 								aria-label={`${title} quote list`}
-								className="text-black"
 							>
 								{title}
 							</Title>
 						</Header>
 						<Droppable droppableId={title} type="QUOTE">
-							{(provided, snapshot) => (
+							{(provided: DroppableProvided, snapshot) => (
 								<div
 									ref={provided.innerRef}
 									{...provided.droppableProps}
@@ -109,6 +110,7 @@ export default class Column extends Component<Props> {
 								</div>
 							)}
 						</Droppable>
+						<AddCardForm columnId={title} onAddCard={this.props.onAddCard} />
 					</Container>
 				)}
 			</Draggable>
