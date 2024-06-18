@@ -36,6 +36,20 @@
       "when": 1718643701943,
       "tag": "0004_greedy_stranger",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1718755011492,
+      "tag": "0005_sticky_mandrill",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1718755132093,
+      "tag": "0006_wild_tombstone",
+      "breakpoints": true
     }
   ]
 }
