@@ -45,7 +45,7 @@ const AddCardForm: React.FC<AddCardFormProps> = ({ columnId, onAddCard }) => {
 						<button
 							type="button"
 							onClick={() => setIsAdding(false)}
-							className="ml-2 text-gray-500 hover:text-gray-700"
+							className="ml-2 text-white hover:text-gray-700 font-bold"
 						>
 							X
 						</button>
