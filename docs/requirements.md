@@ -232,12 +232,8 @@ When: Backend is out of service.
 Must: Alert the user that we are having problems.
 Then: Display a loading component until the connection to the backend is stablished.
 
-Scenario: User's doesn't has a stablished connection and try to see the card's information.
-When: User doesn't ethernet.
-Must: Display a loading component that we are trying to connect to the server.
-Then: When the connection is back refresh the page.
 
-# Feature: Insert card's deadline
+# Feature: Insert card's deadline 
 
 Scenario: User tries to add a new deadline to the card
 When: He clicks on the button "New Deadline"
