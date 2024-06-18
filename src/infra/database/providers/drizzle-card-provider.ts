@@ -98,4 +98,20 @@ export class DrizzleCardProvider implements ICardDatabaseProvider {
       deleted: data.deleted,
     }
   }
+
+  public async insertCardDeadline(card: any, id: string): Promise<Card> {
+    const data = await this.db.insertCardDeadline(card, id)
+    return {
+      id: data.id,
+      idPriority: data.idPriority,
+      idCategory: data.idCategory,
+      idStatus: data.idStatus,
+      title: data.title,
+      description: data.description,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
+      endedAt: data.endedAt,
+      deleted: data.deleted,
+    }
+  }
 }
