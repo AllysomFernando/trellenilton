@@ -1,4 +1,4 @@
-import React, { Component, ReactElement, useState } from "react";
+import React, { Component, ReactElement } from "react";
 import styled from "@emotion/styled";
 import { Global, css } from "@emotion/react";
 import { colors } from "@atlaskit/theme";
@@ -9,9 +9,9 @@ import type {
 } from "@hello-pangea/dnd";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import type { QuoteMap, Quote } from "@/types/board";
-import { PartialAutoScrollerOptions } from "@/components/auto-scroller/fluid-scroller/auto-scroller-options-types";
-import reorder, { reorderQuoteMap } from "@/utils/reorder";
+import { reorderQuoteMap, reorder } from "@/services/reorder";
 import Column from "@/components/Column/Column";
+import AddColumnForm from "@/components/Column/AddColumnForm";
 
 interface ParentContainerProps {
 	height: string;
@@ -26,7 +26,6 @@ const ParentContainer = styled.div<ParentContainerProps>`
 const Container = styled.div`
 	background-color: ${colors.B100};
 	min-height: 100vh;
-	/* like display:flex but will allow bleeding over the window width */
 	min-width: 100vw;
 	display: inline-flex;
 `;
@@ -38,7 +37,6 @@ interface Props {
 	containerHeight?: string;
 	useClone?: boolean;
 	applyGlobalStyles?: boolean;
-	autoScrollerOptions?: PartialAutoScrollerOptions;
 }
 
 interface State {
@@ -47,7 +45,6 @@ interface State {
 }
 
 export class Board extends Component<Props, State> {
-	/* eslint-disable react/sort-comp */
 	static defaultProps = {
 		isCombineEnabled: false,
 		applyGlobalStyles: true,
@@ -78,7 +75,6 @@ export class Board extends Component<Props, State> {
 			return;
 		}
 
-		// dropped nowhere
 		if (!result.destination) {
 			return;
 		}
@@ -86,7 +82,6 @@ export class Board extends Component<Props, State> {
 		const source: DraggableLocation = result.source;
 		const destination: DraggableLocation = result.destination;
 
-		// did not move anywhere - can bail early
 		if (
 			source.droppableId === destination.droppableId &&
 			source.index === destination.index
@@ -94,7 +89,6 @@ export class Board extends Component<Props, State> {
 			return;
 		}
 
-		// reordering column
 		if (result.type === "COLUMN") {
 			const ordered: string[] = reorder(
 				this.state.ordered,
@@ -117,6 +111,21 @@ export class Board extends Component<Props, State> {
 
 		this.setState({
 			columns: data.quoteMap,
+		});
+	};
+
+	handleAddColumn = (title: string) => {
+		this.setState((prevState) => {
+			const newColumn: Quote[] = [];
+			const newColumns = {
+				...prevState.columns,
+				[title]: newColumn,
+			};
+			const newOrdered = [...prevState.ordered, title];
+			return {
+				columns: newColumns,
+				ordered: newOrdered,
+			};
 		});
 	};
 
@@ -160,10 +169,8 @@ export class Board extends Component<Props, State> {
 
 		return (
 			<React.Fragment>
-				<DragDropContext
-					onDragEnd={this.onDragEnd}
-					autoScrollerOptions={this.props.autoScrollerOptions}
-				>
+				<AddColumnForm onAddColumn={this.handleAddColumn} />
+				<DragDropContext onDragEnd={this.onDragEnd}>
 					{containerHeight ? (
 						<ParentContainer height={containerHeight}>{board}</ParentContainer>
 					) : (
