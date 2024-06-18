@@ -28,11 +28,9 @@ export interface Author {
 }
 
 export interface Quote {
-	id: Id;
+	id: string;
 	content: string;
-	author: Author;
 }
-
 export interface Dragging {
 	id: DraggableId;
 	location: DraggableLocation;
@@ -41,7 +39,6 @@ export interface Dragging {
 export interface QuoteMap {
 	[key: string]: Quote[];
 }
-
 export interface Task {
 	id: Id;
 	content: string;
