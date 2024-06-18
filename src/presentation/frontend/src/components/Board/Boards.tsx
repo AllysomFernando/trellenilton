@@ -129,6 +129,18 @@ export class Board extends Component<Props, State> {
 		});
 	};
 
+	handleAddCard = (columnId: string, card: Quote) => {
+		this.setState((prevState) => {
+			const newColumns = {
+				...prevState.columns,
+				[columnId]: [...prevState.columns[columnId], card],
+			};
+			return {
+				columns: newColumns,
+			};
+		});
+	};
+
 	render(): ReactElement {
 		const columns: QuoteMap = this.state.columns;
 		const ordered: string[] = this.state.ordered;
@@ -159,6 +171,7 @@ export class Board extends Component<Props, State> {
 								isScrollable={withScrollableColumns}
 								isCombineEnabled={isCombineEnabled}
 								useClone={useClone}
+								onAddCard={this.handleAddCard}
 							/>
 						))}
 						{provided.placeholder}
