@@ -21,8 +21,8 @@ const AddCardForm: React.FC<AddCardFormProps> = ({ columnId, onAddCard }) => {
 			content,
 		};
 		onAddCard(columnId, newCard);
-		setContent(""); // Clear the input after adding the card
-		setIsAdding(false); // Close the input form
+		setContent(""); 
+		setIsAdding(false);
 	};
 
 	return (
