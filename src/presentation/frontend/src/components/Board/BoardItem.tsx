@@ -21,7 +21,7 @@ const BoardItem = ({ board, onEdit }: BoardProps) => {
 	return (
 		<div className="relative w-32 h-32 p-4 bg-white shadow-md rounded-lg mb-4 hover:bg-gray-200 hover:cursor-pointer">
 			<Link
-				href={`/boards/${board.id}`}
+				href={`/board/${board.id}`}
 				className="absolute inset-0 flex flex-col items-center justify-center text-gray-600"
 			>
 				{board.name}

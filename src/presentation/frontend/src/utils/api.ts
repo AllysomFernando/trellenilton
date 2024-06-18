@@ -42,7 +42,7 @@ export const poster = async (url: string, data: any) => {
 export const updated = async (
 	url: string,
 	data: {
-		id: string;
+		id: string; 
 		board: { name: string };
 	}
 ) => {

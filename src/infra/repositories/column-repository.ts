@@ -34,15 +34,26 @@ export class ColumnRepository implements IColumnRepository {
 		const data = await this.db.deleteColumn(id);
 		return data;
 	}
-    public async updateColumn(id: string, name: string): Promise<Column> {
-        const data = await this.db.updateColumn(id, name);
-        return {
-            id: data.id,
+	public async updateColumn(id: string, name: string): Promise<Column> {
+		const data = await this.db.updateColumn(id, name);
+		return {
+			id: data.id,
 			name: data.name,
-            ordernation: data.ordernation,
-            cards: data.cards,
-            deleted: data.deleted,
-            description: data.description,
-        };
-    }
+			ordernation: data.ordernation,
+			cards: data.cards,
+			deleted: data.deleted,
+			description: data.description,
+		};
+	}
+	public async loadSpecificColumn(id: string): Promise<Column> {
+		const data = await this.db.loadSpecificColumn(id);
+		return {
+			id: data.id,
+			name: data.name,
+			ordernation: data.ordernation,
+			cards: data.cards,
+			deleted: data.deleted,
+			description: data.description,
+		};
+	}
 }

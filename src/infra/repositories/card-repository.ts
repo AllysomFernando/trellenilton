@@ -40,5 +40,5 @@ export class CardRepository implements ICardRepository {
         const data = await this.db.deleteCard(card, id);
         return data;
     }
-
+    
 }

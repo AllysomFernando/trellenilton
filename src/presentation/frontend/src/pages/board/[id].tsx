@@ -22,10 +22,10 @@ const BoardPage = () => {
 	if (!boardData) {
 		return <div>Loading...</div>;
 	}
-
+	console.log(boardData);
 	return (
 		<div>
-			<h1 className="text-2xl font-bold mb-4">Board</h1>
+			<h1 className="text-2xl font-bold mb-4">Quadro {boardData.name}</h1>
 			<Board initial={boardData} />
 		</div>
 	);

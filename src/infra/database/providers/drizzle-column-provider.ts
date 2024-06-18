@@ -48,4 +48,14 @@ export class DrizzleColumnProvider implements IColumnDatabseProvider {
 			console.error(error);
 		}
 	}
+	public async loadSpecificColumn(id: string): Promise<any> {
+		try {
+			const result = await db.query.column.findFirst({
+				where: eq(column.id, id),
+			});
+			return result;
+		} catch (error) {
+			console.error(error);
+		}
+	}
 }
