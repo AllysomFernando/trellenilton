@@ -6,6 +6,7 @@ interface AddColumnFormProps {
 
 const AddColumnForm: React.FC<AddColumnFormProps> = ({ onAddColumn }) => {
 	const [title, setTitle] = useState("");
+	const [isAdding, setIsAdding] = useState(false);
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -15,26 +16,45 @@ const AddColumnForm: React.FC<AddColumnFormProps> = ({ onAddColumn }) => {
 		}
 		onAddColumn(title);
 		setTitle("");
+		setIsAdding(false);
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="mb-4">
-			<label className="block mb-2">
-				Column Name:
-				<input
-					type="text"
-					value={title}
-					onChange={(e) => setTitle(e.target.value)}
-					className="w-full p-2 border border-gray-300 rounded"
-				/>
-			</label>
-			<button
-				type="submit"
-				className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-			>
-				Add Column
-			</button>
-		</form>
+		<div className="mt-4">
+			{isAdding ? (
+				<form onSubmit={handleSubmit} className="mb-4">
+					<input
+						type="text"
+						value={title}
+						onChange={(e) => setTitle(e.target.value)}
+						placeholder="Insira o título da lista..."
+						className="w-full p-2 border border-gray-300 rounded mb-2"
+					/>
+					<div className="flex items-center ">
+						<button
+							type="submit"
+							className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+						>
+							Adicionar Lista
+						</button>
+						<button
+							type="button"
+							onClick={() => setIsAdding(false)}
+							className="ml-2 text-gray-500 hover:text-gray-700"
+						>
+							X
+						</button>
+					</div>
+				</form>
+			) : (
+				<button
+					onClick={() => setIsAdding(true)}
+					className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+				>
+					+ Adicionar outra lista
+				</button>
+			)}
+		</div>
 	);
 };
 
