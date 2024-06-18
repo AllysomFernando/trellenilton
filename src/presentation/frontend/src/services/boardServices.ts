@@ -1,4 +1,4 @@
-import api, { fetcher, poster, deleted, updated } from "../utils/api";
+import { fetcher, poster, deleted, updated } from "../utils/api";
 import { Board, DeleteBoardData, UpdateBoardData } from "../types/board";
 
 export const fetchBoards = async () => {
@@ -32,7 +32,7 @@ export const createBoard = async (data: {
 
 export const fetchBoardById = async (id: string) => {
 	try {
-		const response = await fetcher(`/boards`, { id });
+		const response = await poster(`/board`, { id });
 		return response;
 	} catch (error) {
 		console.log(error);
