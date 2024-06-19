@@ -2,7 +2,6 @@ import type { Card } from "../entities/card";
 import type { ICardRepository } from "../contracts/card-repository";
 
 type Input = {
-	id: string;
 	idPriority: string;
 	idCategory: string;
 	idStatus: string;
@@ -23,7 +22,6 @@ type Setup = (props: SetupCreateCard) => CreateCard;
 export const SetupCreateCard: Setup =
 	({ repository }) =>
 	async ({
-		id,
 		idPriority,
 		idCategory,
 		idStatus,
@@ -47,8 +45,7 @@ export const SetupCreateCard: Setup =
 		}
 
 		try {
-			return await repository.createCard({
-				id,
+			const response = await repository.createCard({
 				idPriority,
 				idCategory,
 				idStatus,
