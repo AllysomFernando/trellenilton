@@ -15,9 +15,6 @@ export const board = pgTable("board", {
 	createdAt: timestamp("createAt")
 });
 
-export const boardRelations = relations(board, ({ many }) => ({
-	columns: many(column),
-}));
 
 export type Board = InferSelectModel<typeof board>;
 export type NewBoard = InferSelectModel<typeof board>;

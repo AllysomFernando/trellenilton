@@ -11,7 +11,7 @@ export class BoardRepository implements IBoardRepository {
 			id: board.id,
 			name: board.name,
 			deleted: board.deleted,
-			column: board.column,
+			column: board.column || [],
 			createdAt: board.createdAt,
 		}));
 	}
@@ -20,7 +20,7 @@ export class BoardRepository implements IBoardRepository {
 		return {
 			id: data.id,
 			name: data.name,
-			column: data.column,
+			column: data.column || [],
 			deleted: data.deleted,
 			createdAt: data.createdAt,
 		};
@@ -48,7 +48,7 @@ export class BoardRepository implements IBoardRepository {
 		return {
 			id: data.id,
 			name: data.name,
-			column: data.column,
+			column: data.column || [],
 			deleted: data.deleted,
 			createdAt: data.createdAt,
 		};

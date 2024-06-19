@@ -7,9 +7,10 @@ export class ColumnRepository implements IColumnRepository {
 	public async createColumn(
 		name: string,
 		deleted: boolean,
-		description: string
+		description: string,
+		idBoard: string
 	): Promise<Column> {
-		const data = await this.db.createColumn(name, deleted, description);
+		const data = await this.db.createColumn(name, deleted, description, idBoard);
 		return {
 			id: data.id,
 			name: data.name,

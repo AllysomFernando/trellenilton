@@ -13,9 +13,6 @@ export const column = pgTable('column', {
   deleted: boolean("deleted").notNull()
 });
 
-export const columnRelations = relations(column, ({ one }) => ({
-	board: one(board),
-}));
 
 
 

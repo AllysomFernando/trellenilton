@@ -1,28 +1,39 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../../main/drizzle";
 import type { IBoardDatabaseProvider } from "../../contracts/board-database-provider";
-import { board } from "../models";
+import { board, column, boardRelations } from "../models";
+import { columnRelations } from "../models/columnsRelations"; 
 
 export class DrizzleBoardProvider implements IBoardDatabaseProvider {
 	public async loadAllBoards(): Promise<any[]> {
 		try {
-			const result = await db.query.board.findMany();
+			const result = await db.query.board.findMany({
+				with: {
+					columns: true,
+				},
+			});
 			return result;
 		} catch (error) {
 			console.error(error);
 		}
 		return [];
 	}
+
 	public async loadSpecificBoard(id: string): Promise<any> {
 		try {
 			const result = await db.query.board.findFirst({
 				where: eq(board.id, id),
+				with: {
+					columns: true,
+				},
 			});
 			return result;
 		} catch (error) {
 			console.error(error);
 		}
+		return null;
 	}
+
 	public async createBoard(name: string): Promise<any> {
 		const result = await db.insert(board).values({
 			name: name,
@@ -31,6 +42,7 @@ export class DrizzleBoardProvider implements IBoardDatabaseProvider {
 		});
 		return result;
 	}
+
 	public async deleteBoard(id: string): Promise<void> {
 		try {
 			await db
@@ -42,6 +54,7 @@ export class DrizzleBoardProvider implements IBoardDatabaseProvider {
 			console.error(error);
 		}
 	}
+
 	public async updateBoard(id: string, name: string): Promise<any> {
 		try {
 			const result = await db

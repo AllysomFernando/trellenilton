@@ -87,13 +87,14 @@ new Elysia()
 	)
 	.post(
 		"api/create-columns",
-		({ body: { name, description }, createColumnService }) => {
-			return createColumnService({ name, description });
+		({ body: { name, description, idBoard }, createColumnService }) => {
+			return createColumnService({ name, description, idBoard });
 		},
 		{
 			body: t.Object({
 				name: t.String(),
 				description: t.String(),
+				idBoard: t.String(),
 			}),
 		}
 	)

@@ -4,7 +4,8 @@ export interface IColumnRepository {
 	createColumn: (
 		name: string,
 		deleted: boolean,
-		description: string
+		description: string,
+		idBoard: string
 	) => Promise<Column>;
 	loadAllColumns: () => Promise<Column[]>;
 	deleteColumn: (id: string) => Promise<void>;
