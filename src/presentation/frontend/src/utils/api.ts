@@ -73,4 +73,21 @@ export const deleted = async (
 	}
 };
 
+export const deletedColumn = async (
+	url: string,
+	data: {
+		id: string;
+		column: { deleted: boolean };
+	}
+) => {
+	try {
+		const response = await axios.delete(`${URL}${url}`, {
+			data,
+		});
+		return response.data;
+	} catch (error) {
+		console.log(error);
+	}
+};
+
 export default api;

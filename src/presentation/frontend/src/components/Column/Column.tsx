@@ -78,8 +78,10 @@ const Column: React.FC<Props> = ({
 }) => {
 	const handleDelete = async () => {
 		try {
-			const deleted = await deleteColumn(columnId, { deleted: true });
-			window.location.reload();
+			const deleted = await deleteColumn(columnId, { deleted: true })
+				.then((res) => window.location.reload())
+				.catch((error) => console.log);
+
 			console.log("deleted inside of component", deleted);
 		} catch (error) {
 			console.log(error);

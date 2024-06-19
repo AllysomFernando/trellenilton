@@ -19,6 +19,7 @@ export const SetupDeleteColumn: Setup =
 	({ repository }) =>
 	async ({ column, id }) => {
 		try {
+			console.log("id=====>", id);
 			if (column.deleted === false) {
 				throw new Error("Column must be marked as deleted before deletion", {
 					cause: "column-not-deleted",

@@ -1,5 +1,5 @@
 import { DeleteColumnData } from "@/types/column";
-import { poster, deleted } from "../utils/api";
+import { deletedColumn, poster } from "../utils/api";
 
 export const createColumn = async (data: {
 	name: string;
@@ -17,8 +17,11 @@ export const createColumn = async (data: {
 
 export const deleteColumn = async (id: string, data: DeleteColumnData) => {
 	try {
-		const response = await deleted(`/delete-columns`, { id, board: data });
-		console.log("deleted", response);
+		const response = await deletedColumn(`/delete-columns`, {
+			id,
+			column: data,
+		});
+		console.log("deleted=====>", response);
 		return response;
 	} catch (error) {
 		console.log(error);

@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../../main/drizzle";
 import type { IBoardDatabaseProvider } from "../../contracts/board-database-provider";
-import { board, column, boardRelations } from "../models";
+import { board } from "../models";
 
 export class DrizzleBoardProvider implements IBoardDatabaseProvider {
 	public async loadAllBoards(): Promise<any[]> {

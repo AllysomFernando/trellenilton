@@ -42,7 +42,7 @@ export class DrizzleColumnProvider implements IColumnDatabseProvider {
 		try {
 			const result = await db
 				.update(column)
-				.set({ name: name })
+				.set({ name: name }) 
 				.where(eq(column.id, id))
 				.execute();
 			return result;
