@@ -1,24 +1,31 @@
 import React, { useState } from "react";
+import { createColumn } from "@/services/columnService"; 
 
 interface AddColumnFormProps {
-	boardId: string;
-	onAddColumn: (title: string, boardId: string) => void;
+	boardId: string; 
+	onAddColumn: (title: string) => void;
 }
 
 const AddColumnForm: React.FC<AddColumnFormProps> = ({
-	boardId,
 	onAddColumn,
+	boardId,
 }) => {
 	const [title, setTitle] = useState("");
 	const [isAdding, setIsAdding] = useState(false);
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (title.trim() === "") {
 			alert("Please enter a column name.");
 			return;
 		}
-		onAddColumn(title, boardId);
+		const columnData = {
+			name: title,
+			description: "Default description",
+			idBoard: boardId,
+		};
+		await createColumn(columnData); 
+		onAddColumn(title);
 		setTitle("");
 		setIsAdding(false);
 	};
