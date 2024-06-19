@@ -8,11 +8,10 @@ import type {
 	DroppableProvided,
 } from "@hello-pangea/dnd";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
-import type { QuoteMap, Quote } from "@/types/board";
+import type { QuoteMap, Quote, Board as BoardType } from "@/types/board";
+import { PartialAutoScrollerOptions } from "@/components/auto-scroller/fluid-scroller/auto-scroller-options-types";
 import { reorderQuoteMap, reorder } from "@/services/reorder";
 import Column from "@/components/Column/Column";
-import AddColumnForm from "@/components/Column/AddColumnForm";
-import { grid } from "@/utils/constants";
 
 interface ParentContainerProps {
 	height: string;
@@ -27,19 +26,19 @@ const ParentContainer = styled.div<ParentContainerProps>`
 const Container = styled.div`
 	background-color: ${colors.B100};
 	min-height: 100vh;
-	display: flex;
-	padding: ${grid}px;
-	gap: ${grid}px;
-	align-items: flex-start; /* align items at the top */
+	/* like display:flex but will allow bleeding over the window width */
+	min-width: 100vw;
+	display: inline-flex;
 `;
 
 interface Props {
-	initial: QuoteMap;
+	initial: BoardType; // Alterando para receber um BoardType
 	withScrollableColumns?: boolean;
 	isCombineEnabled?: boolean;
 	containerHeight?: string;
 	useClone?: boolean;
 	applyGlobalStyles?: boolean;
+	autoScrollerOptions?: PartialAutoScrollerOptions;
 }
 
 interface State {
@@ -48,14 +47,18 @@ interface State {
 }
 
 export class Board extends Component<Props, State> {
+	/* eslint-disable react/sort-comp */
 	static defaultProps = {
 		isCombineEnabled: false,
 		applyGlobalStyles: true,
 	};
 
 	state: State = {
-		columns: this.props.initial,
-		ordered: Object.keys(this.props.initial),
+		columns: this.props.initial.column.reduce((acc, col) => {
+			acc[col.name] = col.quotes;
+			return acc;
+		}, {} as QuoteMap),
+		ordered: this.props.initial.column.map((col) => col.name),
 	};
 
 	onDragEnd = (result: DropResult): void => {
@@ -78,6 +81,7 @@ export class Board extends Component<Props, State> {
 			return;
 		}
 
+		// dropped nowhere
 		if (!result.destination) {
 			return;
 		}
@@ -85,6 +89,7 @@ export class Board extends Component<Props, State> {
 		const source: DraggableLocation = result.source;
 		const destination: DraggableLocation = result.destination;
 
+		// did not move anywhere - can bail early
 		if (
 			source.droppableId === destination.droppableId &&
 			source.index === destination.index
@@ -92,6 +97,7 @@ export class Board extends Component<Props, State> {
 			return;
 		}
 
+		// reordering column
 		if (result.type === "COLUMN") {
 			const ordered: string[] = reorder(
 				this.state.ordered,
@@ -114,33 +120,6 @@ export class Board extends Component<Props, State> {
 
 		this.setState({
 			columns: data.quoteMap,
-		});
-	};
-
-	handleAddColumn = (title: string) => {
-		this.setState((prevState) => {
-			const newColumn: Quote[] = [];
-			const newColumns = {
-				...prevState.columns,
-				[title]: newColumn,
-			};
-			const newOrdered = [...prevState.ordered, title];
-			return {
-				columns: newColumns,
-				ordered: newOrdered,
-			};
-		});
-	};
-
-	handleAddCard = (columnId: string, card: Quote) => {
-		this.setState((prevState) => {
-			const newColumns = {
-				...prevState.columns,
-				[columnId]: [...prevState.columns[columnId], card],
-			};
-			return {
-				columns: newColumns,
-			};
 		});
 	};
 
@@ -170,17 +149,20 @@ export class Board extends Component<Props, State> {
 								key={key}
 								index={index}
 								title={key}
-								quotes={columns[key]}
+								quotes={columns[key] || []}
 								isScrollable={withScrollableColumns}
 								isCombineEnabled={isCombineEnabled}
 								useClone={useClone}
-								onAddCard={this.handleAddCard}
+								onAddCard={(columnId, card) => {
+									const newColumns = {
+										...columns,
+										[columnId]: [...(columns[columnId] || []), card],
+									};
+									this.setState({ columns: newColumns });
+								}}
 							/>
 						))}
 						{provided.placeholder}
-						<div className="m-2 p-2 bg-gray-300 rounded">
-							<AddColumnForm onAddColumn={this.handleAddColumn} />
-						</div>
 					</Container>
 				)}
 			</Droppable>
@@ -188,7 +170,10 @@ export class Board extends Component<Props, State> {
 
 		return (
 			<React.Fragment>
-				<DragDropContext onDragEnd={this.onDragEnd}>
+				<DragDropContext
+					onDragEnd={this.onDragEnd}
+					autoScrollerOptions={this.props.autoScrollerOptions}
+				>
 					{containerHeight ? (
 						<ParentContainer height={containerHeight}>{board}</ParentContainer>
 					) : (
