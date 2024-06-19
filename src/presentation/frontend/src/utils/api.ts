@@ -42,7 +42,7 @@ export const poster = async (url: string, data: any) => {
 export const updated = async (
 	url: string,
 	data: {
-		id: string; 
+		id: string;
 		board: { name: string };
 	}
 ) => {
@@ -64,12 +64,9 @@ export const deleted = async (
 	}
 ) => {
 	try {
-		const response = await axios.delete(
-			"http://localhost:3000/api/delete-boards",
-			{
-				data,
-			}
-		);
+		const response = await axios.delete(`${URL}${url}`, {
+			data,
+		});
 		return response.data;
 	} catch (error) {
 		console.log(error);
