@@ -1,44 +1,131 @@
+import title from "presentation/frontend/src/components/primatives/title";
 import type { ICardRepository } from "../../domain/contracts/card-repository";
 import type { Card } from "../../domain/entities/card";
 import type { ICardDatabaseProvider } from "../contracts/card-database-provider";
 
 export class CardRepository implements ICardRepository {
-    constructor(private readonly db: ICardDatabaseProvider) {}
+	constructor(private readonly db: ICardDatabaseProvider) {}
 
-    public async loadAllCards(): Promise<Card[]> {
-        const data = await this.db.loadAllCards();
-        return data.map((card) => ({
-            id: card.id,
-            idPriority: card.idPriority,
-            idCategory: card.idCategory,
-            idStatus: card.idStatus,
-            title: card.title,
-            description: card.description,
-            createdAt: card.createdAt,
-            updatedAt: card.updatedAt,
-            endedAt: card.endedAt,
-            deleted: card.deleted,
-        }));
-    }
-    public async createCard(card: Card): Promise<Card> {
-        const data = await this.db.createCard(card);
-        return {
-            id: data.id,
-            idPriority: data.idPriority,
-            idCategory: data.idCategory,
-            idStatus: data.idStatus,
-            title: data.title,
-            description: data.description,
-            createdAt: data.createdAt,
-            updatedAt: data.updatedAt,
-            endedAt: data.endedAt,
-            deleted: data.deleted,
-        };
-    }
+	public async loadAllCards(): Promise<Card[]> {
+		const data = await this.db.loadAllCards();
+		return data.map((card) => ({
+			id: card.id,
+			idPriority: card.idPriority,
+			idCategory: card.idCategory,
+			idStatus: card.idStatus,
+			title: card.title,
+			description: card.description,
+			createdAt: card.createdAt,
+			updatedAt: card.updatedAt,
+			endedAt: card.endedAt,
+			deleted: card.deleted,
+		}));
+	}
 
-    public async deleteCard(card: Card, id: string): Promise<void> {
-        const data = await this.db.deleteCard(card, id);
-        return data;
-    }
-    
+	public async createCard(card: Card): Promise<Card> {
+		const data = await this.db.createCard(card);
+		return {
+			id: data.id,
+			idPriority: data.idPriority,
+			idCategory: data.idCategory,
+			idStatus: data.idStatus,
+			title: data.title,
+			description: data.description,
+			createdAt: data.createdAt,
+			updatedAt: data.updatedAt,
+			endedAt: data.endedAt,
+			deleted: data.deleted,
+		};
+	}
+
+	public async deleteCard(id: string): Promise<void> {
+		await this.db.deleteCard(id);
+	}
+
+	public async displayCard(id: string): Promise<Card> {
+		const data = await this.db.displayCard(id);
+		return {
+			id: data.id,
+			idPriority: data.idPriority,
+			idCategory: data.idCategory,
+			idStatus: data.idStatus,
+			title: data.title,
+			description: data.description,
+			createdAt: data.createdAt,
+			updatedAt: data.updatedAt,
+			endedAt: data.endedAt,
+			deleted: data.deleted,
+		};
+	}
+
+	public async findCardByTitle(title: string): Promise<Card> {
+		const data = await this.db.findCardByTitle(title);
+		return {
+			id: data.id,
+			idPriority: data.idPriority,
+			idCategory: data.idCategory,
+			idStatus: data.idStatus,
+			title: data.title,
+			description: data.description,
+			createdAt: data.createdAt,
+			updatedAt: data.updatedAt,
+			endedAt: data.endedAt,
+			deleted: data.deleted,
+		};
+	}
+
+	public async insertCardDescription(
+		id: string,
+		description: string
+	): Promise<Card> {
+		const data = await this.db.insertCardDescription(id, description);
+		return {
+			id: data.id,
+			idPriority: data.idPriority,
+			idCategory: data.idCategory,
+			idStatus: data.idStatus,
+			title: data.title,
+			description: data.description,
+			createdAt: data.createdAt,
+			updatedAt: data.updatedAt,
+			endedAt: data.endedAt,
+			deleted: data.deleted,
+		};
+	}
+
+	public async insertCardDeadline(
+		id: string,
+		createAt: string,
+		endedAt: string
+	): Promise<Card> {
+		const data = await this.db.insertCardDeadline(id, createAt, endedAt);
+		return {
+			id: data.id,
+			idPriority: data.idPriority,
+			idCategory: data.idCategory,
+			idStatus: data.idStatus,
+			title: data.title,
+			description: data.description,
+			createdAt: data.createdAt,
+			updatedAt: data.updatedAt,
+			endedAt: data.endedAt,
+			deleted: data.deleted,
+		};
+	}
+
+	public async renameCard(title: string, id: string): Promise<Card> {
+		const data = await this.db.renameCard(id, title);
+		return {
+			id: data.id,
+			idPriority: data.idPriority,
+			idCategory: data.idCategory,
+			idStatus: data.idStatus,
+			title: data.title,
+			description: data.description,
+			createdAt: data.createdAt,
+			updatedAt: data.updatedAt,
+			endedAt: data.endedAt,
+			deleted: data.deleted,
+		};
+	}
 }
