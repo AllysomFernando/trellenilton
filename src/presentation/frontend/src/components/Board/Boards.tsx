@@ -10,8 +10,9 @@ import type {
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import type { QuoteMap, Quote, Board as BoardType } from "@/types/board";
 import { PartialAutoScrollerOptions } from "@/components/auto-scroller/fluid-scroller/auto-scroller-options-types";
-import  { reorderQuoteMap, reorder } from "@/services/reorder";
+import { reorderQuoteMap, reorder } from "@/services/reorder";
 import Column from "@/components/Column/Column";
+import AddColumnForm from "../Column/AddColumnForm";
 
 interface ParentContainerProps {
 	height: string;
@@ -32,7 +33,7 @@ const Container = styled.div`
 `;
 
 interface Props {
-	initial: BoardType; // Alterando para receber um BoardType
+	initial: BoardType;
 	withScrollableColumns?: boolean;
 	isCombineEnabled?: boolean;
 	containerHeight?: string;
@@ -55,12 +56,27 @@ export class Board extends Component<Props, State> {
 
 	state: State = {
 		columns: this.props.initial.column.reduce((acc, col) => {
-			acc[col.name] = col.quotes;
+			acc[col.name] = {
+				title: col.name,
+				quotes: col.quotes,
+			};
 			return acc;
 		}, {} as QuoteMap),
 		ordered: this.props.initial.column.map((col) => col.name),
 	};
-
+	handleAddColumn = (title: string) => {
+		const newColumnId = `column-${Date.now()}`;
+		this.setState((prevState) => ({
+			columns: {
+				...prevState.columns,
+				[newColumnId]: {
+					title,
+					quotes: [],
+				},
+			},
+			ordered: [...prevState.ordered, newColumnId],
+		}));
+	};
 	onDragEnd = (result: DropResult): void => {
 		if (result.combine) {
 			if (result.type === "COLUMN") {
@@ -70,12 +86,16 @@ export class Board extends Component<Props, State> {
 				return;
 			}
 
-			const column: Quote[] = this.state.columns[result.source.droppableId];
+			const column: Quote[] =
+				this.state.columns[result.source.droppableId].quotes;
 			const withQuoteRemoved: Quote[] = [...column];
 			withQuoteRemoved.splice(result.source.index, 1);
 			const columns: QuoteMap = {
 				...this.state.columns,
-				[result.source.droppableId]: withQuoteRemoved,
+				[result.source.droppableId]: {
+					...this.state.columns[result.source.droppableId],
+					quotes: withQuoteRemoved,
+				},
 			};
 			this.setState({ columns });
 			return;
@@ -149,7 +169,7 @@ export class Board extends Component<Props, State> {
 								key={key}
 								index={index}
 								title={key}
-								quotes={columns[key] || []} // Garantir que quotes seja um array
+								quotes={columns[key]?.quotes || []}
 								isScrollable={withScrollableColumns}
 								isCombineEnabled={isCombineEnabled}
 								useClone={useClone}
@@ -159,6 +179,10 @@ export class Board extends Component<Props, State> {
 							/>
 						))}
 						{provided.placeholder}
+						<AddColumnForm
+							onAddColumn={this.handleAddColumn}
+							boardId={this.props.initial.id}
+						/>
 					</Container>
 				)}
 			</Droppable>
