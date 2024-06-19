@@ -1,4 +1,5 @@
 import type { DraggableId, DraggableLocation } from "@hello-pangea/dnd";
+import { Column } from "./column";
 
 export type Id = string;
 
@@ -7,12 +8,6 @@ export interface Board {
 	name: string;
 	deleted: boolean;
 	column: Column[];
-}
-
-export interface Column {
-	id: Id;
-	name: string;
-	quotes: Quote[];
 }
 export interface UpdateBoardData {
 	name: string;
@@ -33,6 +28,7 @@ export interface Author {
 export interface Quote {
 	id: string;
 	content: string;
+	deleted: boolean;
 }
 export interface Dragging {
 	id: DraggableId;
@@ -42,6 +38,7 @@ export interface QuoteMap {
 	[key: string]: {
 		title: string;
 		quotes: Quote[];
+		deleted: boolean;
 	};
 }
 export interface Task {

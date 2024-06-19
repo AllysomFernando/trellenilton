@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import styled from "@emotion/styled";
 import { Global, css } from "@emotion/react";
 import { colors } from "@atlaskit/theme";
@@ -53,17 +53,39 @@ const Board: React.FC<Props> = ({
 }) => {
 	const [columns, setColumns] = useState<QuoteMap>(
 		initial.column.reduce((acc, col) => {
-			acc[col.id] = {
-				title: col.name,
-				quotes: col.quotes,
-			};
+			if (!col.deleted) {
+				acc[col.id] = {
+					title: col.name,
+					quotes: col.quotes.filter((quote) => !quote.deleted),
+					deleted: col.deleted,
+				};
+			}
 			return acc;
 		}, {} as QuoteMap)
 	);
 
 	const [ordered, setOrdered] = useState<string[]>(
-		initial.column.map((col) => col.id)
+		initial.column.filter((col) => !col.deleted).map((col) => col.id)
 	);
+
+	useEffect(() => {
+		setColumns(
+			initial.column.reduce((acc, col) => {
+				if (!col.deleted) {
+					acc[col.id] = {
+						title: col.name,
+						quotes: col.quotes.filter((quote) => !quote.deleted),
+						deleted: col.deleted,
+					};
+				}
+				return acc;
+			}, {} as QuoteMap)
+		);
+
+		setOrdered(
+			initial.column.filter((col) => !col.deleted).map((col) => col.id)
+		);
+	}, [initial.column]);
 
 	const [isEditingColumn, setIsEditingColumn] = useState<boolean>(false);
 	const [editingColumnId, setEditingColumnId] = useState<string | null>(null);
@@ -101,6 +123,7 @@ const Board: React.FC<Props> = ({
 			[newColumnId]: {
 				title,
 				quotes: [],
+				deleted: false,
 			},
 		}));
 		setOrdered((prevOrdered) => [...prevOrdered, newColumnId]);
@@ -114,6 +137,16 @@ const Board: React.FC<Props> = ({
 		},
 		[]
 	);
+
+	const handleDeleteColumn = (columnId: string) => {
+		setColumns((prevColumns) => {
+			const newColumns = { ...prevColumns };
+			newColumns[columnId].deleted = true;
+			return newColumns;
+		});
+
+		setOrdered((prevOrdered) => prevOrdered.filter((id) => id !== columnId));
+	};
 
 	const onDragEnd = (result: DropResult): void => {
 		if (result.combine) {
@@ -154,7 +187,6 @@ const Board: React.FC<Props> = ({
 		}
 
 		// reordering column
-		// reordering column
 		if (result.type === "COLUMN") {
 			const newOrder: string[] = reorder(
 				ordered,
@@ -185,22 +217,26 @@ const Board: React.FC<Props> = ({
 		>
 			{(provided: DroppableProvided) => (
 				<Container ref={provided.innerRef} {...provided.droppableProps}>
-					{ordered.map((key: string, index: number) => (
-						<Column
-							key={key}
-							index={index}
-							columnId={key}
-							title={columns[key].title}
-							quotes={columns[key]?.quotes || []}
-							isScrollable={withScrollableColumns}
-							isCombineEnabled={isCombineEnabled}
-							useClone={useClone}
-							onAddCard={(columnId, card) => {
-								// Logic to add card to column
-							}}
-							onEdit={() => handleEditColumn(key, columns[key].title)}
-						/>
-					))}
+					{ordered
+						.filter((key) => !columns[key].deleted)
+						.map((key: string, index: number) => (
+							<Column
+								key={key}
+								index={index}
+								columnId={key}
+								title={columns[key].title}
+								quotes={columns[key]?.quotes || []}
+								isScrollable={withScrollableColumns}
+								isCombineEnabled={isCombineEnabled}
+								useClone={useClone}
+								onAddCard={(columnId, card) => {
+									// Logic to add card to column
+								}}
+								onEdit={() => handleEditColumn(key, columns[key].title)}
+								onDelete={() => handleDeleteColumn(key)}
+							/>
+						))}
+
 					{provided.placeholder}
 					<AddColumnForm onAddColumn={handleAddColumn} boardId={initial.id} />
 				</Container>

@@ -62,6 +62,7 @@ interface Props {
 	useClone?: boolean;
 	onAddCard: (columnId: string, card: Quote) => void;
 	onEdit: () => void;
+	onDelete: () => void;
 }
 
 const Column: React.FC<Props> = ({
