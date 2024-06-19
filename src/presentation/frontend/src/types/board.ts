@@ -2,18 +2,22 @@ import type { DraggableId, DraggableLocation } from "@hello-pangea/dnd";
 
 export type Id = string;
 
-export interface Board {
+export type Board = {
 	id: string;
 	name: string;
+	columns: { [key: string]: Column };
 	deleted: boolean;
-	column: Column[];
-}
+	createdAt: string;
+};
 
-export interface Column {
-	id: Id;
+// Ajustando o tipo Column
+export type Column = {
+	id: string;
 	name: string;
+	description: string;
 	quotes: Quote[];
-}
+	deleted: boolean;
+};
 export interface UpdateBoardData {
 	name: string;
 }
