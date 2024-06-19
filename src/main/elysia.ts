@@ -13,9 +13,13 @@ import { setupDisplayColumn } from "domain/features/display-column";
 import { setupCreateColumn } from "domain/features/create-column";
 import { SetupDeleteColumn } from "domain/features/delete-column";
 import { setupUpdateColumn } from "domain/features/update-column";
+import { CardRepository } from "infra/repositories/card-repository";
+import { DrizzleCardProvider } from "infra/database/providers/drizzle-card-provider";
+import { SetupCreateCard } from "domain/features/create-card";
 
 const boardRepository = new BoardRepository(new DrizzleBoardProvider());
 const columnRepository = new ColumnRepository(new DrizzleColumnProvider());
+const cardRepository = new CardRepository(new DrizzleCardProvider());
 
 new Elysia()
 	.use(cors())
@@ -74,6 +78,10 @@ new Elysia()
 			repository: columnRepository,
 		})
 	)
+	.decorate(
+		"createCardService",
+		SetupCreateCard({ repository: cardRepository })
+	)
 	.post(
 		"api/create-boards",
 		({ body: { name }, createService }) => {
@@ -95,6 +103,32 @@ new Elysia()
 				name: t.String(),
 				description: t.String(),
 				idBoard: t.String(),
+			}),
+		}
+	)
+	.post(
+		"api/create/cards",
+		({
+			body: { idPriority, idCategory, idStatus, title, createdAt, deleted },
+			createCardService,
+		}) => {
+			return createCardService({
+				title,
+				idPriority,
+				idCategory,
+				idStatus,
+				createdAt,
+				deleted,
+			});
+		},
+		{
+			body: t.Object({
+				idPriority: t.String(),
+				idCategory: t.String(),
+				idStatus: t.String(),
+				title: t.String(),
+				createdAt: t.String(),
+				deleted: t.Boolean(),
 			}),
 		}
 	)
