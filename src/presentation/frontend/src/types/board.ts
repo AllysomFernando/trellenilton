@@ -6,8 +6,14 @@ export interface Board {
 	id: string;
 	name: string;
 	deleted: boolean;
+	column: Column[];
 }
 
+export interface Column {
+	id: Id;
+	name: string;
+	quotes: Quote[];
+}
 export interface UpdateBoardData {
 	name: string;
 }
