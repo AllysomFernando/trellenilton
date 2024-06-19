@@ -10,7 +10,7 @@ import type {
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import type { QuoteMap, Quote, Board as BoardType } from "@/types/board";
 import { PartialAutoScrollerOptions } from "@/components/auto-scroller/fluid-scroller/auto-scroller-options-types";
-import { reorderQuoteMap, reorder } from "@/services/reorder";
+import  { reorderQuoteMap, reorder } from "@/services/reorder";
 import Column from "@/components/Column/Column";
 
 interface ParentContainerProps {
@@ -149,16 +149,12 @@ export class Board extends Component<Props, State> {
 								key={key}
 								index={index}
 								title={key}
-								quotes={columns[key] || []}
+								quotes={columns[key] || []} // Garantir que quotes seja um array
 								isScrollable={withScrollableColumns}
 								isCombineEnabled={isCombineEnabled}
 								useClone={useClone}
 								onAddCard={(columnId, card) => {
-									const newColumns = {
-										...columns,
-										[columnId]: [...(columns[columnId] || []), card],
-									};
-									this.setState({ columns: newColumns });
+									// Logic to add card to column
 								}}
 							/>
 						))}
