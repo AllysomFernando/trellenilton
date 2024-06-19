@@ -36,22 +36,16 @@ export const fetchBoardById = async (
 	try {
 		const response = await poster(`/board`, { id });
 		const board = response;
-
 		if (Array.isArray(board.column)) {
-			const columns = board.column.reduce((acc: any, col: any) => {
-				acc[col.id] = { ...col, quotes: col.quotes || [] };
-				return acc;
-			}, {});
-
-			board.columns = columns;
-			delete board.column;
+			board.column = board.column.map((col: any) => ({
+				...col,
+				quotes: col.quotes || [],
+			}));
 		}
-
-		return board;
+		return response;
 	} catch (error) {
 		console.log(error);
 	}
-	return undefined;
 };
 
 export const updateBoard = async (id: string, data: UpdateBoardData) => {
