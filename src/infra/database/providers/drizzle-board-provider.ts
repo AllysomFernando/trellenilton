@@ -2,14 +2,13 @@ import { eq } from "drizzle-orm";
 import { db } from "../../../main/drizzle";
 import type { IBoardDatabaseProvider } from "../../contracts/board-database-provider";
 import { board, column, boardRelations } from "../models";
-import { columnRelations } from "../models/columnsRelations"; 
 
 export class DrizzleBoardProvider implements IBoardDatabaseProvider {
 	public async loadAllBoards(): Promise<any[]> {
 		try {
 			const result = await db.query.board.findMany({
 				with: {
-					columns: true,
+					column: true,
 				},
 			});
 			return result;
@@ -24,7 +23,7 @@ export class DrizzleBoardProvider implements IBoardDatabaseProvider {
 			const result = await db.query.board.findFirst({
 				where: eq(board.id, id),
 				with: {
-					columns: true,
+					column: true,
 				},
 			});
 			return result;
