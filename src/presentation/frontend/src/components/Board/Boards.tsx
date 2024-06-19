@@ -99,7 +99,7 @@ const Board: React.FC<Props> = ({
 
 	const handleColumnTitleSave = async (columnId: string, title: string) => {
 		if (columnId && title.trim() !== "") {
-			await updateColumn(columnId, { name: title }); // Chamar updateColumn
+			await updateColumn(columnId, { name: title });
 			setColumns((prevColumns) => ({
 				...prevColumns,
 				[columnId]: {
