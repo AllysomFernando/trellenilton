@@ -7,7 +7,10 @@ export interface ICardRepository {
 		idCategory: string,
 		idStatus: string,
 		createdAt: string,
-		deleted: boolean
+		deleted: boolean,
+		description?: string,
+		updatedAt?: string,
+		endedAt?: string
 	) => Promise<Card>;
 	loadAllCards: () => Promise<Card[]>;
 	displayCard: (id: string) => Promise<Card>;
