@@ -11,6 +11,8 @@ import { grid, borderRadius } from "@/utils/constants";
 import Title from "@/components/primatives/title";
 import AddCardForm from "@/components/Card/CardForm";
 import type { Quote } from "@/types/board";
+import { Menu } from "@headlessui/react";
+import { deleteColumn } from "@/services/columnService";
 
 const Container = styled.div`
 	margin: ${grid}px;
@@ -19,7 +21,7 @@ const Container = styled.div`
 	background-color: ${colors.N30};
 	border-radius: ${borderRadius}px;
 	width: 272px;
-	height: 100%
+	height: 100%;
 `;
 
 interface HeaderProps {
@@ -49,6 +51,7 @@ const QuoteListContainer = styled.div`
 `;
 
 interface Props {
+	columnId: string;
 	title: string;
 	quotes: Quote[];
 	index: number;
@@ -56,6 +59,7 @@ interface Props {
 	isCombineEnabled?: boolean;
 	useClone?: boolean;
 	onAddCard: (columnId: string, card: Quote) => void;
+	onEdit: () => void;
 }
 
 export default class Column extends Component<Props> {
@@ -64,6 +68,18 @@ export default class Column extends Component<Props> {
 
 		// Ensure quotes is an array
 		const quotesList = Array.isArray(quotes) ? quotes : [];
+
+		const handleDelete = async () => {
+			try {
+				const deleted = await deleteColumn(this.props.columnId, {
+					deleted: true,
+				});
+				window.location.reload();
+				console.log("deleted inside of component", deleted);
+			} catch (error) {
+				console.log(error);
+			}
+		};
 
 		return (
 			<Draggable draggableId={title} index={index}>
@@ -76,6 +92,37 @@ export default class Column extends Component<Props> {
 							>
 								{title}
 							</Title>
+							<Menu as="div" className="absolute top-2 right-2">
+								<Menu.Button className="text-gray-500 hover:text-gray-700">
+									•••
+								</Menu.Button>
+								<Menu.Items className="absolute right-0 w-48 py-1 mt-2 bg-white border border-gray-200 rounded-md shadow-lg">
+									<Menu.Item>
+										{({ active }) => (
+											<button
+												onClick={this.props.onEdit}
+												className={`${
+													active ? "bg-gray-100" : ""
+												} block px-4 py-2 text-sm text-gray-700 w-full text-left`}
+											>
+												Editar
+											</button>
+										)}
+									</Menu.Item>
+									<Menu.Item>
+										{({ active }) => (
+											<button
+												onClick={handleDelete}
+												className={`${
+													active ? "bg-gray-100" : ""
+												} block px-4 py-2 text-sm text-gray-700 w-full text-left`}
+											>
+												Excluir
+											</button>
+										)}
+									</Menu.Item>
+								</Menu.Items>
+							</Menu>
 						</Header>
 						<Droppable droppableId={title} type="QUOTE">
 							{(provided: DroppableProvided, snapshot) => (
