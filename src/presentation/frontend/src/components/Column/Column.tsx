@@ -19,6 +19,7 @@ const Container = styled.div`
 	background-color: ${colors.N30};
 	border-radius: ${borderRadius}px;
 	width: 272px;
+	height: 100%
 `;
 
 interface HeaderProps {
