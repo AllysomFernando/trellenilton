@@ -39,7 +39,10 @@ export interface Dragging {
 	location: DraggableLocation;
 }
 export interface QuoteMap {
-	[key: string]: Quote[];
+	[key: string]: {
+		title: string;
+		quotes: Quote[];
+	};
 }
 export interface Task {
 	id: Id;
