@@ -9,6 +9,3 @@ export * from "./log";
 export * from "./priority";
 export * from "./reminders";
 export * from "./status";
-export * from "./boardCards";
-export * from "./boardRelations";
-export * from "./columnsRelations";

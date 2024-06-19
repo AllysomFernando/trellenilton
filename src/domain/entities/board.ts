@@ -1,4 +1,4 @@
-import type { Column } from "@models/column";
+import type { Column } from "./column";
 
 export type Board = {
 	id: string;
