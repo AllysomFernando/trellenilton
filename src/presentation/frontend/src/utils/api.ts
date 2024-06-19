@@ -90,4 +90,19 @@ export const deletedColumn = async (
 	}
 };
 
+export const updatedColumn = async (
+	url: string,
+	data: {
+		id: string;
+		column: { name: string };
+	}
+) => {
+	try {
+		const response = await api.put(url, { id: data.id, column: data.column });
+		return response.data;
+	} catch (error) {
+		console.log(error);
+	}
+};
+
 export default api;

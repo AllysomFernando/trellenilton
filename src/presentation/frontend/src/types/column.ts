@@ -11,3 +11,7 @@ export interface Column {
 export interface DeleteColumnData {
 	deleted: boolean;
 }
+
+export interface UpdateColumn {
+	name: string;
+}

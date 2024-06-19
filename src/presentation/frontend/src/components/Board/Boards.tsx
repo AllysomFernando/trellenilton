@@ -13,6 +13,8 @@ import { PartialAutoScrollerOptions } from "@/components/auto-scroller/fluid-scr
 import { reorderQuoteMap, reorder } from "@/services/reorder";
 import Column from "@/components/Column/Column";
 import AddColumnForm from "../Column/AddColumnForm";
+import EditColumnModal from "../modal/NewColumnModal";
+import { updateColumn } from "@/services/columnService";
 
 interface ParentContainerProps {
 	height: string;
@@ -95,13 +97,14 @@ const Board: React.FC<Props> = ({
 		setEditingColumnTitle(e.target.value);
 	};
 
-	const handleColumnTitleSave = () => {
-		if (editingColumnId && editingColumnTitle.trim() !== "") {
+	const handleColumnTitleSave = async (columnId: string, title: string) => {
+		if (columnId && title.trim() !== "") {
+			await updateColumn(columnId, { name: title }); // Chamar updateColumn
 			setColumns((prevColumns) => ({
 				...prevColumns,
-				[editingColumnId]: {
-					...prevColumns[editingColumnId],
-					title: editingColumnTitle,
+				[columnId]: {
+					...prevColumns[columnId],
+					title,
 				},
 			}));
 			setIsEditingColumn(false);
@@ -266,20 +269,13 @@ const Board: React.FC<Props> = ({
 				/>
 			) : null}
 
-			{isEditingColumn && (
-				<div className="modal">
-					<div className="modal-content">
-						<h2>Editar Coluna</h2>
-						<input
-							type="text"
-							value={editingColumnTitle}
-							onChange={handleColumnTitleChange}
-						/>
-						<button onClick={handleColumnTitleSave}>Salvar</button>
-						<button onClick={handleColumnTitleCancel}>Cancelar</button>
-					</div>
-				</div>
-			)}
+			<EditColumnModal
+				isOpen={isEditingColumn}
+				onClose={handleColumnTitleCancel}
+				onSubmit={handleColumnTitleSave}
+				columnId={editingColumnId || ""}
+				initialTitle={editingColumnTitle}
+			/>
 		</React.Fragment>
 	);
 };

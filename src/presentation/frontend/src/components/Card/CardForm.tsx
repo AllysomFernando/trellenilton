@@ -19,9 +19,10 @@ const AddCardForm: React.FC<AddCardFormProps> = ({ columnId, onAddCard }) => {
 		const newCard = {
 			id: Date.now().toString(),
 			content,
+			deleted: false,
 		};
 		onAddCard(columnId, newCard);
-		setContent(""); 
+		setContent("");
 		setIsAdding(false);
 	};
 

@@ -75,13 +75,12 @@ const Column: React.FC<Props> = ({
 	useClone,
 	onAddCard,
 	onEdit,
+	onDelete,
 }) => {
 	const handleDelete = async () => {
 		try {
-			const deleted = await deleteColumn(columnId, { deleted: true })
-				.then((res) => window.location.reload())
-				.catch((error) => console.log);
-
+			const deleted = await deleteColumn(columnId, { deleted: true });
+			onDelete(); // Chamar a função onDelete passada para atualizar o estado no componente pai
 			console.log("deleted inside of component", deleted);
 		} catch (error) {
 			console.log(error);
