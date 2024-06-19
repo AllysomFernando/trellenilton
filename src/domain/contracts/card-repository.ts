@@ -1,7 +1,14 @@
 import type { Card } from "../entities/card";
 
 export interface ICardRepository {
-	createCard: (card: Card) => Promise<Card>;
+	createCard: (
+		title: string,
+		idPriority: string,
+		idCategory: string,
+		idStatus: string,
+		createdAt: string,
+		deleted: boolean
+	) => Promise<Card>;
 	loadAllCards: () => Promise<Card[]>;
 	displayCard: (id: string) => Promise<Card>;
 	deleteCard: (id: string) => Promise<void>;
