@@ -26,12 +26,9 @@ export const SetupCreateCard: Setup =
 		idCategory,
 		idStatus,
 		title,
-		description,
 		createdAt,
-		updatedAt,
-		endedAt,
 		deleted,
-	}) => {
+	}: Input) => {
 		if (title.length < 3)
 			throw new Error("Title must be at least 3 characters long", {
 				cause: "invalid-card-title",
@@ -43,19 +40,15 @@ export const SetupCreateCard: Setup =
 				cause: "duplicate-card-title",
 			});
 		}
-
 		try {
-			const response = await repository.createCard({
+			return await repository.createCard(
+				title,
 				idPriority,
 				idCategory,
 				idStatus,
-				title,
-				description,
 				createdAt,
-				updatedAt,
-				endedAt,
-				deleted,
-			});
+				deleted
+			);
 		} catch (error) {
 			throw new Error("Could not create card", {
 				cause: "create-card",
