@@ -5,8 +5,6 @@ import type { Card } from "../../../domain/entities/card";
 import type { ICardDatabaseProvider } from "../../contracts/card-database-provider";
 
 export class DrizzleCardProvider implements ICardDatabaseProvider {
-	constructor(private readonly db: ICardDatabaseProvider) {}
-
 	public async createCard(dto: Card): Promise<Card> {
 		const priorityReference = await db.query.priority.findFirst({
 			where: eq(priority.id, dto.idPriority),
