@@ -28,6 +28,9 @@ export const SetupCreateCard: Setup =
 		title,
 		createdAt,
 		deleted,
+		description,
+		updatedAt,
+		endedAt,
 	}: Input) => {
 		if (title.length < 3)
 			throw new Error("Title must be at least 3 characters long", {
@@ -47,7 +50,10 @@ export const SetupCreateCard: Setup =
 				idCategory,
 				idStatus,
 				createdAt,
-				deleted
+				deleted,
+				description,
+				updatedAt,
+				endedAt
 			);
 		} catch (error) {
 			throw new Error("Could not create card", {
