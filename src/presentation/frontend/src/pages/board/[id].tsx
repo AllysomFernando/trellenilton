@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Board } from "@/components/Board/Boards";
+import Board from "@/components/Board/Boards";
 import { fetchBoardById } from "@/services/boardServices";
 import { Board as BoardType } from "@/types/board";
 
