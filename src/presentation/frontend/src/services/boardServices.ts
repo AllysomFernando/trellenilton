@@ -30,20 +30,28 @@ export const createBoard = async (data: {
 	return undefined;
 };
 
-export const fetchBoardById = async (id: string): Promise<Board | undefined> => {
+export const fetchBoardById = async (
+	id: string
+): Promise<Board | undefined> => {
 	try {
 		const response = await poster(`/board`, { id });
 		const board = response;
+
 		if (Array.isArray(board.column)) {
-			board.column = board.column.map((col: any) => ({
-				...col,
-				quotes: col.quotes || []
-			}));
+			const columns = board.column.reduce((acc: any, col: any) => {
+				acc[col.id] = { ...col, quotes: col.quotes || [] };
+				return acc;
+			}, {});
+
+			board.columns = columns;
+			delete board.column;
 		}
-		return response;
+
+		return board;
 	} catch (error) {
 		console.log(error);
 	}
+	return undefined;
 };
 
 export const updateBoard = async (id: string, data: UpdateBoardData) => {
