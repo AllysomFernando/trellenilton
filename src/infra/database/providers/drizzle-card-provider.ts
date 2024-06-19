@@ -5,21 +5,31 @@ import type { Card } from "../../../domain/entities/card";
 import type { ICardDatabaseProvider } from "../../contracts/card-database-provider";
 
 export class DrizzleCardProvider implements ICardDatabaseProvider {
-	public async createCard(dto: Card): Promise<Card> {
+	public async createCard(
+		title: string,
+		idPriority: string,
+		idCategory: string,
+		idStatus: string,
+		createdAt: string,
+		deleted: boolean,
+		description?: string,
+		updatedAt?: string,
+		endedAt?: string
+	): Promise<Card> {
 		const priorityReference = await db.query.priority.findFirst({
-			where: eq(priority.id, dto.idPriority),
+			where: eq(priority.id, idPriority),
 		});
 		if (!priorityReference) {
 			throw new Error("Priority not found");
 		}
 		const categoryReference = await db.query.category.findFirst({
-			where: eq(category.id, dto.idCategory),
+			where: eq(category.id, idCategory),
 		});
 		if (!categoryReference) {
 			throw new Error("Category not found");
 		}
 		const statusReference = await db.query.status.findFirst({
-			where: eq(status.id, dto.idStatus),
+			where: eq(status.id, idStatus),
 		});
 		if (!statusReference) {
 			throw new Error("Status not found");
@@ -28,16 +38,16 @@ export class DrizzleCardProvider implements ICardDatabaseProvider {
 		const result = await db
 			.insert(card)
 			.values({
-				id: dto.id,
-				idPriority: dto.idPriority,
-				idCategory: dto.idCategory,
-				idStatus: dto.idStatus,
-				title: dto.title,
-				description: dto.description || "",
-				createdAt: dto.createdAt,
-				updatedAt: dto.updatedAt || "",
-				endedAt: dto.endedAt || "",
-				deleted: dto.deleted,
+				
+				idPriority: idPriority,
+				idCategory: idCategory,
+				idStatus: idStatus,
+				title: title,
+				description: description || "",
+				createdAt: createdAt,
+				updatedAt: updatedAt || "",
+				endedAt: endedAt || "",
+				deleted: deleted,
 			})
 			.returning();
 
