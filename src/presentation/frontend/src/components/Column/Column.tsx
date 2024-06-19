@@ -59,9 +59,11 @@ interface Props {
 
 export default class Column extends Component<Props> {
 	render(): ReactElement {
-		const title: string = this.props.title;
-		const quotes: Quote[] = this.props.quotes;
-		const index: number = this.props.index;
+		const { title, quotes, index } = this.props;
+
+		// Ensure quotes is an array
+		const quotesList = Array.isArray(quotes) ? quotes : [];
+
 		return (
 			<Draggable draggableId={title} index={index}>
 				{(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
@@ -85,7 +87,7 @@ export default class Column extends Component<Props> {
 											: "white",
 									}}
 								>
-									{quotes.map((quote, index) => (
+									{quotesList.map((quote, index) => (
 										<Draggable
 											key={quote.id}
 											draggableId={quote.id}
