@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 
 interface AddColumnFormProps {
-	onAddColumn: (title: string) => void;
+	boardId: string;
+	onAddColumn: (title: string, boardId: string) => void;
 }
 
-const AddColumnForm: React.FC<AddColumnFormProps> = ({ onAddColumn }) => {
+const AddColumnForm: React.FC<AddColumnFormProps> = ({
+	boardId,
+	onAddColumn,
+}) => {
 	const [title, setTitle] = useState("");
 	const [isAdding, setIsAdding] = useState(false);
 
@@ -14,7 +18,7 @@ const AddColumnForm: React.FC<AddColumnFormProps> = ({ onAddColumn }) => {
 			alert("Please enter a column name.");
 			return;
 		}
-		onAddColumn(title);
+		onAddColumn(title, boardId);
 		setTitle("");
 		setIsAdding(false);
 	};
