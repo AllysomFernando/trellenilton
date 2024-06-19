@@ -1,4 +1,4 @@
-import React, { Component, ReactElement } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "@emotion/styled";
 import { Global, css } from "@emotion/react";
 import { colors } from "@atlaskit/theme";
@@ -42,62 +42,98 @@ interface Props {
 	autoScrollerOptions?: PartialAutoScrollerOptions;
 }
 
-interface State {
-	columns: QuoteMap;
-	ordered: string[];
-}
-
-export class Board extends Component<Props, State> {
-	/* eslint-disable react/sort-comp */
-	static defaultProps = {
-		isCombineEnabled: false,
-		applyGlobalStyles: true,
-	};
-
-	state: State = {
-		columns: this.props.initial.column.reduce((acc, col) => {
-			acc[col.name] = {
+const Board: React.FC<Props> = ({
+	initial,
+	withScrollableColumns = false,
+	isCombineEnabled = false,
+	containerHeight,
+	useClone = false,
+	applyGlobalStyles = true,
+	autoScrollerOptions,
+}) => {
+	const [columns, setColumns] = useState<QuoteMap>(
+		initial.column.reduce((acc, col) => {
+			acc[col.id] = {
 				title: col.name,
 				quotes: col.quotes,
 			};
 			return acc;
-		}, {} as QuoteMap),
-		ordered: this.props.initial.column.map((col) => col.name),
+		}, {} as QuoteMap)
+	);
+
+	const [ordered, setOrdered] = useState<string[]>(
+		initial.column.map((col) => col.id)
+	);
+
+	const [isEditingColumn, setIsEditingColumn] = useState<boolean>(false);
+	const [editingColumnId, setEditingColumnId] = useState<string | null>(null);
+	const [editingColumnTitle, setEditingColumnTitle] = useState<string>("");
+
+	const handleColumnTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setEditingColumnTitle(e.target.value);
 	};
-	handleAddColumn = (title: string) => {
-		const newColumnId = `column-${Date.now()}`;
-		this.setState((prevState) => ({
-			columns: {
-				...prevState.columns,
-				[newColumnId]: {
-					title,
-					quotes: [],
+
+	const handleColumnTitleSave = () => {
+		if (editingColumnId && editingColumnTitle.trim() !== "") {
+			setColumns((prevColumns) => ({
+				...prevColumns,
+				[editingColumnId]: {
+					...prevColumns[editingColumnId],
+					title: editingColumnTitle,
 				},
-			},
-			ordered: [...prevState.ordered, newColumnId],
-		}));
+			}));
+			setIsEditingColumn(false);
+			setEditingColumnId(null);
+			setEditingColumnTitle("");
+		}
 	};
-	onDragEnd = (result: DropResult): void => {
+
+	const handleColumnTitleCancel = () => {
+		setIsEditingColumn(false);
+		setEditingColumnId(null);
+		setEditingColumnTitle("");
+	};
+
+	const handleAddColumn = (title: string) => {
+		const newColumnId = `column-${Date.now()}`;
+		setColumns((prevColumns) => ({
+			...prevColumns,
+			[newColumnId]: {
+				title,
+				quotes: [],
+			},
+		}));
+		setOrdered((prevOrdered) => [...prevOrdered, newColumnId]);
+	};
+
+	const handleEditColumn = useCallback(
+		(columnId: string, columnTitle: string) => {
+			setIsEditingColumn(true);
+			setEditingColumnId(columnId);
+			setEditingColumnTitle(columnTitle);
+		},
+		[]
+	);
+
+	const onDragEnd = (result: DropResult): void => {
 		if (result.combine) {
 			if (result.type === "COLUMN") {
-				const shallow: string[] = [...this.state.ordered];
+				const shallow: string[] = [...ordered];
 				shallow.splice(result.source.index, 1);
-				this.setState({ ordered: shallow });
+				setOrdered(shallow);
 				return;
 			}
 
-			const column: Quote[] =
-				this.state.columns[result.source.droppableId].quotes;
+			const column: Quote[] = columns[result.source.droppableId].quotes;
 			const withQuoteRemoved: Quote[] = [...column];
 			withQuoteRemoved.splice(result.source.index, 1);
-			const columns: QuoteMap = {
-				...this.state.columns,
+			setColumns((prevColumns) => ({
+				...prevColumns,
 				[result.source.droppableId]: {
-					...this.state.columns[result.source.droppableId],
+					...prevColumns[result.source.droppableId],
 					quotes: withQuoteRemoved,
 				},
-			};
-			this.setState({ columns });
+			}));
 			return;
 		}
 
@@ -118,98 +154,98 @@ export class Board extends Component<Props, State> {
 		}
 
 		// reordering column
+		// reordering column
 		if (result.type === "COLUMN") {
-			const ordered: string[] = reorder(
-				this.state.ordered,
+			const newOrder: string[] = reorder(
+				ordered,
 				source.index,
 				destination.index
 			);
 
-			this.setState({
-				ordered,
-			});
-
+			setOrdered(newOrder);
 			return;
 		}
 
 		const data = reorderQuoteMap({
-			quoteMap: this.state.columns,
+			quoteMap: columns,
 			source,
 			destination,
 		});
 
-		this.setState({
-			columns: data.quoteMap,
-		});
+		setColumns(data.quoteMap);
 	};
 
-	render(): ReactElement {
-		const columns: QuoteMap = this.state.columns;
-		const ordered: string[] = this.state.ordered;
-		const {
-			containerHeight,
-			useClone,
-			isCombineEnabled,
-			withScrollableColumns,
-			applyGlobalStyles,
-		} = this.props;
-
-		const board = (
-			<Droppable
-				droppableId="board"
-				type="COLUMN"
-				direction="horizontal"
-				ignoreContainerClipping={Boolean(containerHeight)}
-				isCombineEnabled={isCombineEnabled}
-			>
-				{(provided: DroppableProvided) => (
-					<Container ref={provided.innerRef} {...provided.droppableProps}>
-						{ordered.map((key: string, index: number) => (
-							<Column
-								key={key}
-								index={index}
-								title={key}
-								quotes={columns[key]?.quotes || []}
-								isScrollable={withScrollableColumns}
-								isCombineEnabled={isCombineEnabled}
-								useClone={useClone}
-								onAddCard={(columnId, card) => {
-									// Logic to add card to column
-								}}
-							/>
-						))}
-						{provided.placeholder}
-						<AddColumnForm
-							onAddColumn={this.handleAddColumn}
-							boardId={this.props.initial.id}
+	const board = (
+		<Droppable
+			droppableId="board"
+			type="COLUMN"
+			direction="horizontal"
+			ignoreContainerClipping={Boolean(containerHeight)}
+			isCombineEnabled={isCombineEnabled}
+		>
+			{(provided: DroppableProvided) => (
+				<Container ref={provided.innerRef} {...provided.droppableProps}>
+					{ordered.map((key: string, index: number) => (
+						<Column
+							key={key}
+							index={index}
+							columnId={key}
+							title={columns[key].title}
+							quotes={columns[key]?.quotes || []}
+							isScrollable={withScrollableColumns}
+							isCombineEnabled={isCombineEnabled}
+							useClone={useClone}
+							onAddCard={(columnId, card) => {
+								// Logic to add card to column
+							}}
+							onEdit={() => handleEditColumn(key, columns[key].title)}
 						/>
-					</Container>
-				)}
-			</Droppable>
-		);
+					))}
+					{provided.placeholder}
+					<AddColumnForm onAddColumn={handleAddColumn} boardId={initial.id} />
+				</Container>
+			)}
+		</Droppable>
+	);
 
-		return (
-			<React.Fragment>
-				<DragDropContext
-					onDragEnd={this.onDragEnd}
-					autoScrollerOptions={this.props.autoScrollerOptions}
-				>
-					{containerHeight ? (
-						<ParentContainer height={containerHeight}>{board}</ParentContainer>
-					) : (
-						board
-					)}
-				</DragDropContext>
-				{applyGlobalStyles ? (
-					<Global
-						styles={css`
-							body {
-								background: ${colors.B200};
-							}
-						`}
-					/>
-				) : null}
-			</React.Fragment>
-		);
-	}
-}
+	return (
+		<React.Fragment>
+			<DragDropContext
+				onDragEnd={onDragEnd}
+				autoScrollerOptions={autoScrollerOptions}
+			>
+				{containerHeight ? (
+					<ParentContainer height={containerHeight}>{board}</ParentContainer>
+				) : (
+					board
+				)}
+			</DragDropContext>
+			{applyGlobalStyles ? (
+				<Global
+					styles={css`
+						body {
+							background: ${colors.B200};
+						}
+					`}
+				/>
+			) : null}
+
+			{isEditingColumn && (
+				<div className="modal">
+					<div className="modal-content">
+						<h2>Editar Coluna</h2>
+						<input
+							type="text"
+							value={editingColumnTitle}
+							onChange={handleColumnTitleChange}
+						/>
+						<button onClick={handleColumnTitleSave}>Salvar</button>
+						<button onClick={handleColumnTitleCancel}>Cancelar</button>
+					</div>
+				</div>
+			)}
+		</React.Fragment>
+	);
+};
+
+export default Board;
