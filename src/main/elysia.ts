@@ -248,7 +248,6 @@ new Elysia()
 		"api/create-cards",
 		({
 			body: {
-				id = "",
 				idPriority,
 				idCategory,
 				idStatus,
