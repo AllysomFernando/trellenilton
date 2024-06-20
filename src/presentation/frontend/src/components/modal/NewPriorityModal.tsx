@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { poster } from "@/utils/api";
+import { createPriority } from "@/services/cardService";
 
 interface NewPriorityModalProps {
 	isOpen: boolean;
@@ -18,11 +18,14 @@ const NewPriorityModal: React.FC<NewPriorityModalProps> = ({
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
-			const response = await poster("/api/create-priority", {
+			const response = await createPriority({
 				name,
+				level: "1",
 				deleted: false,
 			});
-			onAdd(response);
+			if (response) {
+				onAdd(response);
+			}
 			onClose();
 		} catch (error) {
 			console.error("Failed to create priority", error);
