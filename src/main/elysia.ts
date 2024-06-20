@@ -248,6 +248,7 @@ new Elysia()
 		"api/create-cards",
 		({
 			body: {
+				id = "",
 				idPriority,
 				idCategory,
 				idStatus,
@@ -274,6 +275,7 @@ new Elysia()
 		},
 		{
 			body: t.Object({
+				id: t.String(),
 				idPriority: t.String(),
 				idCategory: t.String(),
 				idStatus: t.String(),
