@@ -4,17 +4,11 @@ import { colors } from "@atlaskit/theme";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { grid, borderRadius } from "@/utils/constants";
 import Title from "@/components/primatives/title";
-import AddCardForm from "@/components/Card/CardForm";
 import type { Quote, NewCard, Card } from "@/types/board";
 import { Menu } from "@headlessui/react";
 import { deleteColumn } from "@/services/columnService";
 import NewCardModal from "@/components/modal/NewCardModal";
 
-import type {
-	DraggableProvided,
-	DraggableStateSnapshot,
-	DroppableProvided,
-} from "@hello-pangea/dnd";
 const Container = styled.div`
 	margin: ${grid}px;
 	display: flex;
@@ -94,12 +88,10 @@ const Column: React.FC<Props> = ({
 		}
 	};
 
-	const quotesList = Array.isArray(quotes) ? quotes : [];
-
 	return (
 		<>
 			<Draggable draggableId={columnId} index={index}>
-				{(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
+				{(provided, snapshot) => (
 					<Container ref={provided.innerRef} {...provided.draggableProps}>
 						<Header isDragging={snapshot.isDragging}>
 							<Title
@@ -153,7 +145,7 @@ const Column: React.FC<Props> = ({
 							</Menu>
 						</Header>
 						<Droppable droppableId={columnId} type="QUOTE">
-							{(provided: DroppableProvided, snapshot) => (
+							{(provided, snapshot) => (
 								<QuoteListContainer
 									ref={provided.innerRef}
 									{...provided.droppableProps}
@@ -163,7 +155,7 @@ const Column: React.FC<Props> = ({
 											: "white",
 									}}
 								>
-									{quotesList.map((quote, index) => (
+									{quotes.map((quote, index) => (
 										<Draggable
 											key={quote.id}
 											draggableId={quote.id}
@@ -195,12 +187,6 @@ const Column: React.FC<Props> = ({
 								</QuoteListContainer>
 							)}
 						</Droppable>
-						<button
-							className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-900"
-							onClick={() => setIsModalOpen(true)}
-						>
-							Adicionar Cartão
-						</button>
 					</Container>
 				)}
 			</Draggable>
