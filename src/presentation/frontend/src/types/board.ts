@@ -95,9 +95,13 @@ export interface Priority {
 export interface Category {
 	id: string;
 	name: string;
+	description: string;
+	deleted: boolean;
 }
 
 export interface Status {
 	id: string;
 	name: string;
+	description: string;
+	deleted: boolean;
 }
