@@ -1,7 +1,7 @@
 import type { Status } from "domain/entities/status";
 
 export interface IStatusRepository {
-	createCategory: (
+	createStatus: (
 		name: string,
 		deleted: boolean,
 		description: string
