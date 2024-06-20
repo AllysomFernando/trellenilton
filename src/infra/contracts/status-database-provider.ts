@@ -1,6 +1,6 @@
 import type { Status } from "domain/entities/status";
 
-export interface ICategoryDatabaseProvider {
+export interface IStatusDatabaseProvider {
 	createStatus: (
 		name: string,
 		deleted: boolean,
