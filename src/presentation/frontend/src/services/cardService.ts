@@ -24,7 +24,7 @@ export const createCard = async (
 			idColumn: columnId,
 			idCard: response.id,
 		});
-		console.log("==========>",columnCardResponse);
+		console.log("==========>", columnCardResponse);
 		return response;
 	} catch (error) {
 		throw new Error("Failed to create card");
