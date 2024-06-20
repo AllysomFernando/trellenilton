@@ -185,7 +185,7 @@ const NewCardModal: React.FC<NewCardModalProps> = ({
 														<select
 															value={status}
 															onChange={(e) => setStatus(e.target.value)}
-															className="mt-1 p-2 border rounded w-full"
+															className="mt-1 p-2 border text-white rounded w-full"
 															required
 														>
 															<option value="">Selecione o Status</option>
