@@ -32,6 +32,7 @@ import { SetupDisplayStatus } from "domain/features/display-status";
 import { setupDeleteStatus } from "domain/features/delete-status";
 import { setupDisplayCategory } from "domain/features/display-category";
 import { setupDeleteCategory } from "domain/features/delete-category";
+import { setupCreateCategory } from "domain/features/create-category";
 
 const boardRepository = new BoardRepository(new DrizzleBoardProvider());
 const columnRepository = new ColumnRepository(new DrizzleColumnProvider());
@@ -63,7 +64,7 @@ new Elysia()
 	)
 	.decorate(
 		"createCategory",
-		setupDisplayCategory({ repository: categoryRepository })
+		setupCreateCategory({ repository: categoryRepository })
 	)
 	.decorate(
 		"deleteCategory",
@@ -151,6 +152,32 @@ new Elysia()
 			return fetchSiglePriorityService({ id });
 		},
 		{ body: t.Object({ id: t.String() }) }
+	)
+	.post(
+		"api/create-status",
+		({ body: { name, description, deleted }, createStatus }) => {
+			return createStatus({ name, description, deleted });
+		},
+		{
+			body: t.Object({
+				name: t.String(),
+				description: t.String(),
+				deleted: t.Boolean(),
+			}),
+		}
+	)
+	.post(
+		"api/create-category",
+		({ body: { name, description, deleted }, createCategory }) => {
+			return createCategory({ name, description, deleted });
+		},
+		{
+			body: t.Object({
+				name: t.String(),
+				description: t.String(),
+				deleted: t.Boolean(),
+			}),
+		}
 	)
 	.post(
 		"api/create-boards",
