@@ -16,6 +16,7 @@ export const SetupCreateCardColumn: Setup =
 	({ repository }) =>
 	async ({ idCard, idColumn }: Input) => {
 		try {
+			console.log("bateu aqui card column")
 			return await repository.createCardColumn(idCard, idColumn);
 		} catch (error) {
 			console.log(error);
