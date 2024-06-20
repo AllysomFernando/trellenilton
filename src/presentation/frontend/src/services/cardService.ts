@@ -16,7 +16,7 @@ export const createCard = async (cardData: {
 	isRecurring?: boolean;
 }): Promise<Card> => {
 	try {
-		const response = await poster("/api/create-cards", cardData);
+		const response = await poster("/create-cards", cardData);
 		return response.data;
 	} catch (error) {
 		throw new Error("Failed to create card");
