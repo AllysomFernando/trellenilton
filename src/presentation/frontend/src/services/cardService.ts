@@ -1,4 +1,4 @@
-import { Card, Priority } from "@/types/board";
+import { Card, Priority, Status } from "@/types/board";
 import { fetcher, poster } from "@/utils/api";
 
 export const createCard = async (cardData: {
@@ -30,6 +30,34 @@ export const createPriority = async (data: {
 }): Promise<Priority | undefined> => {
 	try {
 		const response = await poster("/create-priority", data);
+		return response;
+	} catch (error) {
+		console.log(error);
+	}
+	return undefined;
+};
+
+export const createStatus = async (data: {
+	name: string;
+	description: string;
+	deleted: boolean;
+}): Promise<Status | undefined> => {
+	try {
+		const response = await poster("/create-status", data);
+		return response;
+	} catch (error) {
+		console.log(error);
+	}
+	return undefined;
+};
+
+export const createCategory = async (data: {
+	name: string;
+	description: string;
+	deleted: boolean;
+}): Promise<Status | undefined> => {
+	try {
+		const response = await poster("/create-category", data);
 		return response;
 	} catch (error) {
 		console.log(error);
