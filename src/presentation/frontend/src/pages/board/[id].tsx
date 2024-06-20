@@ -30,7 +30,7 @@ const BoardPage = () => {
 	return (
 		<div>
 			<h1 className="text-2xl font-bold mb-4">Quadro {boardData.name}</h1>
-			<Board initial={boardData} />
+			<Board initialBoard={boardData} />
 		</div>
 	);
 };
