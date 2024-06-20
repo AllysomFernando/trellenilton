@@ -131,4 +131,10 @@ export class CardRepository implements ICardRepository {
 			deleted: data.deleted,
 		};
 	}
+	public async createCardColumn(
+		idColumn: string,
+		idCard: string
+	): Promise<any> {
+		return this.db.createCardColumn(idColumn, idCard);
+	}
 }
