@@ -88,6 +88,8 @@ export interface NewCard {
 export interface Priority {
 	id: string;
 	name: string;
+	level: string;
+	deleted: boolean;
 }
 
 export interface Category {
