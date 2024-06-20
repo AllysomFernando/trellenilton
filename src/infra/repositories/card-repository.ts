@@ -22,8 +22,18 @@ export class CardRepository implements ICardRepository {
 		}));
 	}
 
-	public async createCard(card: Card): Promise<Card> {
-		const data = await this.db.createCard(card);
+	public async createCard(
+		title: string,
+		idPriority: string,
+		idCategory: string,
+		idStatus: string,
+		createdAt: string,
+		deleted: boolean,
+		description?: string,
+		updatedAt?: string,
+		endedAt?: string
+	): Promise<Card> {
+		const data = await this.db.createCard(title, idPriority, idCategory, idStatus, createdAt, deleted, description, updatedAt, endedAt);
 		return {
 			id: data.id,
 			idPriority: data.idPriority,
