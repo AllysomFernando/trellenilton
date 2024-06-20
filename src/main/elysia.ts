@@ -232,9 +232,9 @@ new Elysia()
 				title,
 				createdAt,
 				deleted,
-				description,
-				updatedAt,
-				endedAt,
+				description = "",
+				updatedAt = "",
+				endedAt = "",
 			},
 			createCardService,
 		}) => {
