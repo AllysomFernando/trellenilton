@@ -6,13 +6,13 @@ type Input = {
 	idColumn: string;
 };
 type Output = {};
-type CreateCard = (input: Input) => Promise<Output>;
-type SetupCreateCard = {
+type CreateCardColumn = (input: Input) => Promise<Output>;
+type SetupCreateCardColumn = {
 	repository: ICardRepository;
 };
-type Setup = (props: SetupCreateCard) => CreateCard;
+type Setup = (props: SetupCreateCardColumn) => CreateCardColumn;
 
-export const SetupCreateCard: Setup =
+export const SetupCreateCardColumn: Setup =
 	({ repository }) =>
 	async ({ idCard, idColumn }: Input) => {
 		try {
