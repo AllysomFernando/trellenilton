@@ -67,7 +67,7 @@ export const createCategory = async (data: {
 
 export const fetchPriority = async () => {
 	try {
-		const response = await fetcher("/priority", {});
+		const response = await fetcher("/priorities", {});
 		console.log("response ==>", response);
 		if (response) {
 			return response;
