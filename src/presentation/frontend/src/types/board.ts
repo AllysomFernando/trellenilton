@@ -84,3 +84,18 @@ export interface NewCard {
 	checklists?: string[];
 	isRecurring?: boolean;
 }
+
+export interface Priority {
+	id: string;
+	name: string;
+}
+
+export interface Category {
+	id: string;
+	name: string;
+}
+
+export interface Status {
+	id: string;
+	name: string;
+}
