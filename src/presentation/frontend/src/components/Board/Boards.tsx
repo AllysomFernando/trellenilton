@@ -14,7 +14,6 @@ import { reorderQuoteMap, reorder } from "@/services/reorder";
 import Column from "@/components/Column/Column";
 import AddColumnForm from "../Column/AddColumnForm";
 import EditColumnModal from "../modal/NewColumnModal";
-import { updateColumn } from "@/services/columnService";
 
 interface ParentContainerProps {
 	height: string;
@@ -42,6 +41,9 @@ interface Props {
 	useClone?: boolean;
 	applyGlobalStyles?: boolean;
 	autoScrollerOptions?: PartialAutoScrollerOptions;
+	priorities: string[];
+	categories: string[];
+	statuses: string[];
 }
 
 const Board: React.FC<Props> = ({
@@ -52,6 +54,9 @@ const Board: React.FC<Props> = ({
 	useClone = false,
 	applyGlobalStyles = true,
 	autoScrollerOptions,
+	priorities,
+	categories,
+	statuses,
 }) => {
 	const [columns, setColumns] = useState<QuoteMap>(
 		initial.column.reduce((acc, col) => {
@@ -97,14 +102,13 @@ const Board: React.FC<Props> = ({
 		setEditingColumnTitle(e.target.value);
 	};
 
-	const handleColumnTitleSave = async (columnId: string, title: string) => {
-		if (columnId && title.trim() !== "") {
-			await updateColumn(columnId, { name: title });
+	const handleColumnTitleSave = () => {
+		if (editingColumnId && editingColumnTitle.trim() !== "") {
 			setColumns((prevColumns) => ({
 				...prevColumns,
-				[columnId]: {
-					...prevColumns[columnId],
-					title,
+				[editingColumnId]: {
+					...prevColumns[editingColumnId],
+					title: editingColumnTitle,
 				},
 			}));
 			setIsEditingColumn(false);
@@ -237,6 +241,9 @@ const Board: React.FC<Props> = ({
 								}}
 								onEdit={() => handleEditColumn(key, columns[key].title)}
 								onDelete={() => handleDeleteColumn(key)}
+								priorities={priorities}
+								categories={categories}
+								statuses={statuses}
 							/>
 						))}
 

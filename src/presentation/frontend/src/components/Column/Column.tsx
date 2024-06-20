@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { colors } from "@atlaskit/theme";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
@@ -13,6 +13,7 @@ import AddCardForm from "@/components/Card/CardForm";
 import type { Quote } from "@/types/board";
 import { Menu } from "@headlessui/react";
 import { deleteColumn } from "@/services/columnService";
+import CreateCardModal from "@/components/modal/NewCardModal";
 
 const Container = styled.div`
 	margin: ${grid}px;
@@ -63,6 +64,9 @@ interface Props {
 	onAddCard: (columnId: string, card: Quote) => void;
 	onEdit: () => void;
 	onDelete: () => void;
+	priorities: string[];
+	categories: string[];
+	statuses: string[];
 }
 
 const Column: React.FC<Props> = ({
@@ -76,12 +80,16 @@ const Column: React.FC<Props> = ({
 	onAddCard,
 	onEdit,
 	onDelete,
+	priorities,
+	categories,
+	statuses,
 }) => {
+	const [isModalOpen, setIsModalOpen] = useState(false);
+
 	const handleDelete = async () => {
 		try {
-			const deleted = await deleteColumn(columnId, { deleted: true });
-			onDelete(); 
-			console.log("deleted inside of component", deleted);
+			await deleteColumn(columnId, { deleted: true });
+			window.location.reload();
 		} catch (error) {
 			console.log(error);
 		}
@@ -175,7 +183,21 @@ const Column: React.FC<Props> = ({
 							</QuoteListContainer>
 						)}
 					</Droppable>
+					<button
+						onClick={() => setIsModalOpen(true)}
+						className="bg-slate-700 text-white px-4 py-2 rounded hover:bg-slate-900 mt-2"
+					>
+						Adicionar Cartão
+					</button>
 					<AddCardForm columnId={columnId} onAddCard={onAddCard} />
+					<CreateCardModal
+						isOpen={isModalOpen}
+						onClose={() => setIsModalOpen(false)}
+						onSubmit={onAddCard}
+						priorities={priorities}
+						categories={categories}
+						statuses={statuses}
+					/>
 				</Container>
 			)}
 		</Draggable>
