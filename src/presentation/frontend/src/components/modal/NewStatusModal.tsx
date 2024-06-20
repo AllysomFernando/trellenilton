@@ -1,6 +1,7 @@
 import React, { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { poster } from "@/utils/api";
+import { createStatus } from "@/services/cardService";
 
 interface NewStatusModalProps {
 	isOpen: boolean;
@@ -18,14 +19,17 @@ const NewStatusModal: React.FC<NewStatusModalProps> = ({
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
-			const response = await poster("/api/create-status", {
+			const response = await createStatus({
 				name,
+				description: "1",
 				deleted: false,
 			});
-			onAdd(response);
+			if (response) {
+				onAdd(response);
+			}
 			onClose();
 		} catch (error) {
-			console.error("Failed to create status", error);
+			console.error("Failed to create priority", error);
 		}
 	};
 
