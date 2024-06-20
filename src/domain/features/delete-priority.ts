@@ -29,11 +29,11 @@ export const setupDeletePriority: Setup =
 			await repository.deletePriority(id);
 			return {
 				statusCode: 200,
-				message: "Board deleted successfully",
+				message: "Category deleted successfully",
 			};
 		} catch (error) {
-			throw new Error("Could not delete the board", {
-				cause: "delete-board",
+			throw new Error("Could not delete the Category", {
+				cause: "delete-Category",
 			});
 		}
 	};
