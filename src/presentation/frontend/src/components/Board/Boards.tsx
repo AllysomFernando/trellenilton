@@ -29,11 +29,11 @@ const BoardComponent: React.FC<Props> = ({ initialBoard }) => {
 	const fetchAllCards = async () => {
 		try {
 			const fetchedCards = await fetchCards();
-			console.log("Fetched Cards:", fetchedCards); // Log para depuração
-			setCards(fetchedCards || []); // Garantir que cards seja um array, mesmo se estiver vazio
+			console.log("Fetched Cards:", fetchedCards);
+			setCards(fetchedCards || []);
 		} catch (error) {
 			console.error("Failed to fetch cards", error);
-			setCards([]); // Definir cards como um array vazio em caso de erro
+			setCards([]);
 		}
 	};
 
@@ -151,7 +151,7 @@ const BoardComponent: React.FC<Props> = ({ initialBoard }) => {
 							const columnCards = cards.filter(
 								(card) => card.idCategory === column.id && !card.deleted
 							);
-							console.log("Cards for column", column.id, columnCards); // Log para depuração
+							console.log("Cards for column", column.id, columnCards);
 							return (
 								<Column
 									key={column.id}
@@ -173,7 +173,7 @@ const BoardComponent: React.FC<Props> = ({ initialBoard }) => {
 						<AddColumnForm
 							onAddColumn={handleAddColumn}
 							boardId={initialBoard.id}
-						/>{" "}
+						/>
 					</Container>
 				)}
 			</Droppable>
