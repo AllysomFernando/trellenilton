@@ -22,4 +22,5 @@ export interface ICardDatabaseProvider {
 		endedAt: string,
 		createdAt: string
 	) => Promise<Card>;
+	createCardColumn: (idCard: string, idColumn: string) => Promise<any>;
 }
