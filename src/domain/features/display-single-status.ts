@@ -11,7 +11,7 @@ type SetupDisplayStatus = {
 };
 type Setup = (props: SetupDisplayStatus) => DisplayStatus;
 
-export const setupDisplayStatus: Setup =
+export const setupDisplaySingleStatus: Setup =
 	({ repository }) =>
 	async ({ id }: Input) => {
 		try {
