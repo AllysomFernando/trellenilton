@@ -1,59 +1,55 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { createBoard, updateBoard } from "../../services/boardServices";
+import { NewCard } from "@/types/board";
 
-interface NewBoardModalProps {
+interface NewCardModalProps {
 	isOpen: boolean;
 	onClose: () => void;
-	onSubmit: (updatedData: {
-		id: string;
-		name: string;
-		deleted: boolean;
-	}) => void;
-	initialData?: { name: string };
-	boardId?: string;
+	onSubmit: (newCard: NewCard) => void;
 }
 
-const NewBoardModal = ({
+const NewCardModal: React.FC<NewCardModalProps> = ({
 	isOpen,
 	onClose,
 	onSubmit,
-	initialData,
-	boardId,
-}: NewBoardModalProps) => {
-	const [name, setName] = useState("");
+}) => {
+	const [title, setTitle] = useState("");
+	const [description, setDescription] = useState("");
+	const [idPriority, setIdPriority] = useState("");
+	const [idCategory, setIdCategory] = useState("");
+	const [idStatus, setIdStatus] = useState("");
+	const [createdAt, setCreatedAt] = useState("");
+	const [isRecurring, setIsRecurring] = useState(false);
 
 	useEffect(() => {
-		if (initialData) {
-			setName(initialData.name);
+		if (!isOpen) {
+			setTitle("");
+			setDescription("");
+			setIdPriority("");
+			setIdCategory("");
+			setIdStatus("");
+			setCreatedAt("");
+			setIsRecurring(false);
 		}
-	}, [initialData]);
+	}, [isOpen]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		if (name.trim() === "") {
-			alert("Please enter a board name.");
+		if (title.trim() === "") {
+			alert("Please enter a card title.");
 			return;
 		}
-		if (name.length < 5) {
-			alert("Please enter a board name with at least 5 characters");
-			return;
-		}
-
-		try {
-			if (boardId) {
-				const updatedBoard = await updateBoard(boardId, { name });
-				onSubmit(updatedBoard || { name: "", deleted: false });
-			} else {
-				const newBoard = await createBoard({ name });
-				onSubmit(newBoard || { id: "", name: "", deleted: false });
-			}
-            window.location.reload();
-			onClose();
-		} catch (error) {
-			console.error("Failed to save board:", error);
-			alert("Failed to save board. Please try again.");
-		}
+		const newCard: NewCard = {
+			title,
+			description,
+			idPriority,
+			idCategory,
+			idStatus,
+			createdAt,
+			deleted: false,
+			isRecurring,
+		};
+		onSubmit(newCard);
 	};
 
 	return (
@@ -88,17 +84,71 @@ const NewBoardModal = ({
 											as="h3"
 											className="text-lg leading-6 font-medium text-gray-900"
 										>
-											{boardId ? "Editar Quadro" : "Criar Quadro"}
+											Criar Cartão
 										</Dialog.Title>
 										<div className="mt-2">
 											<form onSubmit={handleSubmit}>
-												<label className="block text-white text-sm font-bold mb-2">
-													Nome:
+												<label className="block text-sm font-bold mb-2">
+													Título:
 													<input
 														type="text"
-														value={name}
-														onChange={(e) => setName(e.target.value)}
+														value={title}
+														onChange={(e) => setTitle(e.target.value)}
 														className="mt-1 p-2 border rounded w-full"
+													/>
+												</label>
+												<label className="block text-sm font-bold mb-2">
+													Descrição:
+													<input
+														type="text"
+														value={description}
+														onChange={(e) => setDescription(e.target.value)}
+														className="mt-1 p-2 border rounded w-full"
+													/>
+												</label>
+												<label className="block text-sm font-bold mb-2">
+													Prioridade:
+													<input
+														type="text"
+														value={idPriority}
+														onChange={(e) => setIdPriority(e.target.value)}
+														className="mt-1 p-2 border rounded w-full"
+													/>
+												</label>
+												<label className="block text-sm font-bold mb-2">
+													Categoria:
+													<input
+														type="text"
+														value={idCategory}
+														onChange={(e) => setIdCategory(e.target.value)}
+														className="mt-1 p-2 border rounded w-full"
+													/>
+												</label>
+												<label className="block text-sm font-bold mb-2">
+													Status:
+													<input
+														type="text"
+														value={idStatus}
+														onChange={(e) => setIdStatus(e.target.value)}
+														className="mt-1 p-2 border rounded w-full"
+													/>
+												</label>
+												<label className="block text-sm font-bold mb-2">
+													Criado Em:
+													<input
+														type="text"
+														value={createdAt}
+														onChange={(e) => setCreatedAt(e.target.value)}
+														className="mt-1 p-2 border rounded w-full"
+													/>
+												</label>
+												<label className="block text-sm font-bold mb-2">
+													Recorrente:
+													<input
+														type="checkbox"
+														checked={isRecurring}
+														onChange={(e) => setIsRecurring(e.target.checked)}
+														className="mt-1 p-2"
 													/>
 												</label>
 												<div className="flex justify-end space-x-2 mt-4">
@@ -106,7 +156,7 @@ const NewBoardModal = ({
 														type="submit"
 														className="bg-slate-700 text-white px-4 py-2 rounded hover:bg-slate-900"
 													>
-														{boardId ? "Atualizar" : "Criar"} Quadro
+														Criar Cartão
 													</button>
 													<button
 														type="button"
@@ -129,4 +179,4 @@ const NewBoardModal = ({
 	);
 };
 
-export default NewBoardModal;
+export default NewCardModal;
