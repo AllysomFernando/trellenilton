@@ -5,6 +5,7 @@ import NewPriorityModal from "@/components/modal/NewPriorityModal";
 import NewCategoryModal from "@/components/modal/NewCategoryModal";
 import NewStatusModal from "@/components/modal/NewStatusModal";
 import {
+	createCard,
 	fetchCategory,
 	fetchPriority,
 	fetchStatus,
@@ -13,15 +14,17 @@ import {
 interface NewCardModalProps {
 	isOpen: boolean;
 	onClose: () => void;
-	onSubmit: (newCard: {
-		title: string;
-		description: string;
-		idPriority: string;
-		idCategory: string;
-		idStatus: string;
-		createdAt: string;
-		deleted: boolean;
-	}) => void;
+	onSubmit: (
+		title: string,
+		description?: string,
+		idPriority?: string,
+		idCategory?: string,
+		idStatus?: string,
+		createdAt?: string,
+		deleted?: boolean,
+		updatedAt?: string,
+		endedAt?: string
+	) => void;
 }
 
 const NewCardModal: React.FC<NewCardModalProps> = ({
@@ -59,19 +62,37 @@ const NewCardModal: React.FC<NewCardModalProps> = ({
 		fetchData();
 	}, []);
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const newCard = {
-			title,
-			description,
-			idPriority: priority,
-			idCategory: category,
-			idStatus: status,
-			createdAt: new Date().toISOString(),
-			deleted: false,
-		};
-		onSubmit(newCard);
-		onClose();
+		try {
+			const response = await createCard({
+				title,
+				description,
+				idPriority: priority,
+				idCategory: category,
+				idStatus: status,
+				createdAt: new Date().toISOString(),
+				deleted: false,
+				updatedAt: "",
+				endedAt: "",
+			});
+			if (response) {
+				onSubmit(
+					response.title,
+					response.description,
+					response.idPriority,
+					response.idCategory,
+					response.idStatus,
+					response.createdAt,
+					response.deleted,
+					response.updatedAt,
+					response.endedAt
+				);
+			}
+			onClose();
+		} catch (error) {
+			console.error("Failed to create priority", error);
+		}
 	};
 
 	return (
