@@ -135,7 +135,7 @@ const NewCardModal: React.FC<NewCardModalProps> = ({
 															type="text"
 															value={title}
 															onChange={(e) => setTitle(e.target.value)}
-															className="mt-1 p-2 border rounded w-full"
+															className="mt-1 p-2 border text-white rounded w-full"
 															required
 														/>
 													</label>
@@ -144,7 +144,7 @@ const NewCardModal: React.FC<NewCardModalProps> = ({
 														<textarea
 															value={description}
 															onChange={(e) => setDescription(e.target.value)}
-															className="mt-1 p-2 border rounded w-full"
+															className="mt-1 p-2 border text-white rounded w-full"
 															required
 														/>
 													</label>
@@ -153,7 +153,7 @@ const NewCardModal: React.FC<NewCardModalProps> = ({
 														<select
 															value={priority}
 															onChange={(e) => setPriority(e.target.value)}
-															className="mt-1 p-2 border rounded w-full"
+															className="mt-1 p-2 border text-white rounded w-full"
 															required
 														>
 															<option value="">Selecione a Prioridade</option>
@@ -175,7 +175,7 @@ const NewCardModal: React.FC<NewCardModalProps> = ({
 														<select
 															value={category}
 															onChange={(e) => setCategory(e.target.value)}
-															className="mt-1 p-2 border rounded w-full"
+															className="mt-1 p-2 border text-white rounded w-full"
 															required
 														>
 															<option value="">Selecione a Categoria</option>
@@ -197,7 +197,7 @@ const NewCardModal: React.FC<NewCardModalProps> = ({
 														<select
 															value={status}
 															onChange={(e) => setStatus(e.target.value)}
-															className="mt-1 p-2 border rounded w-full"
+															className="mt-1 p-2 border text-white rounded w-full"
 															required
 														>
 															<option value="">Selecione o Status</option>
