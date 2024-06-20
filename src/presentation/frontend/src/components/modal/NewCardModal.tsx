@@ -1,30 +1,34 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { poster, fetcher } from "@/utils/api";
-import NewPriorityModal from "@/components/modal/NewPriorityModal";
-import NewCategoryModal from "@/components/modal/NewCategoryModal";
-import NewStatusModal from "@/components/modal/NewStatusModal";
 import {
 	createCard,
 	fetchCategory,
 	fetchPriority,
 	fetchStatus,
 } from "@/services/cardService";
+import NewPriorityModal from "./NewPriorityModal";
+import NewCategoryModal from "./NewCategoryModal";
+import NewStatusModal from "./NewStatusModal";
 
 interface NewCardModalProps {
 	isOpen: boolean;
 	onClose: () => void;
-	onSubmit: (
-		title: string,
-		description?: string,
-		idPriority?: string,
-		idCategory?: string,
-		idStatus?: string,
-		createdAt?: string,
-		deleted?: boolean,
-		updatedAt?: string,
-		endedAt?: string
-	) => void;
+	onSubmit: (newCard: NewCard) => void;
+}
+
+export interface NewCard {
+	idPriority?: string;
+	idCategory?: string;
+	idStatus?: string;
+	title: string;
+	description?: string;
+	createdAt?: string;
+	updatedAt?: string;
+	endedAt?: string;
+	deleted: boolean;
+	comments?: string[];
+	checklists?: string[];
+	isRecurring?: boolean;
 }
 
 const NewCardModal: React.FC<NewCardModalProps> = ({
@@ -47,6 +51,7 @@ const NewCardModal: React.FC<NewCardModalProps> = ({
 	const [isPriorityModalOpen, setIsPriorityModalOpen] = useState(false);
 	const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
 	const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+
 	useEffect(() => {
 		const fetchData = async () => {
 			const fetchPriorityResponse = await fetchPriority();
@@ -65,7 +70,7 @@ const NewCardModal: React.FC<NewCardModalProps> = ({
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
-			const response = await createCard({
+			const newCard = {
 				title,
 				description,
 				idPriority: priority,
@@ -75,23 +80,15 @@ const NewCardModal: React.FC<NewCardModalProps> = ({
 				deleted: false,
 				updatedAt: "",
 				endedAt: "",
-			});
+			};
+
+			const response = await createCard(newCard);
 			if (response) {
-				onSubmit(
-					response.title,
-					response.description,
-					response.idPriority,
-					response.idCategory,
-					response.idStatus,
-					response.createdAt,
-					response.deleted,
-					response.updatedAt,
-					response.endedAt
-				);
+				onSubmit(response);
 			}
 			onClose();
 		} catch (error) {
-			console.error("Failed to create priority", error);
+			console.error("Failed to create card", error);
 		}
 	};
 
