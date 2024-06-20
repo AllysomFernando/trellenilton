@@ -18,14 +18,14 @@ export const setupDisplayPriority: Setup =
 		try {
 			const board = await repository.loadSpecificPriority(id);
 			if (board.id !== id)
-				throw new Error(`No boards found with this id: ${id}`, {
-					cause: "no-boards",
+				throw new Error(`No Category found with this id: ${id}`, {
+					cause: "no-Category",
 				});
 
 			return board;
 		} catch (error) {
-			throw new Error(`Could not load this board: ${id}`, {
-				cause: "display-board",
+			throw new Error(`Could not load this Category: ${id}`, {
+				cause: "display-Category",
 			});
 		}
 	};
