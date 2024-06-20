@@ -1,23 +1,30 @@
 import { Card, Priority, Status } from "@/types/board";
 import { fetcher, poster } from "@/utils/api";
 
-export const createCard = async (cardData: {
-	title: string;
-	idPriority: string;
-	idCategory: string;
-	idStatus: string;
-	createdAt: string;
-	deleted: boolean;
-	description?: string;
-	updatedAt?: string;
-	endedAt?: string;
-	comments?: string[];
-	checklists?: string[];
-	isRecurring?: boolean;
-}): Promise<Card> => {
+export const createCardWithColumn = async (
+	cardData: {
+		title?: string;
+		idPriority?: string;
+		idCategory: string;
+		idStatus?: string;
+		createdAt?: string;
+		deleted?: boolean;
+		description?: string;
+		updatedAt?: string;
+		endedAt?: string;
+		comments?: string[];
+		checklists?: string[];
+		isRecurring?: boolean;
+	},
+	columnId: string
+): Promise<Card> => {
 	try {
 		const response = await poster("/create-cards", cardData);
-		return response.data;
+		const columnCardResponse = await poster("/create-columnCard", {
+			idColumn: columnId,
+			idCard: response.id,
+		});
+		return response;
 	} catch (error) {
 		throw new Error("Failed to create card");
 	}
@@ -26,7 +33,7 @@ export const createCard = async (cardData: {
 export const fetchCards = async () => {
 	try {
 		const response = await fetcher("/cards");
-		return response.data;
+		return response;
 	} catch (error) {
 		console.error("Failed to fetch cards", error);
 		return [];
