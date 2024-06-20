@@ -1,48 +1,56 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import type { NewCard } from "@/types/board";
+import { fetcher } from "@/utils/api";
+import { Category, NewCard, Priority, Status } from "@/types/board";
 
 interface NewCardModalProps {
 	isOpen: boolean;
 	onClose: () => void;
 	onSubmit: (newCard: NewCard) => void;
-	priorities: string[];
-	categories: string[];
-	statuses: string[];
 }
 
 const NewCardModal: React.FC<NewCardModalProps> = ({
 	isOpen,
 	onClose,
 	onSubmit,
-	priorities,
-	categories,
-	statuses,
 }) => {
-	const [title, setTitle] = useState("");
-	const [description, setDescription] = useState("");
-	const [idPriority, setIdPriority] = useState(priorities[0] || "");
-	const [idCategory, setIdCategory] = useState(categories[0] || "");
-	const [idStatus, setIdStatus] = useState(statuses[0] || "");
+	const [title, setTitle] = useState<string>("");
+	const [description, setDescription] = useState<string>("");
+	const [priority, setPriority] = useState<string>("");
+	const [category, setCategory] = useState<string>("");
+	const [status, setStatus] = useState<string>("");
+	const [priorities, setPriorities] = useState<Priority[]>([]);
+	const [categories, setCategories] = useState<Category[]>([]);
+	const [statuses, setStatuses] = useState<Status[]>([]);
 
-	const handleSubmit = async (e: React.FormEvent) => {
+	useEffect(() => {
+		// Carregar as prioridades
+		fetcher("/api/priorities").then((response) => {
+			setPriorities(response);
+		});
+
+		// Carregar as categorias
+		fetcher("/api/categories").then((response) => {
+			setCategories(response);
+		});
+
+		// Carregar os status
+		fetcher("/api/status").then((response) => {
+			setStatuses(response);
+		});
+	}, []);
+
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		if (title.trim() === "") {
-			alert("Please enter a card title.");
-			return;
-		}
-
 		const newCard: NewCard = {
 			title,
 			description,
-			idPriority,
-			idCategory,
-			idStatus,
+			idPriority: priority,
+			idCategory: category,
+			idStatus: status,
 			createdAt: new Date().toISOString(),
-			updatedAt: new Date().toISOString(),
 			deleted: false,
 		};
-
 		onSubmit(newCard);
 		onClose();
 	};
@@ -83,63 +91,74 @@ const NewCardModal: React.FC<NewCardModalProps> = ({
 										</Dialog.Title>
 										<div className="mt-2">
 											<form onSubmit={handleSubmit}>
-												<label className="block text-sm text-gray-900 font-bold mb-2">
+												<label className="block text-sm font-bold mb-2">
 													Título:
 													<input
 														type="text"
 														value={title}
 														onChange={(e) => setTitle(e.target.value)}
-														className="mt-1 p-2 bord text-white aer rounded w-full"
+														className="mt-1 p-2 border rounded w-full"
+														required
 													/>
 												</label>
-												<label className="block text-sm text-gray-900  font-bold mb-2">
+												<label className="block text-sm font-bold mb-2">
 													Descrição:
 													<textarea
 														value={description}
 														onChange={(e) => setDescription(e.target.value)}
-														className="mt-1 p-2 border text-white rounded w-full"
+														className="mt-1 p-2 border rounded w-full"
+														required
 													/>
 												</label>
-												<label className="block text-sm text-gray-900  font-bold mb-2">
+												<label className="block text-sm font-bold mb-2">
 													Prioridade:
 													<select
-														value={idPriority}
-														onChange={(e) => setIdPriority(e.target.value)}
-														className="mt-1 p-2 border text-white rounded w-full"
+														value={priority}
+														onChange={(e) => setPriority(e.target.value)}
+														className="mt-1 p-2 border rounded w-full"
+														required
 													>
-														{priorities.map((priority) => (
-															<option key={priority} value={priority}>
-																{priority}
-															</option>
-														))}
+														<option value="">Selecione a Prioridade</option>
+														{priorities &&
+															priorities.map((p) => (
+																<option key={p.id} value={p.id}>
+																	{p.name}
+																</option>
+															))}
 													</select>
 												</label>
-												<label className="block text-sm text-gray-900  font-bold mb-2">
+												<label className="block text-sm font-bold mb-2">
 													Categoria:
 													<select
-														value={idCategory}
-														onChange={(e) => setIdCategory(e.target.value)}
-														className="mt-1 p-2 border text-white rounded w-full"
+														value={category}
+														onChange={(e) => setCategory(e.target.value)}
+														className="mt-1 p-2 border rounded w-full"
+														required
 													>
-														{categories.map((category) => (
-															<option key={category} value={category}>
-																{category}
-															</option>
-														))}
+														<option value="">Selecione a Categoria</option>
+														{category &&
+															categories.map((c) => (
+																<option key={c.id} value={c.id}>
+																	{c.name}
+																</option>
+															))}
 													</select>
 												</label>
-												<label className="block text-sm text-gray-900  font-bold mb-2">
+												<label className="block text-sm font-bold mb-2">
 													Status:
 													<select
-														value={idStatus}
-														onChange={(e) => setIdStatus(e.target.value)}
-														className="mt-1 p-2 border text-white rounded w-full"
+														value={status}
+														onChange={(e) => setStatus(e.target.value)}
+														className="mt-1 p-2 border rounded w-full"
+														required
 													>
-														{statuses.map((status) => (
-															<option key={status} value={status}>
-																{status}
-															</option>
-														))}
+														<option value="">Selecione o Status</option>
+														{statuses &&
+															statuses.map((s) => (
+																<option key={s.id} value={s.id}>
+																	{s.name}
+																</option>
+															))}
 													</select>
 												</label>
 												<div className="flex justify-end space-x-2 mt-4">
