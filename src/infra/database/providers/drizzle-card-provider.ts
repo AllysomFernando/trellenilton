@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../../main/drizzle";
-import { card, category, priority, status } from "../models";
+import { card, category, columnCard, priority, status } from "../models";
 import type { Card } from "../../../domain/entities/card";
 import type { ICardDatabaseProvider } from "../../contracts/card-database-provider";
 
@@ -69,7 +69,6 @@ export class DrizzleCardProvider implements ICardDatabaseProvider {
 		}));
 	}
 
-
 	public async deleteCard(id: string): Promise<void> {
 		await db
 			.update(card)
@@ -127,5 +126,18 @@ export class DrizzleCardProvider implements ICardDatabaseProvider {
 			.where(eq(card.id, id))
 			.execute();
 		return this.displayCard(id);
+	}
+	public async createCardColumn(
+		idCard: string,
+		idColumn: string
+	): Promise<any> {
+		const result = await db
+			.insert(columnCard)
+			.values({
+				idCard: idCard,
+				idColumn: idColumn,
+			})
+			.returning();
+		return result[0];
 	}
 }
