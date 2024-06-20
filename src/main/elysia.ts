@@ -34,6 +34,7 @@ import { setupDisplayCategory } from "domain/features/display-category";
 import { setupDeleteCategory } from "domain/features/delete-category";
 import { setupCreateCategory } from "domain/features/create-category";
 import { SetupDisplayCategories } from "domain/features/display-categories";
+import { setupDisplayCards } from "domain/features/display-cards";
 
 const boardRepository = new BoardRepository(new DrizzleBoardProvider());
 const columnRepository = new ColumnRepository(new DrizzleColumnProvider());
@@ -132,6 +133,10 @@ new Elysia()
 	.decorate(
 		"createCardService",
 		SetupCreateCard({ repository: cardRepository })
+	)
+	.decorate(
+		"fetchCardService",
+		setupDisplayCards({ repository: cardRepository })
 	)
 	.decorate(
 		"createPriorityService",
@@ -377,6 +382,9 @@ new Elysia()
 	)
 	.get("/api/boards", ({ fetchService }) => {
 		return fetchService({});
+	})
+	.get("/api/cards", ({ fetchCardService }) => {
+		return fetchCardService({});
 	})
 	.get("api/priorities", ({ fetchPriorityService }) => {
 		return fetchPriorityService({});
