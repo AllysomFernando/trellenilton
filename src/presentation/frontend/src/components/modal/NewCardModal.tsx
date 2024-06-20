@@ -1,38 +1,29 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { NewCard } from "@/types/board";
+import type { NewCard } from "@/types/board";
 
 interface NewCardModalProps {
 	isOpen: boolean;
 	onClose: () => void;
 	onSubmit: (newCard: NewCard) => void;
-	initialData?: { name: string };
-	boardId?: string;
+	priorities: string[];
+	categories: string[];
+	statuses: string[];
 }
+
 const NewCardModal: React.FC<NewCardModalProps> = ({
 	isOpen,
 	onClose,
 	onSubmit,
+	priorities,
+	categories,
+	statuses,
 }) => {
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
-	const [idPriority, setIdPriority] = useState("");
-	const [idCategory, setIdCategory] = useState("");
-	const [idStatus, setIdStatus] = useState("");
-	const [createdAt, setCreatedAt] = useState("");
-	const [isRecurring, setIsRecurring] = useState(false);
-
-	useEffect(() => {
-		if (!isOpen) {
-			setTitle("");
-			setDescription("");
-			setIdPriority("");
-			setIdCategory("");
-			setIdStatus("");
-			setCreatedAt("");
-			setIsRecurring(false);
-		}
-	}, [isOpen]);
+	const [idPriority, setIdPriority] = useState(priorities[0] || "");
+	const [idCategory, setIdCategory] = useState(categories[0] || "");
+	const [idStatus, setIdStatus] = useState(statuses[0] || "");
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -40,17 +31,20 @@ const NewCardModal: React.FC<NewCardModalProps> = ({
 			alert("Please enter a card title.");
 			return;
 		}
+
 		const newCard: NewCard = {
 			title,
 			description,
 			idPriority,
 			idCategory,
 			idStatus,
-			createdAt,
+			createdAt: new Date().toISOString(),
+			updatedAt: new Date().toISOString(),
 			deleted: false,
-			isRecurring,
 		};
+
 		onSubmit(newCard);
+		onClose();
 	};
 
 	return (
@@ -85,72 +79,68 @@ const NewCardModal: React.FC<NewCardModalProps> = ({
 											as="h3"
 											className="text-lg leading-6 font-medium text-gray-900"
 										>
-											Criar Cartão
+											Adicionar Cartão
 										</Dialog.Title>
 										<div className="mt-2">
 											<form onSubmit={handleSubmit}>
-												<label className="block text-sm font-bold mb-2">
+												<label className="block text-sm text-gray-900 font-bold mb-2">
 													Título:
 													<input
 														type="text"
 														value={title}
 														onChange={(e) => setTitle(e.target.value)}
-														className="mt-1 p-2 border rounded w-full"
+														className="mt-1 p-2 bord text-white aer rounded w-full"
 													/>
 												</label>
-												<label className="block text-sm font-bold mb-2">
+												<label className="block text-sm text-gray-900  font-bold mb-2">
 													Descrição:
-													<input
-														type="text"
+													<textarea
 														value={description}
 														onChange={(e) => setDescription(e.target.value)}
-														className="mt-1 p-2 border rounded w-full"
+														className="mt-1 p-2 border text-white rounded w-full"
 													/>
 												</label>
-												<label className="block text-sm font-bold mb-2">
+												<label className="block text-sm text-gray-900  font-bold mb-2">
 													Prioridade:
-													<input
-														type="text"
+													<select
 														value={idPriority}
 														onChange={(e) => setIdPriority(e.target.value)}
-														className="mt-1 p-2 border rounded w-full"
-													/>
+														className="mt-1 p-2 border text-white rounded w-full"
+													>
+														{priorities.map((priority) => (
+															<option key={priority} value={priority}>
+																{priority}
+															</option>
+														))}
+													</select>
 												</label>
-												<label className="block text-sm font-bold mb-2">
+												<label className="block text-sm text-gray-900  font-bold mb-2">
 													Categoria:
-													<input
-														type="text"
+													<select
 														value={idCategory}
 														onChange={(e) => setIdCategory(e.target.value)}
-														className="mt-1 p-2 border rounded w-full"
-													/>
+														className="mt-1 p-2 border text-white rounded w-full"
+													>
+														{categories.map((category) => (
+															<option key={category} value={category}>
+																{category}
+															</option>
+														))}
+													</select>
 												</label>
-												<label className="block text-sm font-bold mb-2">
+												<label className="block text-sm text-gray-900  font-bold mb-2">
 													Status:
-													<input
-														type="text"
+													<select
 														value={idStatus}
 														onChange={(e) => setIdStatus(e.target.value)}
-														className="mt-1 p-2 border rounded w-full"
-													/>
-												</label>
-												<label className="block text-sm font-bold mb-2">
-													Criado Em:
-													<input
-														type="text"
-														value={createdAt}
-														onChange={(e) => setCreatedAt(e.target.value)}
-														className="mt-1 p-2 border rounded w-full"
-													/>
-												</label>
-												<label className="block text-sm font-bold mb-2">
-													Recorrente:
-													<input
-														type="checkbox"
-														checked={isRecurring}
-														onChange={(e) => setIsRecurring(e.target.checked)}
-														className="mt-1 p-2"
-													/>
+														className="mt-1 p-2 border text-white rounded w-full"
+													>
+														{statuses.map((status) => (
+															<option key={status} value={status}>
+																{status}
+															</option>
+														))}
+													</select>
 												</label>
 												<div className="flex justify-end space-x-2 mt-4">
 													<button
