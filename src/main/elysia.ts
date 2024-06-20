@@ -381,6 +381,12 @@ new Elysia()
 	.get("api/priorities", ({ fetchPriorityService }) => {
 		return fetchPriorityService({});
 	})
+	.get("api/status", ({ loadAllStatus }) => {
+		return loadAllStatus({});
+	})
+	.get("api/categories", ({ loadAllCategory }) => {
+		return loadAllCategory({});
+	})
 	.get("/api/columns", ({ displayColumnService }) => {
 		return displayColumnService({});
 	})
