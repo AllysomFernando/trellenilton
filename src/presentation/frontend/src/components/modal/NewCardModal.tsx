@@ -18,7 +18,6 @@ interface NewCardModalProps {
 }
 
 export interface NewCard {
-	id: string;
 	idPriority: string;
 	idCategory: string;
 	idStatus: string;
@@ -72,7 +71,6 @@ const NewCardModal: React.FC<NewCardModalProps> = ({
 		e.preventDefault();
 		try {
 			const newCard: NewCard = {
-				id: "",
 				title,
 				description: description || "", // Garante que description nunca seja undefined
 				idPriority: priority || "",

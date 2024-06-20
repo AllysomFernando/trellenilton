@@ -2,7 +2,6 @@ import { Card, Priority, Status } from "@/types/board";
 import { fetcher, poster } from "@/utils/api";
 
 interface CreateCardPayload {
-	id: string;
 	idPriority: string;
 	idCategory: string;
 	idStatus: string;
