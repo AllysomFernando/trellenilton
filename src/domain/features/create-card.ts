@@ -50,6 +50,7 @@ export const SetupCreateCard: Setup =
 				endedAt
 			);
 		} catch (error) {
+			console.log(error);
 			throw new Error("Could not create card", {
 				cause: "create-card",
 			});
