@@ -2,19 +2,19 @@ import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { colors } from "@atlaskit/theme";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
+import { grid, borderRadius } from "@/utils/constants";
+import Title from "@/components/primatives/title";
+import AddCardForm from "@/components/Card/CardForm";
+import type { Quote, NewCard, Card } from "@/types/board";
+import { Menu } from "@headlessui/react";
+import { deleteColumn } from "@/services/columnService";
+import NewCardModal from "@/components/modal/NewCardModal";
+
 import type {
 	DraggableProvided,
 	DraggableStateSnapshot,
 	DroppableProvided,
 } from "@hello-pangea/dnd";
-import { grid, borderRadius } from "@/utils/constants";
-import Title from "@/components/primatives/title";
-import AddCardForm from "@/components/Card/CardForm";
-import type { Quote, NewCard } from "@/types/board";
-import { Menu } from "@headlessui/react";
-import { deleteColumn } from "@/services/columnService";
-import NewCardModal from "@/components/modal/NewCardModal";
-
 const Container = styled.div`
 	margin: ${grid}px;
 	display: flex;
@@ -56,12 +56,12 @@ const QuoteListContainer = styled.div`
 interface Props {
 	columnId: string;
 	title: string;
-	quotes: Quote[];
+	quotes: Card[];
 	index: number;
 	isScrollable?: boolean;
 	isCombineEnabled?: boolean;
 	useClone?: boolean;
-	onAddCard: (columnId: string, card: Quote) => void;
+	onAddCard: (columnId: string, card: NewCard) => void;
 	onEdit: () => void;
 	onDelete: () => void;
 }
@@ -81,12 +81,7 @@ const Column: React.FC<Props> = ({
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const handleAddCard = (newCard: NewCard) => {
-		const newQuote: Quote = {
-			id: `quote-${Date.now()}`,
-			content: newCard.title,
-			deleted: false,
-		};
-		onAddCard(columnId, newQuote);
+		onAddCard(columnId, newCard);
 		setIsModalOpen(false);
 	};
 
@@ -191,7 +186,7 @@ const Column: React.FC<Props> = ({
 														...provided.draggableProps.style,
 													}}
 												>
-													{quote.content}
+													{quote.title}
 												</div>
 											)}
 										</Draggable>
