@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import { colors } from "@atlaskit/theme";
 import Column from "@/components/Column/Column";
-import { fetchCards, createCardWithColumn } from "@/services/cardService";
+import { fetchCards, createCard } from "@/services/cardService";
 import { createColumn } from "@/services/columnService";
 import { Board, Card, NewCard } from "@/types/board";
 import { Column as ColumnType } from "@/types/column";
@@ -30,9 +30,10 @@ const BoardComponent: React.FC<Props> = ({ initialBoard }) => {
 		try {
 			const fetchedCards = await fetchCards();
 			console.log("Fetched Cards:", fetchedCards); // Log para depuração
-			setCards(fetchedCards);
+			setCards(fetchedCards || []); // Garantir que cards seja um array, mesmo se estiver vazio
 		} catch (error) {
 			console.error("Failed to fetch cards", error);
+			setCards([]); // Definir cards como um array vazio em caso de erro
 		}
 	};
 
@@ -41,13 +42,14 @@ const BoardComponent: React.FC<Props> = ({ initialBoard }) => {
 			fetchAllCards();
 		}
 	}, [initialBoard]);
+
 	const handleAddCard = async (columnId: string, newCard: NewCard) => {
 		if (!newCard.idPriority || !newCard.idStatus || !newCard.title) {
 			console.error("Missing required fields");
 			return;
 		}
 		try {
-			const response = await createCardWithColumn(newCard, columnId);
+			const response = await createCard(newCard, columnId);
 			setCards((prevCards) => [...prevCards, response]);
 		} catch (error) {
 			console.error("Failed to create card", error);
@@ -171,7 +173,7 @@ const BoardComponent: React.FC<Props> = ({ initialBoard }) => {
 						<AddColumnForm
 							onAddColumn={handleAddColumn}
 							boardId={initialBoard.id}
-						/>
+						/>{" "}
 					</Container>
 				)}
 			</Droppable>
