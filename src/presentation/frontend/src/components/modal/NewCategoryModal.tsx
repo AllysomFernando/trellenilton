@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { poster } from "@/utils/api";
+import { createCategory } from "@/services/cardService";
 interface NewCategoryModalProps {
 	isOpen: boolean;
 	onClose: () => void;
@@ -17,14 +17,17 @@ const NewCategoryModal: React.FC<NewCategoryModalProps> = ({
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
-			const response = await poster("/api/create-category", {
+			const response = await createCategory({
 				name,
+				description: "1",
 				deleted: false,
 			});
-			onAdd(response);
+			if (response) {
+				onAdd(response);
+			}
 			onClose();
 		} catch (error) {
-			console.error("Failed to create category", error);
+			console.error("Failed to create priority", error);
 		}
 	};
 
