@@ -86,15 +86,15 @@ export interface CreateCardPayload {
 }
 
 export interface NewCard {
-	title?: string;
-	idPriority?: string;
+	idPriority: string;
 	idCategory: string;
-	idStatus?: string;
-	createdAt?: string;
-	deleted?: boolean;
+	idStatus: string;
+	title: string;
 	description?: string;
+	createdAt: string;
 	updatedAt?: string;
 	endedAt?: string;
+	deleted: boolean;
 	comments?: string[];
 	checklists?: string[];
 	isRecurring?: boolean;
