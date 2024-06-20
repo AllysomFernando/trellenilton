@@ -5,7 +5,7 @@ type Input = {
 	idCard: string;
 	idColumn: string;
 };
-type Output = Card;
+type Output = {};
 type CreateCard = (input: Input) => Promise<Output>;
 type SetupCreateCard = {
 	repository: ICardRepository;
