@@ -22,6 +22,16 @@ import { setupDeletePriority } from "domain/features/delete-priority";
 import { setupDisplayPrioritys } from "domain/features/display-prioritys";
 import { setupDisplayPriority } from "domain/features/display-priority";
 import { DrizzlePriorityProvider } from "infra/database/providers/drizzle-priority-provider";
+import { CategoryRepository } from "infra/repositories/category-repository";
+import { DrizzleCategoryProvider } from "infra/database/providers/drizzle-category-provider";
+import { StatusRepository } from "infra/repositories/status-repository";
+import { DrizzleStatusProvider } from "infra/database/providers/drizzle-status-provider";
+import { setupCreateStatus } from "domain/features/create-status";
+import { setupDisplaySingleStatus } from "domain/features/display-single-status";
+import { SetupDisplayStatus } from "domain/features/display-status";
+import { setupDeleteStatus } from "domain/features/delete-status";
+import { setupDisplayCategory } from "domain/features/display-category";
+import { setupDeleteCategory } from "domain/features/delete-category";
 
 const boardRepository = new BoardRepository(new DrizzleBoardProvider());
 const columnRepository = new ColumnRepository(new DrizzleColumnProvider());
@@ -29,9 +39,36 @@ const cardRepository = new CardRepository(new DrizzleCardProvider());
 const priorityRepository = new PriorityRepository(
 	new DrizzlePriorityProvider()
 );
+const categoryRepository = new CategoryRepository(
+	new DrizzleCategoryProvider()
+);
+const statusRepository = new StatusRepository(new DrizzleStatusProvider());
+
 new Elysia()
 	.use(cors())
 	.get("/health", () => "it's healthy")
+	.decorate("createStatus", setupCreateStatus({ repository: statusRepository }))
+	.decorate(
+		"loadAllStatus",
+		SetupDisplayStatus({ repository: statusRepository })
+	)
+	.decorate("deleteStatus", setupDeleteStatus({ repository: statusRepository }))
+	.decorate(
+		"loadSingleStatus",
+		setupDisplaySingleStatus({ repository: statusRepository })
+	)
+	.decorate(
+		"loadAllCategory",
+		setupDisplayCategory({ repository: categoryRepository })
+	)
+	.decorate(
+		"createCategory",
+		setupDisplayCategory({ repository: categoryRepository })
+	)
+	.decorate(
+		"deleteCategory",
+		setupDeleteCategory({ repository: categoryRepository })
+	)
 	.decorate(
 		"createService",
 		setupCreateBoards({
