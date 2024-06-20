@@ -28,21 +28,15 @@ export const SetupCreateCard: Setup =
 		title,
 		createdAt,
 		deleted,
-		description,
-		updatedAt,
-		endedAt,
+		description = "",
+		updatedAt = "",
+		endedAt = "",
 	}: Input) => {
 		if (title.length < 3)
 			throw new Error("Title must be at least 3 characters long", {
 				cause: "invalid-card-title",
 			});
 
-		const existingCard = await repository.findCardByTitle(title);
-		if (existingCard) {
-			throw new Error("Another card with the same title already exists", {
-				cause: "duplicate-card-title",
-			});
-		}
 		try {
 			return await repository.createCard(
 				title,
