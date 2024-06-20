@@ -1,55 +1,56 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { createCard } from "@/services/cardService";
-import { Card } from "@/types/board";
+import { NewCard } from "@/types/board";
 
-interface CreateCardModalProps {
+interface NewCardModalProps {
 	isOpen: boolean;
 	onClose: () => void;
-	onSubmit: (newCard: Card) => void;
-	priorities: string[];
-	categories: string[];
-	statuses: string[];
+	onSubmit: (newCard: NewCard) => void;
+	initialData?: { name: string };
+	boardId?: string;
 }
-
-const CreateCardModal: React.FC<CreateCardModalProps> = ({
+const NewCardModal: React.FC<NewCardModalProps> = ({
 	isOpen,
 	onClose,
 	onSubmit,
-	priorities,
-	categories,
-	statuses,
 }) => {
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [idPriority, setIdPriority] = useState("");
 	const [idCategory, setIdCategory] = useState("");
 	const [idStatus, setIdStatus] = useState("");
-	const [comments, setComments] = useState<string[]>([]);
-	const [checklists, setChecklists] = useState<string[]>([]);
+	const [createdAt, setCreatedAt] = useState("");
 	const [isRecurring, setIsRecurring] = useState(false);
 
-	const handleAddComment = () => setComments([...comments, ""]);
-	const handleAddChecklist = () => setChecklists([...checklists, ""]);
+	useEffect(() => {
+		if (!isOpen) {
+			setTitle("");
+			setDescription("");
+			setIdPriority("");
+			setIdCategory("");
+			setIdStatus("");
+			setCreatedAt("");
+			setIsRecurring(false);
+		}
+	}, [isOpen]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		const createdAt = new Date().toISOString();
-		const deleted = false;
-		const newCard = await createCard({
+		if (title.trim() === "") {
+			alert("Please enter a card title.");
+			return;
+		}
+		const newCard: NewCard = {
 			title,
+			description,
 			idPriority,
 			idCategory,
 			idStatus,
 			createdAt,
-			deleted,
-			description,
-			comments,
-			checklists,
+			deleted: false,
 			isRecurring,
-		});
+		};
 		onSubmit(newCard);
-		onClose();
 	};
 
 	return (
@@ -89,7 +90,7 @@ const CreateCardModal: React.FC<CreateCardModalProps> = ({
 										<div className="mt-2">
 											<form onSubmit={handleSubmit}>
 												<label className="block text-sm font-bold mb-2">
-													Nome:
+													Título:
 													<input
 														type="text"
 														value={title}
@@ -99,7 +100,8 @@ const CreateCardModal: React.FC<CreateCardModalProps> = ({
 												</label>
 												<label className="block text-sm font-bold mb-2">
 													Descrição:
-													<textarea
+													<input
+														type="text"
 														value={description}
 														onChange={(e) => setDescription(e.target.value)}
 														className="mt-1 p-2 border rounded w-full"
@@ -107,104 +109,49 @@ const CreateCardModal: React.FC<CreateCardModalProps> = ({
 												</label>
 												<label className="block text-sm font-bold mb-2">
 													Prioridade:
-													<select
+													<input
+														type="text"
 														value={idPriority}
 														onChange={(e) => setIdPriority(e.target.value)}
 														className="mt-1 p-2 border rounded w-full"
-													>
-														{priorities.map((priority) => (
-															<option key={priority} value={priority}>
-																{priority}
-															</option>
-														))}
-													</select>
+													/>
 												</label>
 												<label className="block text-sm font-bold mb-2">
 													Categoria:
-													<select
+													<input
+														type="text"
 														value={idCategory}
 														onChange={(e) => setIdCategory(e.target.value)}
 														className="mt-1 p-2 border rounded w-full"
-													>
-														{categories.map((category) => (
-															<option key={category} value={category}>
-																{category}
-															</option>
-														))}
-													</select>
+													/>
 												</label>
 												<label className="block text-sm font-bold mb-2">
 													Status:
-													<select
+													<input
+														type="text"
 														value={idStatus}
 														onChange={(e) => setIdStatus(e.target.value)}
 														className="mt-1 p-2 border rounded w-full"
-													>
-														{statuses.map((status) => (
-															<option key={status} value={status}>
-																{status}
-															</option>
-														))}
-													</select>
+													/>
 												</label>
-												<div className="mt-2">
-													<button
-														type="button"
-														onClick={handleAddComment}
-														className="bg-slate-700 text-white px-4 py-2 rounded hover:bg-slate-900"
-													>
-														Adicionar Comentário
-													</button>
-													{comments.map((comment, index) => (
-														<div key={index} className="mt-1">
-															<textarea
-																value={comment}
-																onChange={(e) =>
-																	setComments((prevComments) => {
-																		const newComments = [...prevComments];
-																		newComments[index] = e.target.value;
-																		return newComments;
-																	})
-																}
-																className="p-2 border rounded w-full"
-															/>
-														</div>
-													))}
-												</div>
-												<div className="mt-2">
-													<button
-														type="button"
-														onClick={handleAddChecklist}
-														className="bg-slate-700 text-white px-4 py-2 rounded hover:bg-slate-900"
-													>
-														Adicionar Checklist
-													</button>
-													{checklists.map((checklist, index) => (
-														<div key={index} className="mt-1">
-															<textarea
-																value={checklist}
-																onChange={(e) =>
-																	setChecklists((prevChecklists) => {
-																		const newChecklists = [...prevChecklists];
-																		newChecklists[index] = e.target.value;
-																		return newChecklists;
-																	})
-																}
-																className="p-2 border rounded w-full"
-															/>
-														</div>
-													))}
-												</div>
-												<div className="mt-2">
-													<label className="block text-sm font-bold mb-2">
-														<input
-															type="checkbox"
-															checked={isRecurring}
-															onChange={(e) => setIsRecurring(e.target.checked)}
-														/>
-														Recorrente
-													</label>
-												</div>
+												<label className="block text-sm font-bold mb-2">
+													Criado Em:
+													<input
+														type="text"
+														value={createdAt}
+														onChange={(e) => setCreatedAt(e.target.value)}
+														className="mt-1 p-2 border rounded w-full"
+													/>
+												</label>
+												<label className="block text-sm font-bold mb-2">
+													Recorrente:
+													<input
+														type="checkbox"
+														checked={isRecurring}
+														onChange={(e) => setIsRecurring(e.target.checked)}
+														className="mt-1 p-2"
+													/>
+												</label>
 												<div className="flex justify-end space-x-2 mt-4">
 													<button
 														type="submit"
@@ -233,4 +180,4 @@ const CreateCardModal: React.FC<CreateCardModalProps> = ({
 	);
 };
 
-export default CreateCardModal;
+export default NewCardModal;
