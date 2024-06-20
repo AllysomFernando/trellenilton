@@ -1,4 +1,3 @@
-import title from "presentation/frontend/src/components/primatives/title";
 import type { ICardRepository } from "../../domain/contracts/card-repository";
 import type { Card } from "../../domain/entities/card";
 import type { ICardDatabaseProvider } from "../contracts/card-database-provider";
@@ -33,7 +32,17 @@ export class CardRepository implements ICardRepository {
 		updatedAt?: string,
 		endedAt?: string
 	): Promise<Card> {
-		const data = await this.db.createCard(title, idPriority, idCategory, idStatus, createdAt, deleted, description, updatedAt, endedAt);
+		const data = await this.db.createCard(
+			title,
+			idPriority,
+			idCategory,
+			idStatus,
+			createdAt,
+			deleted,
+			description,
+			updatedAt,
+			endedAt
+		);
 		return {
 			id: data.id,
 			idPriority: data.idPriority,
@@ -54,22 +63,6 @@ export class CardRepository implements ICardRepository {
 
 	public async displayCard(id: string): Promise<Card> {
 		const data = await this.db.displayCard(id);
-		return {
-			id: data.id,
-			idPriority: data.idPriority,
-			idCategory: data.idCategory,
-			idStatus: data.idStatus,
-			title: data.title,
-			description: data.description,
-			createdAt: data.createdAt,
-			updatedAt: data.updatedAt,
-			endedAt: data.endedAt,
-			deleted: data.deleted,
-		};
-	}
-
-	public async findCardByTitle(title: string): Promise<Card> {
-		const data = await this.db.findCardByTitle(title);
 		return {
 			id: data.id,
 			idPriority: data.idPriority,
