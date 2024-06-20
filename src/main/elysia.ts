@@ -34,6 +34,7 @@ import { setupDisplayCategory } from "domain/features/display-category";
 import { setupDeleteCategory } from "domain/features/delete-category";
 import { setupCreateCategory } from "domain/features/create-category";
 import { SetupDisplayCategories } from "domain/features/display-categories";
+import { SetupCreateCardColumn } from "domain/features/create-cardColumn";
 import { setupDisplayCards } from "domain/features/display-cards";
 
 const boardRepository = new BoardRepository(new DrizzleBoardProvider());
@@ -155,6 +156,22 @@ new Elysia()
 	.decorate(
 		"fetchSiglePriorityService",
 		setupDisplayPriority({ repository: priorityRepository })
+	)
+	.decorate(
+		"createCardColumn",
+		SetupCreateCardColumn({ repository: cardRepository })
+	)
+	.post(
+		"api/create-columnCard",
+		({ body: { idColumn, idCard }, createCardColumn }) => {
+			return createCardColumn({ idColumn, idCard });
+		},
+		{
+			body: t.Object({
+				idColumn: t.String(),
+				idCard: t.String(),
+			}),
+		}
 	)
 	.post(
 		"api/priority",
