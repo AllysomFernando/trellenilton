@@ -16,11 +16,19 @@ import { setupUpdateColumn } from "domain/features/update-column";
 import { CardRepository } from "infra/repositories/card-repository";
 import { DrizzleCardProvider } from "infra/database/providers/drizzle-card-provider";
 import { SetupCreateCard } from "domain/features/create-card";
+import { PriorityRepository } from "infra/repositories/priority-repository";
+import { setupCreatePriority } from "domain/features/create-priority";
+import { setupDeletePriority } from "domain/features/delete-priority";
+import { setupDisplayPrioritys } from "domain/features/display-prioritys";
+import { setupDisplayPriority } from "domain/features/display-priority";
+import { DrizzlePriorityProvider } from "infra/database/providers/drizzle-priority-provider";
 
 const boardRepository = new BoardRepository(new DrizzleBoardProvider());
 const columnRepository = new ColumnRepository(new DrizzleColumnProvider());
 const cardRepository = new CardRepository(new DrizzleCardProvider());
-
+const priorityRepository = new PriorityRepository(
+	new DrizzlePriorityProvider()
+);
 new Elysia()
 	.use(cors())
 	.get("/health", () => "it's healthy")
@@ -82,6 +90,31 @@ new Elysia()
 		"createCardService",
 		SetupCreateCard({ repository: cardRepository })
 	)
+	.decorate(
+		"createPriorityService",
+		setupCreatePriority({ repository: priorityRepository })
+	)
+	.decorate(
+		"deletePriorityService",
+		setupDeletePriority({ repository: priorityRepository })
+	)
+	.decorate(
+		"fetchPriorityService",
+		setupDisplayPrioritys({
+			repository: priorityRepository,
+		})
+	)
+	.decorate(
+		"fetchSiglePriorityService",
+		setupDisplayPriority({ repository: priorityRepository })
+	)
+	.post(
+		"api/priority",
+		({ body: { id }, fetchSiglePriorityService }) => {
+			return fetchSiglePriorityService({ id });
+		},
+		{ body: t.Object({ id: t.String() }) }
+	)
 	.post(
 		"api/create-boards",
 		({ body: { name }, createService }) => {
@@ -107,9 +140,19 @@ new Elysia()
 		}
 	)
 	.post(
-		"api/create/cards",
+		"api/create-cards",
 		({
-			body: { idPriority, idCategory, idStatus, title, createdAt, deleted },
+			body: {
+				idPriority,
+				idCategory,
+				idStatus,
+				title,
+				createdAt,
+				deleted,
+				description,
+				updatedAt,
+				endedAt,
+			},
 			createCardService,
 		}) => {
 			return createCardService({
@@ -119,6 +162,9 @@ new Elysia()
 				idStatus,
 				createdAt,
 				deleted,
+				description,
+				updatedAt,
+				endedAt,
 			});
 		},
 		{
@@ -129,6 +175,22 @@ new Elysia()
 				title: t.String(),
 				createdAt: t.String(),
 				deleted: t.Boolean(),
+				description: t.String(),
+				updatedAt: t.String(),
+				endedAt: t.String(),
+			}),
+		}
+	)
+	.post(
+		"api/create-priority",
+		({ body: { name, deleted, level }, createPriorityService }) => {
+			return createPriorityService({ name, deleted, level });
+		},
+		{
+			body: t.Object({
+				name: t.String(),
+				deleted: t.Boolean(),
+				level: t.String(),
 			}),
 		}
 	)
@@ -141,6 +203,20 @@ new Elysia()
 			body: t.Object({
 				id: t.String(),
 				board: t.Object({
+					deleted: t.Boolean(),
+				}),
+			}),
+		}
+	)
+	.delete(
+		"api/delete-priority",
+		({ body: { id, priority }, deletePriorityService }) => {
+			return deletePriorityService({ id, priority });
+		},
+		{
+			body: t.Object({
+				id: t.String(),
+				priority: t.Object({
 					deleted: t.Boolean(),
 				}),
 			}),
@@ -190,6 +266,9 @@ new Elysia()
 	)
 	.get("/api/boards", ({ fetchService }) => {
 		return fetchService({});
+	})
+	.get("api/priorities", ({ fetchPriorityService }) => {
+		return fetchPriorityService({});
 	})
 	.get("/api/columns", ({ displayColumnService }) => {
 		return displayColumnService({});
