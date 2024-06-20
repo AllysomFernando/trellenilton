@@ -33,6 +33,7 @@ import { setupDeleteStatus } from "domain/features/delete-status";
 import { setupDisplayCategory } from "domain/features/display-category";
 import { setupDeleteCategory } from "domain/features/delete-category";
 import { setupCreateCategory } from "domain/features/create-category";
+import { SetupDisplayCategories } from "domain/features/display-categories";
 
 const boardRepository = new BoardRepository(new DrizzleBoardProvider());
 const columnRepository = new ColumnRepository(new DrizzleColumnProvider());
@@ -60,6 +61,10 @@ new Elysia()
 	)
 	.decorate(
 		"loadAllCategory",
+		SetupDisplayCategories({ repository: categoryRepository })
+	)
+	.decorate(
+		"loadSingleCategory",
 		setupDisplayCategory({ repository: categoryRepository })
 	)
 	.decorate(
@@ -150,6 +155,20 @@ new Elysia()
 		"api/priority",
 		({ body: { id }, fetchSiglePriorityService }) => {
 			return fetchSiglePriorityService({ id });
+		},
+		{ body: t.Object({ id: t.String() }) }
+	)
+	.post(
+		"api/singleStatus",
+		({ body: { id }, loadSingleStatus }) => {
+			return loadSingleStatus({ id });
+		},
+		{ body: t.Object({ id: t.String() }) }
+	)
+	.post(
+		"api/category",
+		({ body: { id }, loadSingleCategory }) => {
+			return loadSingleCategory({ id });
 		},
 		{ body: t.Object({ id: t.String() }) }
 	)
