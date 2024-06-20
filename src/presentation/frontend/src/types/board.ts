@@ -71,15 +71,15 @@ export interface Card {
 }
 
 export interface NewCard {
+	title?: string;
 	idPriority?: string;
-	idCategory?: string;
+	idCategory: string;
 	idStatus?: string;
-	title: string;
-	description?: string;
 	createdAt?: string;
+	deleted?: boolean;
+	description?: string;
 	updatedAt?: string;
 	endedAt?: string;
-	deleted: boolean;
 	comments?: string[];
 	checklists?: string[];
 	isRecurring?: boolean;
