@@ -4,6 +4,11 @@ import { poster, fetcher } from "@/utils/api";
 import NewPriorityModal from "@/components/modal/NewPriorityModal";
 import NewCategoryModal from "@/components/modal/NewCategoryModal";
 import NewStatusModal from "@/components/modal/NewStatusModal";
+import {
+	fetchCategory,
+	fetchPriority,
+	fetchStatus,
+} from "@/services/cardService";
 
 interface NewCardModalProps {
 	isOpen: boolean;
@@ -39,11 +44,19 @@ const NewCardModal: React.FC<NewCardModalProps> = ({
 	const [isPriorityModalOpen, setIsPriorityModalOpen] = useState(false);
 	const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
 	const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
-
 	useEffect(() => {
-		fetcher("/api/priorities").then((data) => setPriorities(data));
-		fetcher("/api/categories").then((data) => setCategories(data));
-		fetcher("/api/status").then((data) => setStatuses(data));
+		const fetchData = async () => {
+			const fetchPriorityResponse = await fetchPriority();
+			setPriorities(fetchPriorityResponse);
+
+			const fetchCategoriesResponse = await fetchCategory();
+			setCategories(fetchCategoriesResponse);
+
+			const fetchStatusResponse = await fetchStatus();
+			setStatuses(fetchStatusResponse);
+		};
+
+		fetchData();
 	}, []);
 
 	const handleSubmit = (e: React.FormEvent) => {
