@@ -287,6 +287,34 @@ new Elysia()
 		}
 	)
 	.delete(
+		"api/delete-status",
+		({ body: { id, status }, deleteStatus }) => {
+			return deleteStatus({ id, status });
+		},
+		{
+			body: t.Object({
+				id: t.String(),
+				status: t.Object({
+					deleted: t.Boolean(),
+				}),
+			}),
+		}
+	)
+	.delete(
+		"api/delete-category",
+		({ body: { id, category }, deleteCategory }) => {
+			return deleteCategory({ id, category });
+		},
+		{
+			body: t.Object({
+				id: t.String(),
+				category: t.Object({
+					deleted: t.Boolean(),
+				}),
+			}),
+		}
+	)
+	.delete(
 		"api/delete-columns",
 		({ body: { id, column }, deleteColumnService }) => {
 			return deleteColumnService({ id, column });
