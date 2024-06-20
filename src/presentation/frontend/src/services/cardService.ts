@@ -1,5 +1,5 @@
 import { Card, Priority } from "@/types/board";
-import { poster } from "@/utils/api";
+import { fetcher, poster } from "@/utils/api";
 
 export const createCard = async (cardData: {
 	title: string;
@@ -35,4 +35,46 @@ export const createPriority = async (data: {
 		console.log(error);
 	}
 	return undefined;
+};
+
+export const fetchPriority = async () => {
+	try {
+		const response = await fetcher("/boards", {});
+		console.log("response ==>", response);
+		if (response) {
+			return response;
+		} else {
+			return [];
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+export const fetchCategory = async () => {
+	try {
+		const response = await fetcher("/categories", {});
+		console.log("response ==>", response);
+		if (response) {
+			return response;
+		} else {
+			return [];
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+export const fetchStatus = async () => {
+	try {
+		const response = await fetcher("/status", {});
+		console.log("response ==>", response);
+		if (response) {
+			return response;
+		} else {
+			return [];
+		}
+	} catch (error) {
+		console.log(error);
+	}
 };
