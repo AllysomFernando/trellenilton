@@ -86,6 +86,7 @@ export interface CreateCardPayload {
 }
 
 export interface NewCard {
+	id: string;
 	idPriority: string;
 	idCategory: string;
 	idStatus: string;

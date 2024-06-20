@@ -1,32 +1,34 @@
 import { Card, Priority, Status } from "@/types/board";
 import { fetcher, poster } from "@/utils/api";
 
+interface CreateCardPayload {
+	id: string;
+	idPriority: string;
+	idCategory: string;
+	idStatus: string;
+	title: string;
+	description?: string;
+	createdAt: string;
+	updatedAt?: string;
+	endedAt?: string;
+	deleted: boolean;
+	comments?: string[];
+	checklists?: string[];
+	isRecurring?: boolean;
+}
 export const createCard = async (
-	cardData: {
-		title?: string;
-		idPriority?: string;
-		idCategory: string;
-		idStatus?: string;
-		createdAt?: string;
-		deleted?: boolean;
-		description?: string;
-		updatedAt?: string;
-		endedAt?: string;
-		comments?: string[];
-		checklists?: string[];
-		isRecurring?: boolean;
-	},
+	cardData: CreateCardPayload,
 	columnId: string
 ): Promise<Card> => {
 	try {
 		const response = await poster("/create-cards", cardData);
-		const columnCardResponse = await poster("/create-columnCard", {
+		await poster("/create-columnCard", {
 			idColumn: columnId,
 			idCard: response.id,
 		});
-		console.log("==========>", columnCardResponse);
 		return response;
 	} catch (error) {
+		console.error("Failed to create card:", error);
 		throw new Error("Failed to create card");
 	}
 };

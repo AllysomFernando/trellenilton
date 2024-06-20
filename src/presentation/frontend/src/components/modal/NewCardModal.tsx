@@ -9,20 +9,22 @@ import {
 import NewPriorityModal from "./NewPriorityModal";
 import NewCategoryModal from "./NewCategoryModal";
 import NewStatusModal from "./NewStatusModal";
+import { Card } from "@/types/board";
 
 interface NewCardModalProps {
 	isOpen: boolean;
 	onClose: () => void;
-	onSubmit: (newCard: NewCard) => void;
+	onSubmit: (newCard: Card) => void;
 }
 
 export interface NewCard {
-	idPriority?: string;
-	idCategory?: string;
-	idStatus?: string;
+	id: string;
+	idPriority: string;
+	idCategory: string;
+	idStatus: string;
 	title: string;
 	description?: string;
-	createdAt?: string;
+	createdAt: string;
 	updatedAt?: string;
 	endedAt?: string;
 	deleted: boolean;
@@ -37,7 +39,7 @@ const NewCardModal: React.FC<NewCardModalProps> = ({
 	onSubmit,
 }) => {
 	const [title, setTitle] = useState("");
-	const [description, setDescription] = useState("");
+	const [description, setDescription] = useState<string>("");
 	const [priority, setPriority] = useState("");
 	const [category, setCategory] = useState("");
 	const [status, setStatus] = useState("");
@@ -66,23 +68,23 @@ const NewCardModal: React.FC<NewCardModalProps> = ({
 
 		fetchData();
 	}, []);
-
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
-			const newCard = {
+			const newCard: NewCard = {
+				id: "",
 				title,
-				description,
-				idPriority: priority,
-				idCategory: category,
-				idStatus: status,
+				description: description || "", // Garante que description nunca seja undefined
+				idPriority: priority || "",
+				idCategory: category || "",
+				idStatus: status || "",
 				createdAt: new Date().toISOString(),
 				deleted: false,
 				updatedAt: "",
 				endedAt: "",
 			};
 
-			const response = await createCard(newCard);
+			const response = await createCard(newCard, category);
 			if (response) {
 				onSubmit(response);
 			}
@@ -129,13 +131,13 @@ const NewCardModal: React.FC<NewCardModalProps> = ({
 											</Dialog.Title>
 											<div className="mt-2">
 												<form onSubmit={handleSubmit}>
-													<label className="block text-sm  text-gray-900 font-bold mb-2">
+													<label className="block text-sm text-gray-900 font-bold mb-2">
 														Título:
 														<input
 															type="text"
 															value={title}
 															onChange={(e) => setTitle(e.target.value)}
-															className="mt-1 p-2 border text-white rounded w-full"
+															className="mt-1 p-2 border rounded w-full"
 															required
 														/>
 													</label>
@@ -144,27 +146,24 @@ const NewCardModal: React.FC<NewCardModalProps> = ({
 														<textarea
 															value={description}
 															onChange={(e) => setDescription(e.target.value)}
-															className="mt-1 p-2 border text-white rounded w-full"
+															className="mt-1 p-2 border rounded w-full"
 															required
 														/>
 													</label>
-													<label className="block text-sm  text-gray-900 font-bold mb-2">
+													<label className="block text-sm text-gray-900 font-bold mb-2">
 														Prioridade:
 														<select
 															value={priority}
 															onChange={(e) => setPriority(e.target.value)}
-															className="mt-1 p-2 border text-white rounded w-full"
+															className="mt-1 p-2 border rounded w-full"
 															required
 														>
 															<option value="">Selecione a Prioridade</option>
-															{priorities &&
-																priorities.map(
-																	(p: { id: string; name: string }) => (
-																		<option key={p.id} value={p.id}>
-																			{p.name}
-																		</option>
-																	)
-																)}
+															{priorities.map((p) => (
+																<option key={p.id} value={p.id}>
+																	{p.name}
+																</option>
+															))}
 														</select>
 														<button
 															type="button"
@@ -178,18 +177,15 @@ const NewCardModal: React.FC<NewCardModalProps> = ({
 														<select
 															value={category}
 															onChange={(e) => setCategory(e.target.value)}
-															className="mt-1 p-2 border text-white  rounded w-full"
+															className="mt-1 p-2 border rounded w-full"
 															required
 														>
 															<option value="">Selecione a Categoria</option>
-															{categories &&
-																categories.map(
-																	(c: { id: string; name: string }) => (
-																		<option key={c.id} value={c.id}>
-																			{c.name}
-																		</option>
-																	)
-																)}
+															{categories.map((c) => (
+																<option key={c.id} value={c.id}>
+																	{c.name}
+																</option>
+															))}
 														</select>
 														<button
 															type="button"
@@ -203,18 +199,15 @@ const NewCardModal: React.FC<NewCardModalProps> = ({
 														<select
 															value={status}
 															onChange={(e) => setStatus(e.target.value)}
-															className="mt-1 p-2 border text-white rounded w-full"
+															className="mt-1 p-2 border rounded w-full"
 															required
 														>
 															<option value="">Selecione o Status</option>
-															{statuses &&
-																statuses.map(
-																	(s: { id: string; name: string }) => (
-																		<option key={s.id} value={s.id}>
-																			{s.name}
-																		</option>
-																	)
-																)}
+															{statuses.map((s) => (
+																<option key={s.id} value={s.id}>
+																	{s.name}
+																</option>
+															))}
 														</select>
 														<button
 															type="button"
