@@ -13,7 +13,7 @@ import AddCardForm from "@/components/Card/CardForm";
 import type { Quote, NewCard } from "@/types/board";
 import { Menu } from "@headlessui/react";
 import { deleteColumn } from "@/services/columnService";
-import NewCardModal from "@/components/modal/NewBoardModal";
+import NewCardModal from "@/components/modal/NewCardModal";
 
 const Container = styled.div`
 	margin: ${grid}px;
@@ -60,9 +60,6 @@ interface Props {
 	index: number;
 	isScrollable?: boolean;
 	isCombineEnabled?: boolean;
-	priorities: string[];
-	categories: string[];
-	statuses: string[];
 	useClone?: boolean;
 	onAddCard: (columnId: string, card: Quote) => void;
 	onEdit: () => void;
@@ -145,18 +142,6 @@ const Column: React.FC<Props> = ({
 											</button>
 										)}
 									</Menu.Item>
-									<Menu.Item>
-										{({ active }) => (
-											<button
-												onClick={() => setIsModalOpen(true)}
-												className={`${
-													active ? "bg-gray-100" : ""
-												} block px-4 py-2 text-sm text-gray-700 w-full text-left`}
-											>
-												Adicionar Cartão
-											</button>
-										)}
-									</Menu.Item>
 								</Menu.Items>
 							</Menu>
 						</Header>
@@ -203,7 +188,12 @@ const Column: React.FC<Props> = ({
 								</QuoteListContainer>
 							)}
 						</Droppable>
-						<AddCardForm columnId={columnId} onAddCard={onAddCard} />
+						<button
+							className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-900"
+							onClick={() => setIsModalOpen(true)}
+						>
+							Adicionar Cartão
+						</button>
 					</Container>
 				)}
 			</Draggable>
@@ -211,6 +201,9 @@ const Column: React.FC<Props> = ({
 				isOpen={isModalOpen}
 				onClose={() => setIsModalOpen(false)}
 				onSubmit={handleAddCard}
+				priorities={[]}
+				categories={[]}
+				statuses={[]}
 			/>
 		</>
 	);
