@@ -22,5 +22,5 @@ export interface ICardRepository {
 		endedAt: string,
 		createdAt: string
 	) => Promise<Card>;
-	createCardColumn: (idCard: string, idColumn: string) => Promise<Card>;
+	createCardColumn: (idCard: string, idColumn: string) => Promise<any>;
 }
