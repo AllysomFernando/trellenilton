@@ -241,9 +241,6 @@ const Board: React.FC<Props> = ({
 								}}
 								onEdit={() => handleEditColumn(key, columns[key].title)}
 								onDelete={() => handleDeleteColumn(key)}
-								priorities={priorities}
-								categories={categories}
-								statuses={statuses}
 							/>
 						))}
 
