@@ -1,7 +1,7 @@
 import { Card, Priority, Status } from "@/types/board";
 import { fetcher, poster } from "@/utils/api";
 
-export const createCardWithColumn = async (
+export const createCard = async (
 	cardData: {
 		title?: string;
 		idPriority?: string;
@@ -24,6 +24,7 @@ export const createCardWithColumn = async (
 			idColumn: columnId,
 			idCard: response.id,
 		});
+		console.log("==========>",columnCardResponse);
 		return response;
 	} catch (error) {
 		throw new Error("Failed to create card");
