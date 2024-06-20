@@ -70,6 +70,21 @@ export interface Card {
 	isRecurring?: boolean;
 }
 
+export interface CreateCardPayload {
+	idPriority: string;
+	idCategory: string;
+	idStatus: string;
+	title: string;
+	description?: string;
+	createdAt: string;
+	updatedAt?: string;
+	endedAt?: string;
+	deleted: boolean;
+	comments?: string[];
+	checklists?: string[];
+	isRecurring?: boolean;
+}
+
 export interface NewCard {
 	title?: string;
 	idPriority?: string;
