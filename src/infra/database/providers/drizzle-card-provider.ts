@@ -38,7 +38,6 @@ export class DrizzleCardProvider implements ICardDatabaseProvider {
 		const result = await db
 			.insert(card)
 			.values({
-				
 				idPriority: idPriority,
 				idCategory: idCategory,
 				idStatus: idStatus,
@@ -70,26 +69,6 @@ export class DrizzleCardProvider implements ICardDatabaseProvider {
 		}));
 	}
 
-	public async findCardByTitle(title: string): Promise<Card> {
-		const data = await db.query.card.findFirst({
-			where: eq(card.title, title),
-		});
-		if (!data) {
-			throw new Error("Card not found");
-		}
-		return {
-			id: data.id,
-			idPriority: data.idPriority,
-			idCategory: data.idCategory,
-			idStatus: data.idStatus,
-			title: data.title,
-			description: data.description,
-			createdAt: data.createdAt,
-			updatedAt: data.updatedAt,
-			endedAt: data.endedAt,
-			deleted: data.deleted,
-		};
-	}
 
 	public async deleteCard(id: string): Promise<void> {
 		await db
