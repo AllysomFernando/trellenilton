@@ -15,7 +15,6 @@ export interface ICardDatabaseProvider {
 	loadAllCards: () => Promise<Card[]>;
 	displayCard: (id: string) => Promise<Card>;
 	deleteCard: (id: string) => Promise<void>;
-	findCardByTitle: (title: string) => Promise<Card>;
 	renameCard: (id: string, title: string) => Promise<Card>;
 	insertCardDescription: (id: string, description: string) => Promise<Card>;
 	insertCardDeadline: (
