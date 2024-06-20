@@ -38,6 +38,7 @@ export const SetupCreateCard: Setup =
 			});
 
 		try {
+			console.log("bateu aqui");
 			return await repository.createCard(
 				title,
 				idPriority,
