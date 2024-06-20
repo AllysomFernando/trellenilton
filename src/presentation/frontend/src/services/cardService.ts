@@ -23,6 +23,16 @@ export const createCard = async (cardData: {
 	}
 };
 
+export const fetchCards = async () => {
+	try {
+		const response = await fetcher("/cards");
+		return response.data;
+	} catch (error) {
+		console.error("Failed to fetch cards", error);
+		return [];
+	}
+};
+
 export const createPriority = async (data: {
 	name: string;
 	level: string;
