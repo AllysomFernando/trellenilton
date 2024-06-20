@@ -1,0 +1,1 @@
+ALTER TABLE "priority" ADD COLUMN "deleted" boolean DEFAULT false NOT NULL;
