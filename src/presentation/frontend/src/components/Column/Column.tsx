@@ -142,6 +142,18 @@ const Column: React.FC<Props> = ({
 											</button>
 										)}
 									</Menu.Item>
+									<Menu.Item>
+										{({ active }) => (
+											<button
+												onClick={() => setIsModalOpen(true)}
+												className={`${
+													active ? "bg-gray-100" : ""
+												} block px-4 py-2 text-sm text-gray-700 w-full text-left`}
+											>
+												Adicionar Cartão
+											</button>
+										)}
+									</Menu.Item>
 								</Menu.Items>
 							</Menu>
 						</Header>
@@ -201,9 +213,6 @@ const Column: React.FC<Props> = ({
 				isOpen={isModalOpen}
 				onClose={() => setIsModalOpen(false)}
 				onSubmit={handleAddCard}
-				priorities={[]}
-				categories={[]}
-				statuses={[]}
 			/>
 		</>
 	);
