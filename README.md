@@ -1,15 +1,35 @@
-# trellenilton
+# Trellenilton
 
-To install dependencies:
+Trellenilton is a project created using Bun v1.1.7.
 
-```bash
+## Installation
+
+### Backend Dependencies
+
+Navigate to the `/src` folder and run:
+
+```bash```
 bun install
-```
 
-To run:
+### Frontend Dependencies
 
-```bash
-bun run index.ts
-```
+Navigate to the `/src/presentation/frontend` folder and run:
 
-This project was created using `bun init` in bun v1.1.7. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+```bash```
+bun install
+
+
+### Running the Project
+
+To run the project, use the following command:
+
+
+```bash```
+bun run project
+
+### About the Project
+
+
+### License
+
+This project is open-source and available under the MIT License.
