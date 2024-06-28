@@ -1,11 +1,34 @@
-import { sqliteTable, text, } from "drizzle-orm/sqlite-core";
+import { pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 import { card } from "./card";
-import { user } from "./profile";
+import { profile } from "./profile";
+import {
+	relations,
+	type InferInsertModel,
+	type InferSelectModel,
+} from "drizzle-orm";
 
-export const comment = sqliteTable('comment', {
-  id: text('id').primaryKey(),
-  idCard: text("idCard").references(() => card.id).notNull(),
-  idUser: text("idUser").references(() => user.id).notNull(), 
-  text: text("text").notNull(),
-  createdAt: text("createAt").notNull()
+export const comment = pgTable("comment", {
+	id: uuid("id").defaultRandom().primaryKey(),
+	idCard: uuid("idCard")
+		.references(() => card.id)
+		.notNull(),
+	idProfile: uuid("idProfile")
+		.references(() => profile.id)
+		.notNull(),
+	text: varchar("text", { length: 255 }).notNull(),
+	createdAt: varchar("createdAt").notNull(),
 });
+
+export const commentRelations = relations(comment, ({ one }) => ({
+	card: one(card, {
+		fields: [comment.idCard],
+		references: [card.id],
+	}),
+	profile: one(profile, {
+		fields: [comment.idProfile],
+		references: [profile.id],
+	}),
+}));
+
+export type Comment = InferSelectModel<typeof comment>;
+export type NewComment = InferInsertModel<typeof comment>;

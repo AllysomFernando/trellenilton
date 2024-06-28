@@ -1,7 +1,26 @@
-export interface ICardDatabaseProvider {
+import type { Card } from "domain/entities/card";
 
-    loadAllCards: () => Promise<any[]>;
-    createCard: (card: any) => Promise<any>;
-    deleteCard: (card: any, id: string) => Promise<any>;
+export interface ICardDatabaseProvider {
+	createCard: (
+		title: string,
+		idPriority: string,
+		idCategory: string,
+		idStatus: string,
+		createdAt: string,
+		deleted: boolean,
+		description?: string,
+		updatedAt?: string,
+		endedAt?: string
+	) => Promise<Card>;
+	loadAllCards: () => Promise<Card[]>;
+	displayCard: (id: string) => Promise<Card>;
+	deleteCard: (id: string) => Promise<void>;
+	renameCard: (id: string, title: string) => Promise<Card>;
+	insertCardDescription: (id: string, description: string) => Promise<Card>;
+	insertCardDeadline: (
+		id: string,
+		endedAt: string,
+		createdAt: string
+	) => Promise<Card>;
+	createCardColumn: (idCard: string, idColumn: string) => Promise<any>;
 }
-  

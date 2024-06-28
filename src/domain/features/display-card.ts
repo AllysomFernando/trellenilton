@@ -1,23 +1,41 @@
-import type { ICardRepository } from "../contracts/card-repository"
-import type { Card } from "../entities/card"
+import type { Card } from "../entities/card";
+import type { ICardRepository } from "../contracts/card-repository";
 
-type Input = {}
-type Output = Card[]
-type DisplayCards = (input: Input) => Promise<Output>
-type SetupDisplayCardsProps = {
-    repository: ICardRepository
-}
-type Setup = (props: SetupDisplayCardsProps) => DisplayCards
+type Input = {
+    id: string,
+};
 
-export const setupDisplayCards: Setup = ({
-    repository
-}) => async input => {
-    try {
-        const cards = await repository.loadAllCards()
-        return cards
-    } catch (error) {
-        throw new Error("Could not load all cards", {
-            cause: "display-cards"
-        })
-    }
-}
+type Output = Card;
+
+type DisplayCard = (input: Input) => Promise<Output>;
+
+type SetupDisplayCard = {
+    repository: ICardRepository;
+};
+
+type Setup = (props: SetupDisplayCard) => DisplayCard;
+
+export const setupDisplayCard: Setup =
+    ({ repository }) =>
+        async ({ id }) => {
+            try {
+                const cards = await repository.loadAllCards();
+                const card = cards.find(card => card.id === id);
+                if (!card) {
+                    throw new Error(`Card with the id ${id} not found`, {
+                        cause: "card-not-found",
+                    });
+                }
+
+                const displayCard: Card = {
+                    ...card,
+                }
+
+                return await repository.displayCard(displayCard.id);
+
+            } catch (error) {
+                throw new Error("Could not find a card", {
+                    cause: "card-not-found",
+                });
+            }
+        }

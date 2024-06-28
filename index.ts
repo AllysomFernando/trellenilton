@@ -1,1 +1,7 @@
-console.log("Hello via Bun!");
+import { Pool } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-serverless';
+import * as models from 'infra/database/models'
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+export const db = drizzle(pool, { schema: models });

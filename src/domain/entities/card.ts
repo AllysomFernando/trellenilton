@@ -4,9 +4,9 @@ export type Card = {
   idCategory: string,
   idStatus: string,
   title: string,
-  description: string,
+  description?: string,
   createdAt: string,
-  updatedAt: string,
-  endedAt: string,
-  deleted: number,
+  updatedAt?: string,
+  endedAt?: string,
+  deleted: boolean,
 }

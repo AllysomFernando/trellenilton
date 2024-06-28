@@ -2,17 +2,32 @@
   "name": "trellenilton",
   "module": "index.ts",
   "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun run src/main/elysia.ts",
+    "migrate": "bun drizzle-kit generate && bun migrate.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest",
-    "drizzle-kit": "^0.21.2"
+    "drizzle-kit": "^0.22.7"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@elysiajs/cors": "^1.0.2",
     "@libsql/client": "^0.6.0",
-    "drizzle-orm": "^0.30.10",
+    "@neondatabase/serverless": "^0.9.3",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.31.2",
     "drizzle-zod": "^0.5.1",
+    "elysia": "^1.0.23",
+    "next": "^14.2.4",
+    "react": "^18.3.1",
+    "react-hook-form": "^7.51.5",
     "zod": "^3.23.8"
   }
 }

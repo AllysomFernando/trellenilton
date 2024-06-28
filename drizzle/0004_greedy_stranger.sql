@@ -1,0 +1,1 @@
+ALTER TABLE "column" ALTER COLUMN "idCard" DROP NOT NULL;

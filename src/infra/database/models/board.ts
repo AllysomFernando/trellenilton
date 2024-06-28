@@ -1,15 +1,24 @@
+import { type InferSelectModel } from "drizzle-orm";
+import {
+	boolean,
+	pgTable,
+	timestamp,
+	uuid,
+	varchar,
+} from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
-import { sqliteTable, text, int } from "drizzle-orm/sqlite-core";
-import { card } from "./card";
+import { column } from "./column";
 
-
-export const board = sqliteTable('board', {
-  id: text('id').primaryKey(),
-  name: text("name").notNull(),
-  deleted: int("deleted").notNull(),
-  createdAt: text("createAt").notNull()
+export const board = pgTable("board", {
+	id: uuid("id").defaultRandom().primaryKey(),
+	name: varchar("name", { length: 255 }).notNull(),
+	deleted: boolean("deleted"),
+	createdAt: timestamp("createAt"),
 });
 
 export const boardRelations = relations(board, ({ many }) => ({
-  cards: many(card),
+	column: many(column),
 }));
+
+export type Board = InferSelectModel<typeof board>;
+export type NewBoard = InferSelectModel<typeof board>;

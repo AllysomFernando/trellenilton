@@ -1,8 +1,9 @@
-import type { Card } from "./card"
+import type { Column } from "./column";
 
 export type Board = {
-  cards: Card[],
-  id: string,
-  name: string
-  deleted: number
-}
+	id: string;
+	name: string;
+	deleted: boolean;
+	createdAt: string;
+	column: Column[];
+};

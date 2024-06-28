@@ -1,25 +1,29 @@
-import type { IColumnRepository } from "../contracts/column-repository"
+import type { Column } from "../entities/column";
+import type { IColumnRepository } from "../contracts/column-repository";
 
 type Input = {
-    deleted: boolean,
-}
-type Output = {}
+	name: string;
+	deleted?: boolean;
+	description: string;
+	idBoard: string
+};
+type Output = Column;
+type CreateColumn = (input: Input) => Promise<Output>;
+type SetupCreateColumn = {
+	repository: IColumnRepository;
+};
 
-type CreateColumn = (input: Input) => Promise<Output>
+type Setup = (props: SetupCreateColumn) => CreateColumn;
 
-type SetupCreateColumnProps = {
-    repository: IColumnRepository
-}
-
-type Setup = (props: SetupCreateColumnProps) => CreateColumn
-
-export const setupCreateColumn: Setup = ({ repository }) => async ({ deleted }) => {
-    try {
-        return await repository.createColumn(deleted || false)
-    } catch (error) {
-        throw new Error("Could not create column", {
-            cause: "create-column",
-        })
-    }
-
-}
+export const setupCreateColumn: Setup =
+	({ repository }) =>
+	async ({ name, deleted, description, idBoard }: Input) => {
+		try {
+			return await repository.createColumn(name, deleted || false, description, idBoard);
+		} catch (error) {
+			console.log(error);
+			throw new Error("Could not create column", {
+				cause: "create-column",
+			});
+		}
+	};
