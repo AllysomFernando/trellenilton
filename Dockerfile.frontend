@@ -1,0 +1,16 @@
+# Frontend Dockerfile (Desenvolvimento)
+FROM oven/bun:1 AS base
+
+# Configure o diretório de trabalho
+WORKDIR /usr/src/presentation/frontend/app
+
+# Copie o package.json e o bun.lockb e instale as dependências
+COPY package.json bun.lockb ./
+RUN bun install
+
+# Copie todos os arquivos do projeto para o contêiner
+COPY . .
+
+# Exponha a porta e defina o entrypoint
+EXPOSE 8080
+CMD ["bash", "-c", "bun run dev"]

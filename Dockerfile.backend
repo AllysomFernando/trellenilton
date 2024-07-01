@@ -1,0 +1,15 @@
+# Backend Dockerfile (Desenvolvimento)
+FROM oven/bun:1 AS base
+
+# Configure o diretório de trabalho
+WORKDIR /usr/src/app
+
+# Copie o package.json e o bun.lockb e instale as dependências
+COPY package.json bun.lockb ./
+RUN bun install
+
+# Copie todos os arquivos do projeto para o contêiner
+COPY . .
+
+# Execute as migrações e inicie o servidor
+CMD ["bash", "-c", "bun run src/main/elysia.ts"]
