@@ -37,7 +37,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "src/apps/backend/domain/modules/board/infra/board.model.ts"  ],
   "exclude": [
     "node_modules"
   ]
